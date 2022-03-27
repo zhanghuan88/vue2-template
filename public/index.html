@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+  <title><%= process.env.APP_TITLE %></title>
+  <% for (var i in htmlWebpackPlugin.options.cdnConfig && htmlWebpackPlugin.options.cdnConfig.css) { %>
+  <!-- 使用CDN的CSS文件 -->
+  <link href="<%= htmlWebpackPlugin.options.cdnConfig.css[i] %>" rel="stylesheet">
+  <% } %>
+</head>
+<body>
+<noscript>
+  <strong>
+    很抱歉，如果没有 JavaScript 支持，网页 将不能正常工作。请启用浏览器的 JavaScript 然后继续。
+  </strong>
+</noscript>
+<div id="app">正在渲染,请稍等...</div>
+
+<% for (var i in htmlWebpackPlugin.options.cdnConfig && htmlWebpackPlugin.options.cdnConfig.js) { %>
+<script src="<%= htmlWebpackPlugin.options.cdnConfig.js[i] %>"></script>
+<% } %>
+</body>
+</html>

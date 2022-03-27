@@ -1,0 +1,19 @@
+
+html,
+body {
+    height: 100%;
+}
+body {
+    margin: 0;
+    //background-color: $g-app-bg;
+    box-sizing: border-box;
+    font-family: Lato, PingFang SC, Microsoft YaHei, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+* {
+    box-sizing: inherit;
+}
+
+textarea {
+    font-family: inherit;
+}
