@@ -1,6 +1,7 @@
 //重设浏览器自带样式
 @import "./main/reset";
-//条件编译nprogress的css
+//条件编译的css
 /* IFTRUE_offCDN */
-@import 'accessible-nprogress/dist/accessible-nprogress.min.css';
+@import 'accessible-nprogress/dist/accessible-nprogress.min.css';//引入nprogress 的 css
+@import 'element-ui/lib/theme-chalk/index.css';
 /* FITRUE_offCDN */

@@ -8,7 +8,8 @@
     "plugin:vue/essential"
   ],
   "globals": {
-    "process": true
+    "process": true,
+    "require": true
   },
   "parserOptions": {
     "ecmaVersion": "latest",

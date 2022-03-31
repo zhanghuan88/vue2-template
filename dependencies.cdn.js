@@ -35,4 +35,16 @@ module.exports = [
     js: 'https://cdn.jsdelivr.net/npm/accessible-nprogress@2.1.2/dist/accessible-nprogress.min.js',
     css: 'https://cdn.jsdelivr.net/npm/accessible-nprogress@2.1.2/dist/accessible-nprogress.min.css'
   },
+  {
+    name: 'element-ui',
+    library: 'ElementUI',
+    js: 'https://cdn.jsdelivr.net/npm/element-ui@2.15.6/lib/index.js',
+    css: 'https://cdn.jsdelivr.net/npm/element-ui@2.15.6/lib/theme-chalk/index.css'
+  },
+  {
+    name: 'localforage',
+    library: 'localforage',
+    js: 'https://cdn.jsdelivr.net/npm/localforage@1.10.0/dist/localforage.min.js',
+    css: ''
+  },
 ]

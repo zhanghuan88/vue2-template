@@ -1,10 +1,16 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import settings from './modules/settings'
+import settings from '@/store/modules/settings'
+import project from '@/store/modules/project'
+import user from '@/store/modules/user'
+import getters from '@/store/getters'
 
 Vue.use(Vuex);
 export default new Vuex.Store({
   modules: {
-    settings
-  }
+    settings,
+    project,
+    user
+  },
+  getters
 });

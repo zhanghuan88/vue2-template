@@ -12,7 +12,6 @@ const CompressionPlugin = require("compression-webpack-plugin");
 const {DefinePlugin} = require("webpack");
 const webpackCommonConfig = require("./webpack.common.js");
 
-console.log( getConditionalLoader())
 module.exports = merge(webpackCommonConfig, {
   mode: 'production',
   // devtool: "cheap-module-source-map",
@@ -39,6 +38,12 @@ module.exports = merge(webpackCommonConfig, {
             loader: 'sass-loader',
             options: {
               sourceMap: false
+            }
+          },
+          {
+            loader: 'sass-resources-loader',
+            options: {
+              resources: [ './src/styles/resources/*.scss',]
             }
           },
           getConditionalLoader(),

@@ -19,6 +19,12 @@ module.exports = merge(webpackCommonConfig, {
         'css-loader',
         'postcss-loader',
         'sass-loader',
+        {
+          loader: 'sass-resources-loader',
+          options: {
+            resources: [ './src/styles/resources/*.scss',]
+          }
+        },
         getConditionalLoader(),
       ]
     }]
