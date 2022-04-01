@@ -67,7 +67,12 @@ export default {
       this.passwordType = this.passwordType === "text" ? "password" : "text";
     },
     handleLogin() {
-      this.$store.dispatch("SaveLoginForm", this.form.remember ? this.form : {});
+      this.$store.dispatch("SaveLoginForm", this.form.remember
+        ? {
+          account: this.form.account,
+          remember: this.form.remember
+        }
+        : {});
     }
   }
 }

@@ -12,15 +12,23 @@ const constantRoutes = [
     meta: {
       title: '登录'
     }
+  },
+  {
+    path: '/sign-in',
+    name: 'sign-in',
+    component: () => import('@/framework/SignIn'),
+    meta: {
+      title: '登录'
+    }
+  },
+  {
+    path: '*',
+    component: () => import('@/framework/RouteError'),
+    meta: {
+      title: '404',
+      sidebar: false
+    }
   }
-  // {
-  //  path: '*',
-  //  component: () => import('@/views/404'),
-  //  meta: {
-  //    title: '404',
-  //    sidebar: false
-  //  }
-  // }
 ]
 
 const router = new VueRouter({
