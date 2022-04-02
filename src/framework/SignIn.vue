@@ -60,7 +60,6 @@ export default {
   },
   created() {
     if (this.loginForm.remember) this.form = clone(this.loginForm);
-
   },
   methods: {
     showPassword() {
