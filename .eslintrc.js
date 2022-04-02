@@ -3,6 +3,10 @@ module.exports = {
     "browser": true,
     "es2022": true
   },
+  "globals": {
+    "process": true,
+    "require": true
+  },
   "extends": [
     "plugin:vue/essential",
     "eslint:recommended"
