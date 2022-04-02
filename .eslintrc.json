@@ -115,7 +115,7 @@
     "vue/attributes-order": 2,
     "vue/order-in-components": 2,
     "vue/this-in-template": 2,
-    "vue/multi-word-component-names": 2,
+    "vue/multi-word-component-names": 0,
     "vue/script-indent": [2, 2, {
       "switchCase": 1
     }]
