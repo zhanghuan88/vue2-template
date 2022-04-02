@@ -59,7 +59,6 @@ export default {
     ...mapGetters(["loginForm"])
   },
   created() {
-    alert("111")
     if (this.loginForm.remember) this.form = clone(this.loginForm);
 
   },
