@@ -26,6 +26,6 @@ const app = new Vue({
 });
 alert("33")
 
-store.dispatch("InitProjectStore").then(() => {
+store.dispatch('InitProjectStore').then(() => {
   app.$mount('#app');
 });
