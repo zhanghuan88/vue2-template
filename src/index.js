@@ -24,7 +24,7 @@ const app = new Vue({
   store,
   router
 });
-alert("111")
+alert("33")
 
 store.dispatch("InitProjectStore").then(() => {
   app.$mount('#app');
