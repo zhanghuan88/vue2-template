@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import NProgress from 'accessible-nprogress'
 import store from '@/store'
+import Layout from '@/framework/layout'
 
 Vue.use(VueRouter)
 const constantRoutes = [
@@ -14,12 +15,12 @@ const constantRoutes = [
     }
   },
   {
-    path: '/sign-in',
-    name: 'sign-in',
-    component: () => import('@/framework/SignIn'),
-    meta: {
-      title: '登录'
-    }
+    path: '/',
+    component: Layout,
+    redirect: '/home',
+    children: [
+
+    ]
   },
   {
     path: '*',
