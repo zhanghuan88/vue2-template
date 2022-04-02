@@ -2,7 +2,6 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import NProgress from 'accessible-nprogress'
 import store from '@/store'
-import Layout from '@/framework/layout'
 
 Vue.use(VueRouter)
 const constantRoutes = [
@@ -14,14 +13,14 @@ const constantRoutes = [
       title: '登录'
     }
   },
-  {
-    path: '/',
-    component: Layout,
-    redirect: '/home',
-    children: [
-
-    ]
-  },
+  // {
+  //  path: '/',
+  //  component: Layout,
+  //  redirect: '/home',
+  //  children: [
+  //
+  //  ]
+  // },
   {
     path: '*',
     component: () => import('@/framework/RouteError'),
