@@ -69,7 +69,10 @@ export default {
     async handleLogin() {
       const [, valid] = await to(this.$refs.form.validate())
       if (valid) {
-        await to(this.$store.dispatch("SignIn", this.form))
+        const [err] = await to(this.$store.dispatch("SignIn", this.form))
+        if (!err) {
+          this.$router.push({name: "home"}).then();
+        }
       }
     }
   }

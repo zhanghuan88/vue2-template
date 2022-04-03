@@ -5,6 +5,8 @@ import router from '@/routers'
 import {debounce} from 'lodash-es'
 import {showMessage} from '@/utils/element-api'
 import projectSetting from '@/project-setting'
+import {getToken} from '@/utils/token'
+import ProjectSetting from '@/project-setting'
 
 let debounceShowMessage = debounce(message => {
   showMessage({
@@ -27,6 +29,9 @@ const api = axios.create({
 api.interceptors.request.use(config => {
   // 开启 progress bar
    store.state.settings.enableProgress && NProgress.start();
+   if (getToken()) {
+     config.headers[ProjectSetting.tokenHeader] = getToken()
+   }
   return config
 }, error => {
   return Promise.reject(error)

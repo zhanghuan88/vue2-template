@@ -3,6 +3,7 @@ import {login} from '@/api/user/auth'
 import localforage from 'localforage'
 import StoreKeys from '@/constant/store-keys'
 import {setToken} from '@/utils/token'
+import md5 from 'md5'
 
 export default {
   state: {
@@ -22,11 +23,17 @@ export default {
   },
   actions: {
     async SignIn({commit}, form) {
-      const [, res] = await to(login(form));
+      const params = {
+        account: form.account,
+        password: md5(form.password)
+      };
+      const [, res] = await to(login(params));
       if (res) {
         commit("SET_USER_INFO", res['userInfo'])
         commit("SET_TOKEN", res['token'])
         commit("SET_LOGIN_FORM", form)
+      } else {
+         throw new Error("登录失败")
       }
     },
     FedLogOut({commit}) {
