@@ -50,11 +50,20 @@ module.exports = merge(webpackCommonConfig, {
     client: {
       logging: 'warn',
       overlay: {
-        errors: true,
+        errors: false,
         warnings: false
       }
+    },
+    proxy: {
+      '/api': {
+        //本地服务接口地址
+        target: 'https://console-mock.apipost.cn/app/mock/project/d4a075b7-3c3a-433a-beb2-5049f0c08126/api',//开发环境
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      }
     }
-
   },
   stats: 'errors-warnings'
 });

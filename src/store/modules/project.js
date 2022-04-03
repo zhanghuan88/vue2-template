@@ -1,6 +1,6 @@
 import to from 'await-to-js'
 import localforage from 'localforage'
-import StoreKeys from '@/constant/store_keys'
+import StoreKeys from '@/constant/store-keys'
 
 export default {
   state: {
@@ -8,19 +8,21 @@ export default {
   },
   mutations: {
     SET_LOGIN_FORM: (state, loginForm) => {
-      state.loginForm = loginForm
+      state.loginForm = {
+        account: loginForm.account,
+        remember: loginForm.remember
+      };
+      localforage.setItem(StoreKeys.loginForm, state.loginForm).then();
     }
   },
   actions: {
     async GetLoginForm({commit}) {
-      const [err, loginForm] = await to(localforage.getItem(StoreKeys.loginForm));
-      if (err) return {}
-      commit("SET_LOGIN_FORM", loginForm)
-      return loginForm;
-    },
-    async SaveLoginForm({commit}, form) {
-      await to(localforage.setItem(StoreKeys.loginForm, form));
-      commit("SET_LOGIN_FORM", form)
+      const [, loginForm] = await to(localforage.getItem(StoreKeys.loginForm));
+      if (loginForm) {
+        commit("SET_LOGIN_FORM", loginForm)
+        return loginForm;
+      }
+
     },
     async InitProjectStore({dispatch}) {
       await to(Promise.allSettled([

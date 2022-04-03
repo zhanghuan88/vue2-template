@@ -31,6 +31,7 @@
 
 import {mapGetters} from 'vuex'
 import {clone} from 'lodash-es'
+import to from 'await-to-js'
 
 export default {
   name: "SignIn",
@@ -65,13 +66,11 @@ export default {
     showPassword() {
       this.passwordType = this.passwordType === "text" ? "password" : "text";
     },
-    handleLogin() {
-      this.$store.dispatch("SaveLoginForm", this.form.remember
-        ? {
-          account: this.form.account,
-          remember: this.form.remember
-        }
-        : {});
+    async handleLogin() {
+      const [, valid] = await to(this.$refs.form.validate())
+      if (valid) {
+        await to(this.$store.dispatch("SignIn", this.form))
+      }
     }
   }
 }

@@ -2,10 +2,9 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const {VueLoaderPlugin} = require("vue-loader");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const {getExternals, getCdnConfig, resolve, getConditionalLoader} = require('./utils');
-console.log(resolve("src/asset/icons"))
 module.exports = {
   entry: {
-    index: "./src/index.js"
+    index: "./src/main.js"
   },
   output: {
     filename: "js/[name].[fullhash:8].js",

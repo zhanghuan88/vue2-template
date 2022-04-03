@@ -4,7 +4,8 @@ export default {
     // 页面标题,
     title: '',
     // 显示模式，支持：mobile、pc
-    mode: 'pc'
+    mode: 'pc',
+    homeTitle: "首页"
   },
   mutations: {
     SET_TITLE: (state, title) => {
