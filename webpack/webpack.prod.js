@@ -5,8 +5,8 @@ const config = readEnv("./.env.production");
 const {CleanWebpackPlugin} = require("clean-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
-const chalk = require("chalk");
-const ProgressBarPlugin = require("progress-bar-webpack-plugin");
+//const chalk = require("chalk");
+//const ProgressBarPlugin = require("progress-bar-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const CompressionPlugin = require("compression-webpack-plugin");
 const {DefinePlugin} = require("webpack");
@@ -61,9 +61,7 @@ module.exports = merge(webpackCommonConfig, {
     }),
     new CleanWebpackPlugin(),
     // 进度条
-    new ProgressBarPlugin({
-      format: `  :msg [:bar] ${chalk.green.bold(":percent")} (:elapsed s)`
-    }),
+    //new ProgressBarPlugin(),
     ...process.env.APP_GZIP === "ON" ? [new CompressionPlugin({
       filename: "[path][base].gz",
       threshold: 10240,
@@ -103,7 +101,8 @@ module.exports = merge(webpackCommonConfig, {
       cacheGroups: {
         vendor: {
           test: /node_modules/,
-          name: 'vendor',
+          chunks: "all",
+          priority: 10, // 优先级
           enforce: true,
         },
         main: {

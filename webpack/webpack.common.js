@@ -22,7 +22,7 @@ module.exports = {
       {
         test: /\.js$/,
         include: resolve("src"),
-        use: ['babel-loader', getConditionalLoader()]
+        use: ['babel-loader']
       },
       {
         test: /\.svg$/,
@@ -90,6 +90,7 @@ module.exports = {
     })
   ],
   resolve: {
+    symlinks: false,
     extensions: [".vue", ".js", ".json"],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',

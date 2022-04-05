@@ -8,3 +8,10 @@ export const login = data => {
   })
 }
 
+export const getAllMenu = () => {
+  return api({
+    url: '/api/getAllMenu',
+    method: 'get'
+  })
+}
+

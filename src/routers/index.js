@@ -4,6 +4,7 @@ import NProgress from 'accessible-nprogress'
 import store from '@/store'
 import Layout from '@/framework/layout'
 import {getToken} from '@/utils/token'
+import ProjectSetting from '@/project-setting'
 
 Vue.use(VueRouter)
 const constantRoutes = [
@@ -23,10 +24,10 @@ const constantRoutes = [
     children: [
       {
         path: 'home',
-        name: 'home',
+        name: 'Home',
         component: () => import('@/framework/layout/pages/Home'),
         meta: {
-          title: store.state.settings.homeTitle
+          title: ProjectSetting.homeTitle
         }
       }
     ]
@@ -46,7 +47,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  store.state.settings.enableProgress && NProgress.start();
+  ProjectSetting.enableProgress && NProgress.start();
   const meta = to.meta || {};
   meta?.title && store.commit('SET_TITLE', meta.title);
   if (getToken()) {
@@ -57,7 +58,7 @@ router.beforeEach((to, from, next) => {
     }
   } else {
     // 判断是否需要认证，没有登录访问去登录页
-    if (meta.isAuth === false) {
+    if (meta?.isAuth === false) {
       next()
     } else {
       next({path: '/sign-in'});
@@ -66,7 +67,7 @@ router.beforeEach((to, from, next) => {
 })
 
 router.afterEach(() => {
-  store.state.settings.enableProgress && NProgress.done()
+  ProjectSetting.enableProgress && NProgress.done()
 })
 
 export default router;

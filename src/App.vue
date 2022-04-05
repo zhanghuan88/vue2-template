@@ -23,9 +23,10 @@ export default {
     }
   },
   mounted() {
+    this.$store.commit('SET_MODE', document.body.clientWidth)
     window.onresize = debounce(() => {
       this.$store.commit('SET_MODE', document.body.clientWidth)
-    }, 100)
+    }, 100);
   },
   methods: {},
   metaInfo() {

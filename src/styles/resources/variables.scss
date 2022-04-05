@@ -1,0 +1,11 @@
+//主侧边栏
+//主侧边栏的宽度
+$g-main-sidebar-container-width: 70px;
+//主侧边栏的背景色
+$g-main-sidebar-bg: #292C33;
+// 主侧边栏文字颜色
+$g-main-sidebar-menu-color: #fff;
+// 主侧边栏菜单选中背景色
+$g-main-sidebar-menu-active-bg: lighten($g-main-sidebar-bg, 10);
+
+

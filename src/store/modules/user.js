@@ -3,7 +3,7 @@ import {login} from '@/api/user/auth'
 import localforage from 'localforage'
 import StoreKeys from '@/constant/store-keys'
 import {setToken} from '@/utils/token'
-import md5 from 'md5'
+import md5 from 'js-md5'
 
 export default {
   state: {

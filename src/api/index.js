@@ -3,13 +3,13 @@ import store from '@/store'
 import NProgress from 'accessible-nprogress'
 import router from '@/routers'
 import {debounce} from 'lodash-es'
-import {showMessage} from '@/utils/element-api'
 import projectSetting from '@/project-setting'
 import {getToken} from '@/utils/token'
 import ProjectSetting from '@/project-setting'
+import {Message} from 'element-ui'
 
 let debounceShowMessage = debounce(message => {
-  showMessage({
+  Message({
     message,
     type: 'error'
   })
@@ -28,7 +28,7 @@ const api = axios.create({
 // http request拦截
 api.interceptors.request.use(config => {
   // 开启 progress bar
-   store.state.settings.enableProgress && NProgress.start();
+   ProjectSetting.enableProgress && NProgress.start();
    if (getToken()) {
      config.headers[ProjectSetting.tokenHeader] = getToken()
    }
@@ -39,7 +39,7 @@ api.interceptors.request.use(config => {
 // http response 拦截
 api.interceptors.response.use(res => {
   // 关闭 progress bar
-  store.state.settings.enableProgress && NProgress.done();
+  ProjectSetting.enableProgress && NProgress.done();
   const {data} = res;
   const meta = res.config['meta'] ?? {};
   // 获取状态码
@@ -61,7 +61,7 @@ api.interceptors.response.use(res => {
   return res;
 
 }, error => {
-  store.state.settings.enableProgress && NProgress.done();
+  ProjectSetting.enableProgress && NProgress.done();
   return Promise.reject(new Error(error));
 });
 

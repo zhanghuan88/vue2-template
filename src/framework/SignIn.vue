@@ -130,7 +130,7 @@ export default {
           margin: 0 auto 20px;
           text-align: center;
           font-weight: bold;
-          @include text-overflow;
+          @include text-overflow();
         }
       }
 

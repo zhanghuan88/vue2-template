@@ -37,7 +37,7 @@ module.exports = [
   },
   {
     name: 'element-ui',
-    library: 'ElementUI',
+    library: 'ELEMENT',
     js: 'https://cdn.jsdelivr.net/npm/element-ui@2.15.6/lib/index.js',
     css: 'https://cdn.jsdelivr.net/npm/element-ui@2.15.6/lib/theme-chalk/index.css'
   },
@@ -45,6 +45,18 @@ module.exports = [
     name: 'localforage',
     library: 'localforage',
     js: 'https://cdn.jsdelivr.net/npm/localforage@1.10.0/dist/localforage.min.js',
+    css: ''
+  },
+  {
+    name: 'js-cookie',
+    library: 'Cookies',
+    js: 'https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js',
+    css: ''
+  },
+  {
+    name: 'js-md5',
+    library: 'md5',
+    js: 'https://cdn.jsdelivr.net/npm/js-md5@0.7.2/src/md5.min.js',
     css: ''
   },
 ]

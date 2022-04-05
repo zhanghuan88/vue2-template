@@ -38,7 +38,6 @@ module.exports = {
     options: {
       isDebug: process.env.NODE_ENV === 'development', // optional, this expression is default
       offCDN: process.env.APP_CDN === 'OFF', // any prop name you want, used for /* IFTRUE_CDN ...js code... FITRUE_CDN */
-      cdn: process.env.APP_CDN === 'ON',
     }
   })
 };
