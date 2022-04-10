@@ -57,13 +57,10 @@ module.exports = merge(webpackCommonConfig, {
     proxy: {
       '/api': {
         //本地服务接口地址
-        target: 'https://console-mock.apipost.cn/app/mock/project/d4a075b7-3c3a-433a-beb2-5049f0c08126/api',//开发环境
+        target: 'https://console-mock.apipost.cn/app/mock/project/d4a075b7-3c3a-433a-beb2-5049f0c08126',//开发环境
         changeOrigin: true,
-        pathRewrite: {
-          '^/api': ''
-        }
       }
     }
   },
-  stats: 'errors-warnings'
+  stats: 'errors-warnings',
 });

@@ -1,5 +1,5 @@
 export default {
-  homeTitle: '首页', // 首页标题
+  homeTitle: '首页', // 首页浏览器标签前缀
   enableProgress: true, // 启用进度条
   resStatusKey: "status", // 通用响应状态
   resMsgKey: "msg", // 通用响应信息

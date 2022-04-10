@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import App from './App';
-import router from './routers'
+import router from './router'
 import store from "./store/index";
 import './styles/index.scss';
 import VueMeta from 'vue-meta'

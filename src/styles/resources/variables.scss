@@ -2,10 +2,24 @@
 //主侧边栏的宽度
 $g-main-sidebar-container-width: 70px;
 //主侧边栏的背景色
-$g-main-sidebar-bg: #292C33;
-// 主侧边栏文字颜色
-$g-main-sidebar-menu-color: #fff;
+$g-main-sidebar-bg: #222b45;
 // 主侧边栏菜单选中背景色
 $g-main-sidebar-menu-active-bg: lighten($g-main-sidebar-bg, 10);
+// 主侧边栏文字颜色
+$g-main-sidebar-menu-color: #ccc;
+// 主侧边栏文字颜色选中颜色
+$g-main-sidebar-menu-active-color: #fff;
 
-
+//子侧边栏
+//子侧边栏的宽度
+$g-sub-sidebar-container-width: 220px;
+// 次侧边栏背景色
+$g-sub-sidebar-bg: #fafafa;
+// 次侧边栏菜单文字颜色
+$g-sub-sidebar-menu-color: #37414b;
+// 次侧边栏菜单文字选中颜色
+$g-sub-sidebar-menu-active-color: #e7f4ff;
+// 次侧边栏菜单选中背景色
+$g-sub-sidebar-menu-active-bg: #5482ee;
+//子侧边栏标题的高度
+$g-sub-sidebar-container-header-height: 50px;

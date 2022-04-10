@@ -58,7 +58,7 @@ module.exports = {
       },
       {
         test: /\.vue$/,
-        use: ["vue-loader", getConditionalLoader(),]
+        use: ["vue-loader"]
       }
 
     ]

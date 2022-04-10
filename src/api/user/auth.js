@@ -8,9 +8,9 @@ export const login = data => {
   })
 }
 
-export const getAllMenu = () => {
+export const getTopMenus = () => {
   return api({
-    url: '/api/getAllMenu',
+    url: '/api/getTopMenus',
     method: 'get'
   })
 }

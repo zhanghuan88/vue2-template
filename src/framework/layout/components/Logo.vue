@@ -1,6 +1,6 @@
 <template>
   <div class="logo">
-    <!--<img :src="logo" alt="LOGO"/>-->
+    <img :src="logo" alt="LOGO"/>
   </div>
 </template>
 
@@ -9,7 +9,7 @@ export default {
   name: "Logo",
   data() {
     return {
-      // logo: require("@/assets/image/framework/vue.png")
+      logo: require("@/assets/image/framework/vue.png")
     }
   }
 }

@@ -1,11 +1,20 @@
 <template>
   <div class="main-sidebar-container">
     <logo class="sidebar-logo"></logo>
+    <div class="nav">
+      <div v-for="top of  topMenus" :key="top.id" class="item"
+           :class="{'active':top.id===$store.state.menu.activeMainSidebarId}"
+           @click="$store.commit('SET_ACTIVE_MAIN_SIDEBAR_ID', top.id)">
+        <svg-icon :name="top.icon"></svg-icon>
+        <div class="title">{{ top.title }}</div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import Logo from '@/framework/layout/components/Logo'
+import {mapGetters} from 'vuex'
 
 export default {
   name: "MainSidebarContainer",
@@ -13,7 +22,11 @@ export default {
   data() {
     return {}
   },
-  computed: {},
+  computed: {
+    ...mapGetters(["topMenus"])
+  },
+  created() {
+  },
   methods: {}
 }
 </script>
@@ -34,7 +47,58 @@ export default {
     top: 0;
     left: 0;
     right: 0;
+  }
 
+  .nav {
+    margin-top: 50px;
+    color: $g-main-sidebar-menu-color;
+
+    .active {
+      background-color: $g-main-sidebar-menu-active-bg;
+      color: $g-main-sidebar-menu-active-color;
+
+      &:before {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 50%;
+        margin-top: -7px;
+        width: 0;
+        height: 0;
+        border-top: 7px solid transparent;
+        border-bottom: 7px solid transparent;
+        border-right: 7px solid #fafafa;
+      }
+    }
+
+    .item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      height: 60px;
+      padding: 0 5px;
+      cursor: pointer;
+      position: relative;
+
+      &:hover {
+        background-color: $g-main-sidebar-menu-active-bg;
+        color: $g-main-sidebar-menu-active-color;
+      }
+
+      .svg-icon {
+        margin: 0 auto;
+        font-size: 24px;
+      }
+
+      .title {
+        text-align: center;
+        font-size: 14px;
+        width: 100%;
+        @include text-overflow();
+      }
+    }
   }
 }
 </style>

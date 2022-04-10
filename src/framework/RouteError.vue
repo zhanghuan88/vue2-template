@@ -27,13 +27,13 @@ export default {
       this.countdown--
       if (this.countdown === 0) {
         clearInterval(this.inter)
-        // this.goBack()
+        this.goBack()
       }
     }, 1000)
   },
   methods: {
     goBack() {
-      this.$router.replace('/')
+      this.$router.replace('/home').catch(() => {})
     }
   }
 }

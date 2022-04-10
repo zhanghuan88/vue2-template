@@ -1,23 +1,26 @@
 import localforage from 'localforage'
 import StoreKeys from '@/constant/store-keys'
 import to from 'await-to-js'
-import {getAllMenu} from '@/api/user/auth'
 
 export default {
   state: {
-    menuAll: []
+    topMenus: [],
+    activeMainSidebarId: ""
   },
   mutations: {
-    SET_MENU_ALL: (state, menuAll) => {
-      state.menuAll = menuAll;
-      localforage.setItem(StoreKeys.menuAll, menuAll).then();
+    SET_TOP_MENUS: (state, topMenus) => {
+      state.topMenus = topMenus;
+      localforage.setItem(StoreKeys.topMenus, topMenus).then();
+    },
+    SET_ACTIVE_MAIN_SIDEBAR_ID: (state, activeMainSidebarId) => {
+      state.activeMainSidebarId = activeMainSidebarId;
     }
   },
   actions: {
-    async GetMenuAll({commit}) {
-      const [, menuAll] = await to(getAllMenu());
-      if (menuAll) {
-        commit("SET_MENU_ALL", menuAll)
+    async GetTopMenu({commit}) {
+      const [, topMenus] = await to(localforage.getItem(StoreKeys.topMenus));
+      if (topMenus) {
+        commit("SET_TOP_MENUS", topMenus)
       }
     }
   }

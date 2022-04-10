@@ -71,7 +71,7 @@ export default {
       if (valid) {
         const [err] = await to(this.$store.dispatch("SignIn", this.form))
         if (!err) {
-          this.$router.push({name: "home"}).then();
+          this.$router.push({ path: this.$route.query?.redirect || '/' }).then();
         }
       }
     }

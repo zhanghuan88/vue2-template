@@ -26,7 +26,8 @@ export default {
     },
     async InitProjectStore({dispatch}) {
       await to(Promise.allSettled([
-        dispatch("GetLoginForm")
+        dispatch("GetLoginForm"),
+        dispatch("GetTopMenu")
       ]))
     }
   }
