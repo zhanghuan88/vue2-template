@@ -19,6 +19,16 @@ module.exports = {
     "vue"
   ],
   "rules": {
+    //两个空格缩进
+    "indent": ["error", 2],
+    //对象属性换行
+    "object-property-newline": ["error", {
+      "allowAllPropertiesOnSameLine": true
+    }],
+    //强制数组元素间出现换行
+    "array-element-newline": ["error", "consistent"],
+    //在数组开括号后和闭括号前强制换行
+    "array-bracket-newline": 2,
     // 数组的 map、filter、sort 等方法，回调函数必须有返回值
     "array-callback-return": 2,
     // 禁止函数 if ... else if ... else 的复杂度超过 20

@@ -1,33 +1,50 @@
-import Vue from 'vue'
 import VueRouter from 'vue-router'
 import NProgress from 'accessible-nprogress'
 import store from '@/store'
 import Layout from '@/framework/layout'
 import {getToken} from '@/utils/token'
 import ProjectSetting from '@/project-setting'
+import Vue from 'vue'
 
 Vue.use(VueRouter)
-const constantRoutes = [{
-  path: '/sign-in', name: 'sign-in', component: () => import('@/framework/SignIn'), meta: {
-    title: '登录', isAuth: false
-  }
-}, {
-  path: '/', component: Layout, redirect: '/home', children: [{
-    path: 'home', name: 'Home', component: () => import('@/framework/layout/pages/Home'), meta: {
-      title: ProjectSetting.homeTitle
+const constantRoutes = [
+  {
+    path: '/sign-in',
+    name: 'sign-in',
+    component: () => import('@/framework/SignIn'),
+    meta: {
+      title: '登录', isAuth: false
     }
-  }]
-}, {
-  path: '*', component: () => import('@/framework/RouteError'), meta: {
-    title: '404', isAuth: false
+  },
+  {
+    path: '/',
+    component: Layout,
+    redirect: '/home',
+    children: [
+      {
+        path: 'home',
+        name: 'Home',
+        component: () => import('@/framework/layout/pages/Home'),
+        meta: {
+          title: ProjectSetting.homeTitle
+        }
+      }
+    ]
+  },
+  {
+    path: '*',
+    component: () => import('@/framework/RouteError'),
+    meta: {
+      title: '404', isAuth: false
+    }
   }
-}]
+]
 const router = new VueRouter({
   routes: constantRoutes
 })
 router.beforeEach((to, from, next) => {
   const meta = to.meta || {};
-  meta?.title && store.commit('SET_TITLE', meta.title);
+  meta?.['title'] && store.commit('SET_TITLE', meta.title);
   ProjectSetting.enableProgress && NProgress.start();
   if (getToken()) {
     if (to.path === '/sign-in') {
@@ -42,7 +59,8 @@ router.beforeEach((to, from, next) => {
       next()
     } else {
       next({
-        path: '/sign-in', query: {
+        path: '/sign-in',
+        query: {
           redirect: to.fullPath
         }
       });

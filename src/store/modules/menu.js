@@ -10,6 +10,7 @@ export default {
   mutations: {
     SET_TOP_MENUS: (state, topMenus) => {
       state.topMenus = topMenus;
+      state.activeMainSidebarId = topMenus[0].id;
       localforage.setItem(StoreKeys.topMenus, topMenus).then();
     },
     SET_ACTIVE_MAIN_SIDEBAR_ID: (state, activeMainSidebarId) => {
@@ -19,9 +20,7 @@ export default {
   actions: {
     async GetTopMenu({commit}) {
       const [, topMenus] = await to(localforage.getItem(StoreKeys.topMenus));
-      if (topMenus) {
-        commit("SET_TOP_MENUS", topMenus)
-      }
+      if (topMenus) commit("SET_TOP_MENUS", topMenus)
     }
   }
 }

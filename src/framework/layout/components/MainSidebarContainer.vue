@@ -2,7 +2,7 @@
   <div class="main-sidebar-container">
     <logo class="sidebar-logo"></logo>
     <div class="nav">
-      <div v-for="top of  topMenus" :key="top.id" class="item"
+      <div v-for="top of topMenus" :key="top.id" class="item"
            :class="{'active':top.id===$store.state.menu.activeMainSidebarId}"
            @click="$store.commit('SET_ACTIVE_MAIN_SIDEBAR_ID', top.id)">
         <svg-icon :name="top.icon"></svg-icon>
@@ -14,7 +14,7 @@
 
 <script>
 import Logo from '@/framework/layout/components/Logo'
-import {mapGetters} from 'vuex'
+import {mapState} from 'vuex'
 
 export default {
   name: "MainSidebarContainer",
@@ -23,7 +23,9 @@ export default {
     return {}
   },
   computed: {
-    ...mapGetters(["topMenus"])
+    ...mapState({
+      topMenus: state => state.menu.topMenus
+    })
   },
   created() {
   },
@@ -36,22 +38,15 @@ export default {
   width: $g-main-sidebar-container-width;
   background-color: $g-main-sidebar-bg;
   height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  @include hide-scrollbar();
-  position: relative;
-
-  .sidebar-logo {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-  }
+  display: flex;
+  flex-direction: column;
 
   .nav {
-    margin-top: 50px;
     color: $g-main-sidebar-menu-color;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    @include hide-scrollbar();
 
     .active {
       background-color: $g-main-sidebar-menu-active-bg;
@@ -81,7 +76,7 @@ export default {
       padding: 0 5px;
       cursor: pointer;
       position: relative;
-
+      transition: all 0.3s;
       &:hover {
         background-color: $g-main-sidebar-menu-active-bg;
         color: $g-main-sidebar-menu-active-color;

@@ -1,6 +1,6 @@
 <template>
   <div class="sign-in">
-    <div id="login-box">
+    <div id="login-box" class="animate__animated animate__zoomIn">
       <div class="login-banner"></div>
       <el-form ref="form" :model="form" :rules="rules" class="login-form" label-position="left">
         <div class="title-container">
@@ -29,7 +29,7 @@
 
 <script>
 
-import {mapGetters} from 'vuex'
+import { mapState} from 'vuex'
 import {clone} from 'lodash-es'
 import to from 'await-to-js'
 
@@ -44,9 +44,7 @@ export default {
         remember: false
       },
       rules: {
-        account: [
-          {required: true, trigger: 'blur', message: '请输入用户名'}
-        ],
+        account: [{required: true, trigger: 'blur', message: '请输入用户名'}],
         password: [
           {required: true, trigger: 'blur', message: '请输入密码'},
           {min: 6, max: 18, trigger: 'blur', message: '密码长度为6到18位'}
@@ -57,7 +55,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["loginForm"])
+    ...mapState({
+      loginForm: state => state.project.loginForm
+    })
   },
   created() {
     if (this.loginForm.remember) this.form = clone(this.loginForm);

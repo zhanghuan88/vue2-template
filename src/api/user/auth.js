@@ -7,7 +7,10 @@ export const login = data => {
     data
   })
 }
-
+/**
+ * @description: 获取顶部菜单,根据用户权限获取,如果没有子菜单,则不返回该顶部菜单
+ * @returns {*}
+ */
 export const getTopMenus = () => {
   return api({
     url: '/api/getTopMenus',

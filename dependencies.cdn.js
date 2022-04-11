@@ -59,4 +59,10 @@ module.exports = [
     js: 'https://cdn.jsdelivr.net/npm/js-md5@0.7.2/src/md5.min.js',
     css: ''
   },
+  {
+    name: '',
+    library: '',
+    js: '',
+    css: 'https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css'
+  },
 ]

@@ -8,10 +8,7 @@ import SvgIcon from '@/components/SvgIcon'
 import ELEMENT from 'element-ui';
 
 // 根据CDN配置条件编译
-if (process.env.APP_CDN === 'OFF') {
-  Vue.use(ELEMENT);
-}
-
+Vue.use(ELEMENT);
 // 自动加载 svg 图标
 const req = require.context('./assets/icons', false, /\.svg$/)
 const requireAll = requireContext => requireContext.keys().map(requireContext)
@@ -20,11 +17,11 @@ Vue.component(SvgIcon.name, SvgIcon)
 
 Vue.use(VueMeta)
 
+const app = new Vue({
+  render: h => h(App),
+  store,
+  router
+});
 store.dispatch('InitProjectStore').then(() => {
-  const app = new Vue({
-    render: h => h(App),
-    store,
-    router
-  });
   app.$mount('#app');
 });

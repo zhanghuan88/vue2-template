@@ -22,16 +22,16 @@ const api = axios.create({
   validateStatus: function(status) { // 返回其他状态码
     return status >= 200 && status < 500
   },
-   withCredentials: true // 跨域请求，允许保存cookie
+  withCredentials: true // 跨域请求，允许保存cookie
 })
 
 // http request拦截
 api.interceptors.request.use(config => {
   // 开启 progress bar
-   ProjectSetting.enableProgress && NProgress.start();
-   if (getToken()) {
-     config.headers[ProjectSetting.tokenHeader] = getToken()
-   }
+  ProjectSetting.enableProgress && NProgress.start();
+  if (getToken()) {
+    config.headers[ProjectSetting.tokenHeader] = getToken()
+  }
   return config
 }, error => {
   return Promise.reject(error)

@@ -12,6 +12,7 @@
   "license": "MIT",
   "dependencies": {
     "accessible-nprogress": "^2.1.2",
+    "animate.css": "^4.1.1",
     "await-to-js": "^3.0.0",
     "axios": "^0.26.0",
     "element-ui": "^2.15.6",

@@ -14,10 +14,9 @@ module.exports = {
     let externals = {};
     if (process.env.APP_CDN === "ON") {
       cdn.forEach(config => {
-        externals[config.name] = config.library;
+        if (config.name) externals[config.name] = config.library;
       });
     }
-
     return externals;
   },
   getCdnConfig: () => {

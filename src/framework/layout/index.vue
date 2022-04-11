@@ -25,6 +25,7 @@ export default {
   async mounted() {
     const [, topMenus] = await to(getTopMenus())
     if (topMenus) this.$store.commit('SET_TOP_MENUS', topMenus);
+
   }
 }
 </script>
@@ -38,7 +39,8 @@ export default {
     width: 100%;
     height: 100%;
     display: flex;
-    .main{
+
+    .main {
       flex-grow: 1;
     }
   }

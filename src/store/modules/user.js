@@ -33,7 +33,7 @@ export default {
         commit("SET_TOKEN", res['token'])
         commit("SET_LOGIN_FORM", form)
       } else {
-         throw new Error("登录失败")
+        throw new Error("登录失败")
       }
     },
     FedLogOut({commit}) {
