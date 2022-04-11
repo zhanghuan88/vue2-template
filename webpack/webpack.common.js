@@ -1,7 +1,7 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const {VueLoaderPlugin} = require("vue-loader");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const {getExternals, getCdnConfig, resolve, getConditionalLoader} = require('./utils');
+const {getExternals, getCdnConfig, resolve} = require('./utils');
 module.exports = {
   entry: {
     index: "./src/main.js"
