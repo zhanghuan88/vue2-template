@@ -18,3 +18,13 @@ export const getTopMenus = () => {
   })
 }
 
+export const getRouters = topMenuId => {
+  return api({
+    url: '/api/routers',
+    method: 'get',
+    params: {
+      topMenuId
+    }
+  })
+}
+

@@ -1,7 +1,7 @@
 export default {
   homeTitle: '首页', // 首页浏览器标签前缀
   enableProgress: true, // 启用进度条
-  resStatusKey: "status", // 通用响应状态
+  resStatusKey: "code", // 通用响应状态
   resMsgKey: "msg", // 通用响应信息
   resDataKey: "data", // 通用响应数据
   tokenHeader: "Authorization", // token头部

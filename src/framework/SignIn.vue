@@ -1,6 +1,6 @@
 <template>
   <div class="sign-in">
-    <div id="login-box" class="animate__animated animate__zoomIn">
+    <div id="login-box" >
       <div class="login-banner"></div>
       <el-form ref="form" :model="form" :rules="rules" class="login-form" label-position="left">
         <div class="title-container">
@@ -109,7 +109,8 @@ export default {
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 0 5px #999;
-
+    animation: fadeInDown;
+    animation-duration: 1s;
     .login-banner {
       width: 250px;
       background-image: url("~@/assets/image/framework/login-banner.jpeg");

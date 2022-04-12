@@ -43,13 +43,14 @@ api.interceptors.response.use(res => {
   const {data} = res;
   const meta = res.config['meta'] ?? {};
   // 获取状态码
-  const status = data.code ?? res[projectSetting.resStatusKey];
+  const status = data[projectSetting.resStatusKey] ?? res.status;
   const message = data[projectSetting.resMsgKey] ?? '未知错误';
   // 如果是401则跳转到登录页面
   if (status === 401) {
     store.dispatch('FedLogOut').then();
     router.push({path: '/login'}).then();
   }
+  // 自定义处理请求
   if (!meta["handler"]) {
     if (status !== 200) {
       debounceShowMessage(message);

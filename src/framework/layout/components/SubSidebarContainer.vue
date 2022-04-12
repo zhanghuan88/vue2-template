@@ -3,19 +3,56 @@
     <div class="sub-sidebar-container__header">
       {{ title }}
     </div>
+    <div class="sub-sidebar-container__content">
+      <el-menu class="">
 
+      </el-menu>
+    </div>
   </div>
 </template>
 
 <script>
+import {debounce, isEmpty} from 'lodash-es'
+import to from 'await-to-js'
+import {getRouters} from '@/api/user/auth'
+
 export default {
   name: "SubSidebarContainer",
   data() {
     return {
-      title: process.env.APP_TITLE
+      title: process.env.APP_TITLE,
+      subMenu: []
     }
+  },
+  watch: {
+    '$store.state.menu.activeMainSidebarId': {
+      handler: debounce(async function(val) {
+        console.log(this)
+        const [, res] = await to(getRouters(val))
+        if (res) this.setSubMenu(res)
+      }, 300),
+      immediate: true
+    }
+  },
+  methods: {
+    // 处理子菜单没有文件路径并且没有子菜单的路由
+    handleSubMenu(routers) {
+      let subMenu = [];
+      routers.forEach(router => {
+        if (!isEmpty(router.children)) {
+          router.children = this.handleSubMenu(router.children)
+        }
+        if (!isEmpty(router.children) || router.filePath) subMenu.push(router);
+      })
+      return subMenu;
+    }
+  },
+  setSubMenu(routers) {
+    this.subMenu = this.handleSubMenu(routers);
+    console.log(this.subMenu)
   }
 }
+
 </script>
 
 <style scoped lang="scss">
