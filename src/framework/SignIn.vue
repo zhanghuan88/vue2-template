@@ -1,6 +1,6 @@
 <template>
   <div class="sign-in">
-    <div id="login-box" >
+    <div id="login-box">
       <div class="login-banner"></div>
       <el-form ref="form" :model="form" :rules="rules" class="login-form" label-position="left">
         <div class="title-container">
@@ -29,7 +29,7 @@
 
 <script>
 
-import { mapState} from 'vuex'
+import {mapState} from 'vuex'
 import {clone} from 'lodash-es'
 import to from 'await-to-js'
 
@@ -71,7 +71,7 @@ export default {
       if (valid) {
         const [err] = await to(this.$store.dispatch("SignIn", this.form))
         if (!err) {
-          this.$router.push({ path: this.$route.query?.redirect || '/' }).then();
+          this.$router.push({path: this.$route.query?.redirect || '/'}).then();
         }
       }
     }
@@ -111,6 +111,7 @@ export default {
     box-shadow: 0 0 5px #999;
     animation: fadeInDown;
     animation-duration: 1s;
+
     .login-banner {
       width: 250px;
       background-image: url("~@/assets/image/framework/login-banner.jpeg");

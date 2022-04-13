@@ -29,8 +29,7 @@ export default {
   },
   created() {
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 
@@ -41,6 +40,10 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
+
+  .sidebar-logo {
+    flex-shrink: 0;
+  }
 
   .nav {
     color: $g-main-sidebar-menu-color;
@@ -78,6 +81,7 @@ export default {
       cursor: pointer;
       position: relative;
       transition: all 0.3s;
+
       &:hover {
         background-color: $g-main-sidebar-menu-active-bg;
         color: $g-main-sidebar-menu-active-color;

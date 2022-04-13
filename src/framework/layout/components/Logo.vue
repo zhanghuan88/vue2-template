@@ -17,14 +17,15 @@ export default {
 
 <style scoped lang="scss">
 .logo {
-  display:flex;
-  justify-content:center;
+  display: flex;
+  justify-content: center;
   align-items: center;
-  height:50px;
-  cursor:pointer;
-  img{
-    width:40px;
-    height:40px;
+  height: 50px;
+  cursor: pointer;
+
+  img {
+    width: 40px;
+    height: 40px;
   }
 }
 </style>
