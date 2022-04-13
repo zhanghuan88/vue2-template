@@ -1,46 +1,14 @@
 import VueRouter from 'vue-router'
 import NProgress from 'accessible-nprogress'
 import store from '@/store'
-import Layout from '@/framework/layout'
 import {getToken} from '@/utils/token'
 import ProjectSetting from '@/project-setting'
 import Vue from 'vue'
+import routesConfig from '@/router/routes-config'
 
 Vue.use(VueRouter)
-const constantRoutes = [
-  {
-    path: '/sign-in',
-    name: 'sign-in',
-    component: () => import('@/framework/SignIn'),
-    meta: {
-      title: '登录', isAuth: false
-    }
-  },
-  {
-    path: '/',
-    component: Layout,
-    redirect: '/home',
-    children: [
-      {
-        path: '/home',
-        name: 'Home',
-        component: () => import('@/framework/layout/pages/Home'),
-        meta: {
-          title: ProjectSetting.homeTitle
-        }
-      }
-    ]
-  },
-  {
-    path: '*',
-    component: () => import('@/framework/RouteError'),
-    meta: {
-      title: '404', isAuth: false
-    }
-  }
-]
 const router = new VueRouter({
-  routes: constantRoutes
+  routes: routesConfig.constantRoutes
 })
 router.beforeEach((to, from, next) => {
   const meta = to.meta || {};
