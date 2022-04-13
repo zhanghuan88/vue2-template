@@ -1,17 +1,17 @@
 <template>
-  <component :is="component" :title="item.title" :index="basePath" class="sidebar-item">
-    <template v-if="component==='el-submenu'" slot="title">
-      <svg-icon v-if="item.icon" :name="item.icon"/>
-      <span>{{ item.title }}</span>
-    </template>
-    <template v-if="component==='el-submenu'">
-      <SidebarItem v-for="menu in item.children" :key="menu.path" :item="menu" :base-path="resolvePath(menu.path)"/>
-    </template>
-    <div v-else>
+  <div class="sidebar-item">
+    <el-menu-item v-if="emptyChildren" :title="item.title" :index="basePath">
       <svg-icon :name="item.icon"/>
       <span>{{ item.title }}</span>
-    </div>
-  </component>
+    </el-menu-item>
+    <el-submenu v-else :title="item.title" :index="basePath">
+      <template slot="title">
+        <svg-icon v-if="item.icon" :name="item.icon"/>
+        <span>{{ item.title }}</span>
+      </template>
+      <SidebarItem v-for="menu in item.children" :key="menu.path" :item="menu" :base-path="resolvePath(menu.path)"/>
+    </el-submenu>
+  </div>
 </template>
 
 <script>
@@ -31,8 +31,8 @@ export default {
     }
   },
   computed: {
-    component() {
-      return isEmpty(this.item.children) ? 'el-menu-item' : 'el-submenu'
+    emptyChildren() {
+      return isEmpty(this.item.children)
     }
   },
   methods: {
@@ -53,6 +53,7 @@ export default {
     vertical-align: -0.25em;
     transition: all 0.2s;
   }
+
   ::v-deep .el-menu-item.is-active {
     color: $g-sub-sidebar-menu-active-color !important;
     background-color: $g-sub-sidebar-menu-active-bg !important;
@@ -65,6 +66,7 @@ export default {
 
     &:hover, &:focus {
       background-color: $g-sub-sidebar-menu-hover-bg;
+
       .svg-icon {
         transform: scale(1.2);
       }

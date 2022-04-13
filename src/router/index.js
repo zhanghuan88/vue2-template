@@ -22,7 +22,7 @@ const constantRoutes = [
     redirect: '/home',
     children: [
       {
-        path: 'home',
+        path: '/home',
         name: 'Home',
         component: () => import('@/framework/layout/pages/Home'),
         meta: {
