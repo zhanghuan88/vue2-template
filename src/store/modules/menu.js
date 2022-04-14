@@ -12,8 +12,8 @@ export default {
     activeMainSidebarId: "",
     // 顶部菜单和子菜单的缓存
     topMenuSide: {},
-    // 所有路由信息
-    allRoutes: []
+    // 所有菜单信息
+    allMenus: []
   },
   mutations: {
     // 设置顶部菜单
@@ -33,8 +33,8 @@ export default {
     SET_TOP_MENU_SIDE: (state, {topMenuId, sideMenu}) => {
       state.topMenuSide[topMenuId] = sideMenu;
     },
-    SET_ALL_ROUTES: (state, allRoutes) => {
-      state.allRoutes = allRoutes;
+    SET_ALL_MENUS: (state, allMenus) => {
+      state.allMenus = allMenus;
     }
   },
   actions: {
@@ -49,9 +49,8 @@ export default {
     async GetAllRoutes({commit}) {
       const [, allMenus] = await to(getMenus());
       if (allMenus) {
-        const allRoutes = handleRoutesByMenus(allMenus);
-        commit("SET_ALL_ROUTES", allRoutes);
-        return allRoutes;
+        commit("SET_ALL_MENUS", allMenus);
+        return handleRoutesByMenus(allMenus);
       }
     }
   }

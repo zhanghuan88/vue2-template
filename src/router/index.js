@@ -26,7 +26,7 @@ router.beforeEach(async(to, from, next) => {
   ProjectSetting.enableProgress && NProgress.start();
   if (getToken()) {
     // 判断是否加载了路由信息
-    if (isEmpty(store.state.menu.allRoutes)) {
+    if (isEmpty(store.state.menu.allMenus)) {
       const allRoutes = await store.dispatch('GetAllRoutes');
       if (allRoutes) {
         router.matcher = new VueRouter({
@@ -35,9 +35,10 @@ router.beforeEach(async(to, from, next) => {
         allRoutes.forEach(route => {
           router.addRoute(route)
         })
+        // 重新跳转到当前路由
         next({...to, replace: true})
+        return;
       }
-
     }
     if (to.path === '/sign-in') {
       next({path: '/home'});

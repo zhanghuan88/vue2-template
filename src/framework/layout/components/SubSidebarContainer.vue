@@ -4,7 +4,8 @@
       {{ title }}
     </div>
     <div class="sub-sidebar-container__content" @scroll="onSidebarScroll">
-      <el-menu class="menu" :collapse-transition="false" @select="menuClick">
+      <el-menu class="menu" :collapse-transition="false" :default-active="$route.path"
+               @select="menuClick">
         <transition-group enter-active-class="content_animated">
           <sidebar-item v-for="menu in subMenu" :key="menu.path" :item="menu" :base-path="menu.path"/>
         </transition-group>

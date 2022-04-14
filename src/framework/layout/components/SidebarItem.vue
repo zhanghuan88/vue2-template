@@ -1,7 +1,7 @@
 <template>
   <div class="sidebar-item">
     <el-menu-item v-if="emptyChildren" :title="item.title" :index="basePath">
-      <svg-icon :name="item.icon"/>
+      <svg-icon v-if="item.icon" :name="item.icon"/>
       <span>{{ item.title }}</span>
     </el-menu-item>
     <el-submenu v-else :title="item.title" :index="basePath">
