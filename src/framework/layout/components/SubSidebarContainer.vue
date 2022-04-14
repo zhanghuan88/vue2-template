@@ -20,7 +20,6 @@ import to from 'await-to-js'
 import {getMenus} from '@/api/user/auth'
 import regex from '@/constant/regex'
 import SidebarItem from '@/framework/layout/components/SidebarItem'
-import {mapState} from 'vuex'
 
 export default {
   name: "SubSidebarContainer",
@@ -29,14 +28,12 @@ export default {
     return {
       title: process.env.APP_TITLE,
       headerShowShadow: false,
-      subMenu: []
+      subMenu: [],
+      // 顶部菜单和对应子菜单的缓存
+      topMenuSide: {}
     }
   },
-  computed: {
-    ...mapState({
-      topMenuSide: state => state.menu.topMenuSide
-    })
-  },
+  computed: {},
   watch: {
     '$store.state.menu.activeMainSidebarId': {
       async handler(val) {
@@ -70,10 +67,7 @@ export default {
     },
     setSubMenu(topMenuId, routers) {
       this.subMenu = this.handleSubMenu(routers);
-      this.$store.commit("SET_TOP_MENU_SIDE", {
-        topMenuId: topMenuId,
-        sideMenu: this.subMenu
-      })
+      this.topMenuSide[topMenuId] = this.subMenu;
     }
   }
 }

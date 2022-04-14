@@ -10,8 +10,6 @@ export default {
     topMenus: [],
     // 当前激活的顶部菜单id
     activeMainSidebarId: "",
-    // 顶部菜单和子菜单的缓存
-    topMenuSide: {},
     // 所有菜单信息
     allMenus: []
   },
@@ -29,10 +27,7 @@ export default {
       state.activeMainSidebarId = activeMainSidebarId;
       localforage.setItem(StoreKeys.activeMainSidebarId, activeMainSidebarId).then();
     },
-    // 设置顶部菜单和子菜单的缓存
-    SET_TOP_MENU_SIDE: (state, {topMenuId, sideMenu}) => {
-      state.topMenuSide[topMenuId] = sideMenu;
-    },
+    // 设置所有菜单信息
     SET_ALL_MENUS: (state, allMenus) => {
       state.allMenus = allMenus;
     }
