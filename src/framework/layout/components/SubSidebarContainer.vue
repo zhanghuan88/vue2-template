@@ -4,7 +4,7 @@
       {{ title }}
     </div>
     <div class="sub-sidebar-container__content" @scroll="onSidebarScroll">
-      <el-menu @select="menuClick">
+      <el-menu class="menu" :collapse-transition="false" @select="menuClick">
         <transition-group enter-active-class="content_animated">
           <sidebar-item v-for="menu in subMenu" :key="menu.path" :item="menu" :base-path="menu.path"/>
         </transition-group>
@@ -16,7 +16,7 @@
 <script>
 import {isEmpty} from 'lodash-es'
 import to from 'await-to-js'
-import {getRouters} from '@/api/user/auth'
+import {getMenus} from '@/api/user/auth'
 import regex from '@/constant/regex'
 import SidebarItem from '@/framework/layout/components/SidebarItem'
 import {mapState} from 'vuex'
@@ -43,7 +43,7 @@ export default {
           this.subMenu = this.topMenuSide[val];
           return;
         }
-        const [, res] = await to(getRouters(val))
+        const [, res] = await to(getMenus(val))
         if (res) this.setSubMenu(val, res);
       },
       immediate: true
@@ -118,9 +118,13 @@ export default {
       animation-duration: 0.2s;
     }
 
-    ::v-deep .el-menu {
+    .menu {
       background-color: $g-sub-sidebar-bg;
       border-right: none;
+
+      ::v-deep .el-menu {
+        background-color: $g-sub-sidebar-next-bg;
+      }
     }
   }
 

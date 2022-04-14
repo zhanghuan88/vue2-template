@@ -28,11 +28,14 @@ export default {
       ]
     }
   ],
-  lastRoute: {
-    path: '*',
-    component: () => import('@/framework/RouteError'),
-    meta: {
-      title: '404', isAuth: false
+  lastRoutes: [
+    {
+      path: '*',
+      component: () => import('@/framework/RouteError'),
+      meta: {
+        title: '404',
+        isAuth: false
+      }
     }
-  }
+  ]
 }

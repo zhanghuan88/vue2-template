@@ -1,6 +1,6 @@
 <template>
   <div class="route-error">
-    <svg-icon name="404" />
+    <svg-icon name="404"/>
     <div class="content">
       <h1>404</h1>
       <div class="desc">抱歉，你访问的页面不存在</div>
@@ -33,7 +33,7 @@ export default {
   },
   methods: {
     goBack() {
-      this.$router.replace('/home').catch(() => {})
+      this.$router.replace('/home');
     }
   }
 }
@@ -53,6 +53,7 @@ export default {
 
   .content {
     margin-left: 80px;
+
     h1 {
       color: #434e59;
       font-size: 72px;
@@ -60,6 +61,7 @@ export default {
       line-height: 72px;
       margin-bottom: 24px;
     }
+
     .desc {
       margin: 20px 0 30px;
       font-size: 20px;

@@ -1,6 +1,6 @@
 <template>
   <div class="menu">
-    菜单
+    菜单1212
   </div>
 </template>
 

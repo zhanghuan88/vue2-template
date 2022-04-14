@@ -5,16 +5,40 @@ import {getToken} from '@/utils/token'
 import ProjectSetting from '@/project-setting'
 import Vue from 'vue'
 import routesConfig from '@/router/routes-config'
+import {isEmpty} from 'lodash-es'
 
 Vue.use(VueRouter)
+// 解决路由在 push/replace相同地址报错的问题
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
+const originalReplace = VueRouter.prototype.replace
+VueRouter.prototype.replace = function replace(location) {
+  return originalReplace.call(this, location).catch(err => err)
+}
 const router = new VueRouter({
   routes: routesConfig.constantRoutes
 })
-router.beforeEach((to, from, next) => {
+router.beforeEach(async(to, from, next) => {
   const meta = to.meta || {};
   meta?.['title'] && store.commit('SET_TITLE', meta.title);
   ProjectSetting.enableProgress && NProgress.start();
   if (getToken()) {
+    // 判断是否加载了路由信息
+    if (isEmpty(store.state.menu.allRoutes)) {
+      const allRoutes = await store.dispatch('GetAllRoutes');
+      if (allRoutes) {
+        router.matcher = new VueRouter({
+          routes: routesConfig.constantRoutes
+        })['matcher'];
+        allRoutes.forEach(route => {
+          router.addRoute(route)
+        })
+        next({...to, replace: true})
+      }
+
+    }
     if (to.path === '/sign-in') {
       next({path: '/home'});
       ProjectSetting.enableProgress && NProgress.done()
@@ -38,6 +62,9 @@ router.beforeEach((to, from, next) => {
 })
 
 router.afterEach(() => {
+  ProjectSetting.enableProgress && NProgress.done()
+})
+router.onError(() => {
   ProjectSetting.enableProgress && NProgress.done()
 })
 export default router;

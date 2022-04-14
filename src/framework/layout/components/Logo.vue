@@ -1,5 +1,5 @@
 <template>
-  <div class="logo">
+  <div class="logo" @click="goHome()">
     <img :src="logo" alt="LOGO"/>
   </div>
 </template>
@@ -10,6 +10,11 @@ export default {
   data() {
     return {
       logo: require("@/assets/image/framework/vue.png")
+    }
+  },
+  methods: {
+    goHome() {
+      this.$router.push("/");
     }
   }
 }
