@@ -89,6 +89,7 @@ export default {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  z-index: 1;
 
   &__header {
     height: $g-sub-sidebar-container-header-height;
@@ -115,8 +116,7 @@ export default {
     @include hide-scrollbar();
     // 侧边栏进入动画
     .content_animated {
-      animation: fadeInUp;
-      animation-duration: 0.2s;
+      animation: fadeInUp 0.3s ease;
     }
 
     .menu {
