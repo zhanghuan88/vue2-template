@@ -10,6 +10,7 @@ import TopToolbar from '@/framework/layout/components/TopToolbar'
 export default {
   name: "MainTop",
   components: {TopToolbar}
+
 }
 </script>
 

@@ -18,28 +18,21 @@ export default {
     SET_TOP_MENUS: (state, topMenus) => {
       state.topMenus = topMenus;
       localforage.setItem(StoreKeys.topMenus, topMenus).then();
-      if (topMenus.findIndex(item => item.id === state.activeMainSidebarId) === -1) {
-        state.activeMainSidebarId = topMenus[0].id;
-      }
     },
     // 设置当前激活的顶部菜单id
     SET_ACTIVE_MAIN_SIDEBAR_ID: (state, activeMainSidebarId) => {
       state.activeMainSidebarId = activeMainSidebarId;
-      localforage.setItem(StoreKeys.activeMainSidebarId, activeMainSidebarId).then();
     },
     // 设置所有菜单信息
     SET_ALL_MENUS: (state, allMenus) => {
       state.allMenus = allMenus;
     }
+
   },
   actions: {
-    async GetTopMenu({commit}) {
+    async GetTopMenuByStore({commit}) {
       const [, topMenus] = await to(localforage.getItem(StoreKeys.topMenus));
       if (topMenus) commit("SET_TOP_MENUS", topMenus)
-    },
-    async GetActiveMainSidebarId({commit}) {
-      const [, activeMainSidebarId] = await to(localforage.getItem(StoreKeys.activeMainSidebarId));
-      if (activeMainSidebarId) commit("SET_ACTIVE_MAIN_SIDEBAR_ID", activeMainSidebarId)
     },
     async GetAllRoutes({commit}) {
       const [, allMenus] = await to(getMenus());

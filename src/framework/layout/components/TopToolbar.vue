@@ -19,5 +19,9 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: stretch;
+
+  .top-toolbar-left {
+    padding-right: 50px;
+  }
 }
 </style>

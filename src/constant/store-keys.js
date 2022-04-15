@@ -3,6 +3,6 @@ const StoreKeys = {
   userInfo: "USER_INFO",
   token: "TOKEN",
   topMenus: "TOP_MENUS",
-  activeMainSidebarId: "ACTIVE_MAIN_SIDEBAR_ID"
+  lastOpenRouteTopMenuId: "LAST_OPEN_ROUTE_TOP_MENU_ID"
 }
 export default StoreKeys;

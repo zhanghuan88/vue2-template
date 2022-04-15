@@ -20,6 +20,9 @@ import to from 'await-to-js'
 import {getMenus} from '@/api/user/auth'
 import regex from '@/constant/regex'
 import SidebarItem from '@/framework/layout/components/SidebarItem'
+import StoreKeys from '@/constant/store-keys'
+import {mapState} from 'vuex'
+import localforage from 'localforage'
 
 export default {
   name: "SubSidebarContainer",
@@ -33,10 +36,15 @@ export default {
       topMenuSide: {}
     }
   },
-  computed: {},
+  computed: {
+    ...mapState({
+      activeMainSidebarId: state => state.menu.activeMainSidebarId
+    })
+  },
   watch: {
     '$store.state.menu.activeMainSidebarId': {
       async handler(val) {
+        if (!val) return
         if (this.topMenuSide[val]) {
           this.subMenu = this.topMenuSide[val];
           return;
@@ -51,6 +59,7 @@ export default {
     menuClick(path) {
       if (!regex.url.test(path)) {
         this.$router.push(path);
+        localforage.setItem(StoreKeys.lastOpenRouteTopMenuId, this.activeMainSidebarId)
       }
     },
     onSidebarScroll(e) {

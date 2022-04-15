@@ -3,9 +3,9 @@
     <logo class="sidebar-logo"></logo>
     <div class="nav">
       <div v-for="top of topMenus" :key="top.id" class="item"
-           :class="{'active':top.id===$store.state.menu.activeMainSidebarId}"
+           :class="{'active':top.id===activeMainSidebarId}"
            @click="$store.commit('SET_ACTIVE_MAIN_SIDEBAR_ID', top.id)">
-        <svg-icon :name="top.icon"></svg-icon>
+        <svg-icon :name="top.icon || 'default'"></svg-icon>
         <div class="title">{{ top.title }}</div>
       </div>
     </div>
@@ -15,6 +15,10 @@
 <script>
 import Logo from '@/framework/layout/components/Logo'
 import {mapState} from 'vuex'
+import to from 'await-to-js'
+import {getTopMenus} from '@/api/user/auth'
+import localforage from 'localforage'
+import StoreKeys from '@/constant/store-keys'
 
 export default {
   name: "MainSidebarContainer",
@@ -24,12 +28,26 @@ export default {
   },
   computed: {
     ...mapState({
-      topMenus: state => state.menu.topMenus
+      topMenus: state => state.menu.topMenus,
+      activeMainSidebarId: state => state.menu.activeMainSidebarId
     })
   },
-  created() {
+  mounted() {
+    this.init();
   },
-  methods: {}
+  methods: {
+    async init() {
+      // 初始化顶部菜单
+      const [, topMenus] = await to(getTopMenus())
+      if (topMenus) {
+        this.$store.commit('SET_TOP_MENUS', topMenus);
+        // 获取最后打开页面时的顶部菜单
+        const [, topMenuId] = await to(localforage.getItem(StoreKeys.lastOpenRouteTopMenuId))
+        this.$store.commit('SET_ACTIVE_MAIN_SIDEBAR_ID', topMenuId || topMenus[0].id);
+      }
+
+    }
+  }
 }
 </script>
 

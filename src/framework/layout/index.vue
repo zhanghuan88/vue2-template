@@ -18,19 +18,13 @@
 
 <script>
 import MainSidebarContainer from '@/framework/layout/components/MainSidebarContainer'
-import {getTopMenus} from '@/api/user/auth'
-import to from 'await-to-js'
 import SubSidebarContainer from '@/framework/layout/components/SubSidebarContainer'
 import MainTop from '@/framework/layout/components/MainTop'
 
 export default {
   name: "Layout",
-  components: {MainTop, SubSidebarContainer, MainSidebarContainer},
-  async mounted() {
-    const [, topMenus] = await to(getTopMenus())
-    if (topMenus) this.$store.commit('SET_TOP_MENUS', topMenus);
+  components: {MainTop, SubSidebarContainer, MainSidebarContainer}
 
-  }
 }
 </script>
 
