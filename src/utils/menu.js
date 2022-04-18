@@ -33,6 +33,7 @@ export function handleRoutesByMenus(allMenus) {
   })
   // 添加最后路由
   routes.push(...routesConfig.lastRoutes);
+  console.log(routes, 'allRoutes')
   return routes;
 }
 

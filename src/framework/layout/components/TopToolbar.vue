@@ -17,6 +17,7 @@
 import {mapState} from 'vuex'
 import projectSetting from '@/project-setting'
 import {trimSlash} from '@/utils/menu'
+import {isEmpty} from 'lodash-es'
 
 export default {
   name: "TopToolbar",
@@ -44,8 +45,25 @@ export default {
             name: matched['title']
           });
           const childrenPath = trimSlash(last.path.replace(first.path, ''));
-          let childrenList = this.findChildrenList(childrenPath.replace(/^\/*/, ""), matched.children, matched.path);
-          breadcrumbList.push(...childrenList);
+          // 根据菜单找到当前路由层级
+          const childrenList = this.findChildrenList(childrenPath, matched.children);
+          // 处理路径
+          const lastChild = childrenList.reduce((pre, cur) => {
+            if (!isEmpty(cur.children)) {
+              breadcrumbList.push({
+                name: cur['title'],
+                path: `/${trimSlash(pre.path)}/${trimSlash(this.getChildPath(cur))}`
+              })
+            }
+            return {
+              name: cur['title'],
+              path: `/${trimSlash(pre.path)}/${trimSlash(cur.path)}`
+            };
+          }, {
+            path: trimSlash(matched.path)
+          });
+          breadcrumbList.push(lastChild);
+          console.log(breadcrumbList);
         }
       } else {
         // 单层菜单首页直接返回
@@ -57,32 +75,33 @@ export default {
       }
       return breadcrumbList
     }
+
   },
   methods: {
+    getChildPath(cur) {
+      if (!isEmpty(cur.children)) {
+        return `${trimSlash(cur.path)}/${trimSlash(this.getChildPath(cur.children[0]))}`
+      }
+      return cur.path;
+    },
     toggleCollapse() {
       this.$store.commit("SET_SIDEBAR_COLLAPSE", !this.sidebarCollapse);
     },
-    findChildrenList(childrenPath, children, basePath = "") {
+    findChildrenList(childrenPath, children) {
       let childrenList = [];
       children.findLast(item => {
-        const re = new RegExp(`^${item.path.replace(/^\/*/, "")}`)
+        const re = new RegExp(`^${trimSlash(item.path)}`)
         if (re.test(childrenPath)) {
           // 判断剩余路径是否为空
-          const remainingPath = childrenPath.replace(re, '').replace(/^\/*/, "");
+          const remainingPath = trimSlash(childrenPath.replace(re, ''));
           if (remainingPath === '') {
-            childrenList.unshift({
-              path: `/${trimSlash(basePath)}/${trimSlash(item.path)}`,
-              name: item['title']
-            });
+            childrenList.unshift(item);
             return true
           } else {
-            const list = this.findChildrenList(remainingPath, item.children, `${trimSlash(basePath)}/${trimSlash(item.path)}`);
+            const list = this.findChildrenList(remainingPath, item.children);
             if (list.length > 0) {
               childrenList.unshift(...list);
-              childrenList.unshift({
-                path: `/${trimSlash(basePath)}/${trimSlash(item.path)}`,
-                name: item['title']
-              });
+              childrenList.unshift(item);
             }
             return list.length > 0;
           }
