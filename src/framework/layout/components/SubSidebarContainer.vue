@@ -42,7 +42,7 @@ export default {
     })
   },
   watch: {
-    '$store.state.menu.activeMainSidebarId': {
+    'activeMainSidebarId': {
       async handler(val) {
         if (!val) return
         if (this.topMenuSide[val]) {

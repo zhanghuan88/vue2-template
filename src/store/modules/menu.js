@@ -11,7 +11,9 @@ export default {
     // 当前激活的顶部菜单id
     activeMainSidebarId: "",
     // 所有菜单信息
-    allMenus: []
+    allMenus: [],
+    // 收缩侧边栏
+    sidebarCollapse: false
   },
   mutations: {
     // 设置顶部菜单
@@ -26,8 +28,11 @@ export default {
     // 设置所有菜单信息
     SET_ALL_MENUS: (state, allMenus) => {
       state.allMenus = allMenus;
+    },
+    // 设置收缩侧边栏
+    SET_SIDEBAR_COLLAPSE: (state, sidebarCollapse) => {
+      state.sidebarCollapse = sidebarCollapse;
     }
-
   },
   actions: {
     async GetTopMenuByStore({commit}) {

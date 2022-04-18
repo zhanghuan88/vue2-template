@@ -8,7 +8,8 @@ module.exports = {
   },
   output: {
     filename: "js/[name].[fullhash:8].js",
-    path: resolve("dist")
+    path: resolve("dist"),
+    publicPath: "/"
   },
   cache: {
     type: 'filesystem',

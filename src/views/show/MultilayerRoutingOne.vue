@@ -6,7 +6,10 @@
 
 <script>
 export default {
-  name: "MultilayerRoutingOne"
+  name: "MultilayerRoutingOne",
+  data() {
+    return {}
+  }
 }
 </script>
 

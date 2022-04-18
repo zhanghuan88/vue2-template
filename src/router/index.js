@@ -18,20 +18,18 @@ VueRouter.prototype.replace = function replace(location) {
   return originalReplace.call(this, location).catch(err => err)
 }
 const router = new VueRouter({
-  routes: routesConfig.constantRoutes
+  routes: routesConfig.constantRoutes,
+  mode: 'history'
 })
 router.beforeEach(async(to, from, next) => {
   const meta = to.meta || {};
-  meta?.['title'] && store.commit('SET_TITLE', meta.title);
+  meta?.['title'] && store.commit('SET_TITLE', meta['title']);
   ProjectSetting.enableProgress && NProgress.start();
   if (getToken()) {
     // 判断是否加载了路由信息
     if (isEmpty(store.state.menu.allMenus)) {
       const allRoutes = await store.dispatch('GetAllRoutes');
       if (allRoutes) {
-        router.matcher = new VueRouter({
-          routes: routesConfig.constantRoutes
-        })['matcher'];
         allRoutes.forEach(route => {
           router.addRoute(route)
         })

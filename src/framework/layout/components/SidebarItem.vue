@@ -51,7 +51,7 @@ export default {
   .svg-icon {
     font-size: 20px;
     vertical-align: -0.25em;
-    transition: all 0.2s;
+    transition: transform 0.2s;
   }
 
   ::v-deep .el-menu-item.is-active {

@@ -13,12 +13,12 @@ export default {
       }
     },
     {
-      path: '/',
+      path: '',
       component: Layout,
-      redirect: '/home',
+      redirect: 'home',
       children: [
         {
-          path: '/home',
+          path: 'home',
           name: 'Home',
           component: () => import('@/framework/layout/pages/Home'),
           meta: {

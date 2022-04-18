@@ -98,7 +98,8 @@ export default {
       padding: 0 5px;
       cursor: pointer;
       position: relative;
-      transition: all 0.3s;
+      transition-duration: 0.3s;
+      transition-property: color, background-color;
 
       &:hover {
         background-color: $g-main-sidebar-menu-active-bg;

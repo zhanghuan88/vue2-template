@@ -22,7 +22,7 @@ module.exports = merge(webpackCommonConfig, {
         {
           loader: 'sass-resources-loader',
           options: {
-            resources: [ './src/styles/resources/*.scss',]
+            resources: ['./src/styles/resources/*.scss',]
           }
         },
         getConditionalLoader(),
