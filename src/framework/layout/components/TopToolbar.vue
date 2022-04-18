@@ -63,7 +63,6 @@ export default {
             path: trimSlash(matched.path)
           });
           breadcrumbList.push(lastChild);
-          console.log(breadcrumbList);
         }
       } else {
         // 单层菜单首页直接返回
