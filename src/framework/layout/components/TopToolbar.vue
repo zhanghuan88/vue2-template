@@ -5,9 +5,10 @@
         <svg-icon name="collapse"/>
       </div>
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item to="/">{{ homeTitle }}</el-breadcrumb-item>
-        <el-breadcrumb-item v-for="list of breadcrumbList" :key="list.path" :to="list.path">{{ list.name }}
-        </el-breadcrumb-item>
+        <transition-group name="breadcrumb">
+          <el-breadcrumb-item v-for="list of breadcrumbList" :key="list.path" :to="list.path" >{{ list.name }}
+          </el-breadcrumb-item>
+        </transition-group>
       </el-breadcrumb>
     </div>
   </div>
@@ -23,7 +24,6 @@ export default {
   name: "TopToolbar",
   data() {
     return {
-      homeTitle: projectSetting.homeTitle
     }
   },
   computed: {
@@ -32,7 +32,12 @@ export default {
       allMenus: state => state.menu.allMenus
     }),
     breadcrumbList() {
-      let breadcrumbList = []
+      let breadcrumbList = [
+        {
+          path: "/",
+          name: projectSetting.homeTitle
+        }
+      ]
       const [first, last] = this.$route.matched;
       if (first.path) { // 不是单层菜单
         // 找到所有菜单最后匹配的路由
@@ -74,7 +79,6 @@ export default {
       }
       return breadcrumbList
     }
-
   },
   methods: {
     getChildPath(cur) {
@@ -144,6 +148,17 @@ export default {
         transform: rotateZ(-180deg);
       }
     }
+    // 面包屑动画
+    .breadcrumb-enter-active {
+      transition: all 0.25s;
+    }
+    .breadcrumb-enter,
+    .breadcrumb-leave-active {
+      opacity: 0;
+      transform: translateX(30px) skewX(-50deg);
+    }
+
   }
+
 }
 </style>
