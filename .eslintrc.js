@@ -20,7 +20,7 @@ module.exports = {
   ],
   "rules": {
     //两个空格缩进
-    "indent": ["error", 2],
+    "indent": ["error", 2, {"SwitchCase": 1}],
     //对象属性换行
     "object-property-newline": ["error", {
       "allowAllPropertiesOnSameLine": true
@@ -104,9 +104,7 @@ module.exports = {
       "words": true,
       "nonwords": false
     }],
-    "spaced-comment": [2, "always", {
-      "markers": ["global", "globals", "eslint", "eslint-disable", "*package", "!", ","]
-    }],
+    "spaced-comment": [2, "always"],
     "switch-colon-spacing": [2, {
       "after": true,
       "before": false

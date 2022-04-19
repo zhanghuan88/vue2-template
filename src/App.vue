@@ -15,9 +15,9 @@ export default {
     return {};
   },
   watch: {
-    '$store.state.settings.mode': {
+    '$store.state.project.mode': {
       handler() {
-        document.body.setAttribute('data-mode', this.$store.state.settings.mode)
+        document.body.setAttribute('data-mode', this.$store.state.project.mode)
       },
       immediate: true
     }
@@ -31,7 +31,7 @@ export default {
   methods: {},
   metaInfo() {
     return {
-      title: this.$store.state.settings.title,
+      title: this.$store.state.project.title,
       titleTemplate: title => title ? `${title} - ${process.env.APP_TITLE}` : process.env.APP_TITLE
     }
   }

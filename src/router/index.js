@@ -18,8 +18,7 @@ VueRouter.prototype.replace = function replace(location) {
   return originalReplace.call(this, location).catch(err => err)
 }
 const router = new VueRouter({
-  routes: routesConfig.constantRoutes,
-  mode: 'history'
+  routes: routesConfig.constantRoutes
 })
 router.beforeEach(async(to, from, next) => {
   const meta = to.meta || {};

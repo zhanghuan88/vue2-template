@@ -18,7 +18,6 @@ export default {
     SET_TOKEN: (state, token) => {
       setToken(token);
       state.token = token;
-      localforage.setItem(StoreKeys.token, state.token).then();
     }
   },
   actions: {

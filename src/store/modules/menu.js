@@ -35,10 +35,6 @@ export default {
     }
   },
   actions: {
-    async GetTopMenuByStore({commit}) {
-      const [, topMenus] = await to(localforage.getItem(StoreKeys.topMenus));
-      if (topMenus) commit("SET_TOP_MENUS", topMenus)
-    },
     async GetAllRoutes({commit}) {
       const [, allMenus] = await to(getMenus());
       if (allMenus) {

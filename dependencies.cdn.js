@@ -60,6 +60,12 @@ module.exports = [
     css: ''
   },
   {
+    name: 'hotkeys-js',
+    library: 'hotkeys',
+    js: 'https://cdn.jsdelivr.net/npm/hotkeys-js@3.8.9/dist/hotkeys.min.js',
+    css: ''
+  },
+  {
     name: '',
     library: '',
     js: '',

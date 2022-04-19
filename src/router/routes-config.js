@@ -13,7 +13,7 @@ export default {
       }
     },
     {
-      path: '',
+      path: '/',
       component: Layout,
       redirect: 'home',
       children: [
@@ -24,6 +24,19 @@ export default {
           meta: {
             title: ProjectSetting.homeTitle
           }
+        },
+        {
+          path: 'personal-center',
+          name: 'PersonalCenter',
+          component: () => import('@/framework/layout/pages/PersonalCenter'),
+          meta: {
+            title: "个人中心"
+          }
+        },
+        {
+          path: 'reload',
+          name: 'Reload',
+          component: () => import('@/framework/layout/pages/Reload')
         }
       ]
     }

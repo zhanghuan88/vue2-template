@@ -6,10 +6,39 @@
       </div>
       <el-breadcrumb separator="/">
         <transition-group name="breadcrumb">
-          <el-breadcrumb-item v-for="list of breadcrumbList" :key="list.path" :to="list.path" >{{ list.name }}
+          <el-breadcrumb-item v-for="list of breadcrumbList" :key="list.path" :to="list.path">{{ list.name }}
           </el-breadcrumb-item>
         </transition-group>
       </el-breadcrumb>
+    </div>
+    <div class="top-toolbar-right">
+      <div class="tools">
+        <el-tooltip effect="dark" content="全屏" placement="bottom">
+          <span v-if="isFullscreenEnable" class="item" @click="fullscreen">
+            <svg-icon :name="isFullscreen ? 'fullscreen-exit' : 'fullscreen'"/>
+          </span>
+        </el-tooltip>
+        <el-tooltip effect="dark" content="刷新页面" placement="bottom">
+          <span class="item reload" :style="'transform:rotateZ('+rotationReload+'deg)'" @click="refresh()">
+            <svg-icon name="reload"/>
+          </span>
+        </el-tooltip>
+      </div>
+      <el-dropdown class="user-container" @command="handleCommand">
+        <div class="user-wrapper">
+          <el-avatar size="medium" :src="avatar">
+            <i class="el-icon-user-solid"/>
+          </el-avatar>
+          {{ nickname }}
+          <i class="el-icon-caret-bottom"/>
+        </div>
+        <el-dropdown-menu slot="dropdown" class="user-dropdown">
+          <el-dropdown-item command="home">{{ homeTitle }}</el-dropdown-item>
+          <el-dropdown-item command="setting">个人中心</el-dropdown-item>
+          <el-dropdown-item divided command="logout">退出登录</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+
     </div>
   </div>
 </template>
@@ -19,18 +48,28 @@ import {mapState} from 'vuex'
 import projectSetting from '@/project-setting'
 import {trimSlash} from '@/utils/menu'
 import {isEmpty} from 'lodash-es'
+import screenfull from 'screenfull';
 
 export default {
   name: "TopToolbar",
+  inject: ['reload'],
   data() {
     return {
+      homeTitle: projectSetting.homeTitle,
+      isFullscreenEnable: screenfull.isEnabled,
+      isFullscreen: screenfull.isFullscreen,
+      rotationReload: 0
     }
   },
   computed: {
     ...mapState({
       sidebarCollapse: state => state.menu.sidebarCollapse,
-      allMenus: state => state.menu.allMenus
+      allMenus: state => state.menu.allMenus,
+      nickname: state => state.user.userInfo.nickname,
+      avatar: state => state.user.userInfo.avatar ?? ""
     }),
+    // eslint-disable-next-line no-warning-comments
+    // TODO 缓存reload页面时列表
     breadcrumbList() {
       let breadcrumbList = [
         {
@@ -39,8 +78,9 @@ export default {
         }
       ]
       const [first, last] = this.$route.matched;
+      console.log(last)
       if (first.path) { // 不是单层菜单
-        // 找到所有菜单最后匹配的路由
+        // 找到所有菜单从后往前匹配
         const matched = this.allMenus.findLast(item => {
           return item.path === first.path
         });
@@ -80,7 +120,45 @@ export default {
       return breadcrumbList
     }
   },
+  mounted() {
+    if (screenfull.isEnabled) {
+      screenfull.on('change', this.fullscreenChange)
+    }
+  },
+  beforeDestroy() {
+    if (screenfull.isEnabled) {
+      screenfull.off('change', this.fullscreenChange)
+    }
+  },
   methods: {
+    refresh() {
+      this.rotationReload = this.rotationReload + 360;
+      this.reload(2);
+    },
+    fullscreen() {
+      screenfull.toggle()
+    },
+    fullscreenChange() {
+      this.isFullscreen = screenfull.isFullscreen
+    },
+    handleCommand(command) {
+      switch (command) {
+        case 'home':
+          this.$router.push('/home');
+          break
+        case 'setting':
+          this.$router.push({
+            name: 'PersonalCenter'
+          })
+          break
+        case 'logout':
+          this.$store.dispatch('FedLogOut')
+          this.$router.push("/sign-in");
+          break
+        default:
+          break;
+      }
+    },
     getChildPath(cur) {
       if (!isEmpty(cur.children)) {
         return `${trimSlash(cur.path)}/${trimSlash(this.getChildPath(cur.children[0]))}`
@@ -148,10 +226,12 @@ export default {
         transform: rotateZ(-180deg);
       }
     }
+
     // 面包屑动画
     .breadcrumb-enter-active {
       transition: all 0.25s;
     }
+
     .breadcrumb-enter,
     .breadcrumb-leave-active {
       opacity: 0;
@@ -160,5 +240,39 @@ export default {
 
   }
 
+  .top-toolbar-right {
+    display: flex;
+    align-items: center;
+    padding: 0 18px;
+
+    .tools {
+      margin-right: 20px;
+
+      .item {
+        padding: 6px 8px;
+        border-radius: 5px;
+        outline: none;
+        cursor: pointer;
+      }
+
+      .reload {
+        display: inline-block;
+        transition: transform 0.3s;
+      }
+    }
+
+    .user-container {
+      .user-wrapper {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+
+        .el-avatar {
+          margin-right: 4px;
+        }
+      }
+    }
+
+  }
 }
 </style>

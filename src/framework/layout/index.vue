@@ -6,13 +6,12 @@
       <div class="main">
         <main-top></main-top>
         <transition enter-active-class="main-enter" leave-active-class="main-leave" mode="out-in">
-          <keep-alive>
+          <keep-alive :include="[]">
             <router-view></router-view>
           </keep-alive>
         </transition>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -20,10 +19,50 @@
 import MainSidebarContainer from '@/framework/layout/components/MainSidebarContainer'
 import SubSidebarContainer from '@/framework/layout/components/SubSidebarContainer'
 import MainTop from '@/framework/layout/components/MainTop'
+import hotkeys from 'hotkeys-js'
 
 export default {
   name: "Layout",
-  components: {MainTop, SubSidebarContainer, MainSidebarContainer}
+  components: {MainTop, SubSidebarContainer, MainSidebarContainer},
+  provide() {
+    return {
+      reload: this.reload
+    }
+  },
+  data() {
+    return {
+      isRouterAlive: true
+    }
+  },
+  watch: {
+    $route: 'routeChange'
+  },
+  mounted() {
+    hotkeys('f5', e => {
+      e.preventDefault()
+      this.reload(2)
+    })
+  },
+  methods: {
+    reload(type = 1) {
+      if (type === 1) {
+        this.isRouterAlive = false
+        this.$nextTick(() => (this.isRouterAlive = true))
+      } else {
+        this.$router.replace({
+          path: '/reload',
+          query: {
+            redirect: this.$route.fullPath
+          }
+        })
+      }
+    },
+    routeChange(newVal, oldVal) {
+      if (newVal.name === oldVal.name) {
+        this.reload()
+      }
+    }
+  }
 
 }
 </script>
