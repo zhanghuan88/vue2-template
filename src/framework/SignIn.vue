@@ -119,7 +119,7 @@ export default {
     }
 
     .login-form {
-      width: 400px;
+      width: 300px;
       padding: 50px 35px 30px;
       overflow: hidden;
 
