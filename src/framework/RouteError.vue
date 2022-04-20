@@ -46,7 +46,7 @@ export default {
   justify-content: center;
   height: 100vh;
 
-  .svg-icon {
+  ::v-deep .svg-icon {
     width: 400px;
     height: 400px;
   }

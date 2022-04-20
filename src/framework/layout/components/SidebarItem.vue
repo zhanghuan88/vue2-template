@@ -48,7 +48,7 @@ export default {
 
 <style scoped lang="scss">
 .sidebar-item {
-  .svg-icon {
+  ::v-deep .svg-icon {
     font-size: 20px;
     vertical-align: -0.25em;
     transition: transform 0.2s;
@@ -67,7 +67,7 @@ export default {
     &:hover, &:focus {
       background-color: $g-sub-sidebar-menu-hover-bg;
 
-      .svg-icon {
+      ::v-deep .svg-icon {
         transform: scale(1.2);
       }
     }

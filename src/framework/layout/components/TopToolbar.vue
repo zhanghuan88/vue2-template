@@ -120,6 +120,7 @@ export default {
       return breadcrumbList
     }
   },
+  watch: {},
   mounted() {
     if (screenfull.isEnabled) {
       screenfull.on('change', this.fullscreenChange)
@@ -218,11 +219,11 @@ export default {
         background-image: linear-gradient(to right, #ddd, transparent);
       }
 
-      .svg-icon {
+      ::v-deep .svg-icon {
         transition: transform 0.3s;
       }
 
-      &.is-collapse .svg-icon {
+      &.is-collapse ::v-deep .svg-icon {
         transform: rotateZ(-180deg);
       }
     }

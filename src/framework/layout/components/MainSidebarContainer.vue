@@ -106,7 +106,7 @@ export default {
         color: $g-main-sidebar-menu-active-color;
       }
 
-      .svg-icon {
+      ::v-deep .svg-icon {
         margin: 0 auto;
         font-size: 24px;
       }
@@ -114,7 +114,9 @@ export default {
       .title {
         text-align: center;
         font-size: 14px;
+        line-height: 20px;
         width: 100%;
+        height: 20px;
         @include text-overflow();
       }
     }
