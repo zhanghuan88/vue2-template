@@ -19,7 +19,7 @@
           </span>
         </el-tooltip>
         <el-tooltip effect="dark" content="刷新页面" placement="bottom">
-          <span class="item reload" :style="'transform:rotateZ('+rotationReload+'deg)'" @click="refresh()">
+          <span class="item reload" @click="reload(2)">
             <svg-icon name="reload"/>
           </span>
         </el-tooltip>
@@ -58,7 +58,6 @@ export default {
       homeTitle: projectSetting.homeTitle,
       isFullscreenEnable: screenfull.isEnabled,
       isFullscreen: screenfull.isFullscreen,
-      rotationReload: 0,
       breadcrumbList: []
     }
   },
@@ -92,7 +91,6 @@ export default {
     getBreadcrumb() {
       const [first, last] = this.$route.matched;
       if (last.name === 'Reload') return;
-      console.log(111)
       let breadcrumbList = [
         {
           path: "/",
@@ -141,10 +139,6 @@ export default {
         })
       }
       this.breadcrumbList = breadcrumbList;
-    },
-    refresh() {
-      this.rotationReload = this.rotationReload + 360;
-      this.reload(2);
     },
     fullscreen() {
       screenfull.toggle()
@@ -266,9 +260,23 @@ export default {
         cursor: pointer;
       }
 
-      .reload {
+      @keyframes reload-animation {
+        0% {
+          transform: rotateZ(0deg);
+        }
+        100% {
+          transform: rotateZ(360deg);
+        }
+      }
+
+      .reload:focus {
         display: inline-block;
-        transition: transform 0.3s;
+        animation: reload-animation 0.3s linear;
+      }
+
+      .reload:active {
+        /* 加上这个才可以连续点击 */
+        animation: none;
       }
     }
 
