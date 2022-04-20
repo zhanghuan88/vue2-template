@@ -92,6 +92,7 @@ export default {
     getBreadcrumb() {
       const [first, last] = this.$route.matched;
       if (last.name === 'Reload') return;
+      console.log(111)
       let breadcrumbList = [
         {
           path: "/",
@@ -130,7 +131,10 @@ export default {
         }
       } else {
         // 单层菜单首页直接返回
-        if (last.path === "/home") return breadcrumbList;
+        if (last.name === "Home") {
+          this.breadcrumbList = breadcrumbList
+          return;
+        }
         breadcrumbList.push({
           path: last.path,
           name: last.meta['title']
