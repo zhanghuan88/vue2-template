@@ -77,6 +77,10 @@ export default {
     height: 100%;
     display: flex;
 
+    ::v-deep .main-sidebar-container, .sub-sidebar-container {
+      flex-shrink: 0;
+    }
+
     .main {
       flex-grow: 1;
       background: $g-main-content-bg;

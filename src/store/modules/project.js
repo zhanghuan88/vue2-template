@@ -36,7 +36,6 @@ export default {
     }
   },
   actions: {
-
     async GetLoginFormByStore({commit}) {
       const [, loginForm] = await to(localforage.getItem(StoreKeys.loginForm));
       if (loginForm) {

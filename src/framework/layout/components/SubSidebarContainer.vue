@@ -1,10 +1,10 @@
 <template>
-  <div class="sub-sidebar-container">
-    <div class="sub-sidebar-container__header" :class="{'shadow':headerShowShadow}">
+  <div class="sub-sidebar-container" :class="{'sub-sidebar-container--collapse':sidebarCollapse}">
+    <div v-if="!sidebarCollapse" class="sub-sidebar-container__header" :class="{'shadow':headerShowShadow}">
       {{ title }}
     </div>
     <div class="sub-sidebar-container__content" @scroll="onSidebarScroll">
-      <el-menu class="menu" :collapse-transition="false" :default-active="$route.path"
+      <el-menu class="menu" :collapse-transition="false" :default-active="$route.path" :collapse="sidebarCollapse"
                @select="menuClick">
         <transition-group enter-active-class="content_animated">
           <sidebar-item v-for="menu in subMenu" :key="menu.path" :item="menu" :base-path="menu.path"/>
@@ -38,7 +38,8 @@ export default {
   },
   computed: {
     ...mapState({
-      activeMainSidebarId: state => state.menu.activeMainSidebarId
+      activeMainSidebarId: state => state.menu.activeMainSidebarId,
+      sidebarCollapse: state => state.menu.sidebarCollapse
     })
   },
   watch: {
@@ -93,6 +94,7 @@ export default {
   flex-direction: column;
   overflow: hidden;
   z-index: 1;
+  transition: width 0.3s;
 
   &__header {
     height: $g-sub-sidebar-container-header-height;
@@ -122,6 +124,21 @@ export default {
       animation: fadeInUp 0.3s ease;
     }
 
+    // 收缩后样式
+    ::v-deep .el-menu--collapse {
+      width: $g-sub-sidebar-container-collapse-width;
+
+      .el-submenu__title {
+        i {
+          right: 7px;
+        }
+
+        span {
+          display: none;
+        }
+      }
+    }
+
     .menu {
       background-color: $g-sub-sidebar-bg;
       border-right: none;
@@ -129,8 +146,13 @@ export default {
       ::v-deep .el-menu {
         background-color: $g-sub-sidebar-next-bg;
       }
+
     }
   }
 
+}
+
+.sub-sidebar-container--collapse {
+  width: $g-sub-sidebar-container-collapse-width;
 }
 </style>
