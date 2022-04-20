@@ -58,7 +58,8 @@ export default {
       homeTitle: projectSetting.homeTitle,
       isFullscreenEnable: screenfull.isEnabled,
       isFullscreen: screenfull.isFullscreen,
-      rotationReload: 0
+      rotationReload: 0,
+      breadcrumbList: []
     }
   },
   computed: {
@@ -67,18 +68,36 @@ export default {
       allMenus: state => state.menu.allMenus,
       nickname: state => state.user.userInfo.nickname,
       avatar: state => state.user.userInfo.avatar ?? ""
-    }),
-    // eslint-disable-next-line no-warning-comments
-    // TODO 缓存reload页面时列表
-    breadcrumbList() {
+    })
+  },
+  watch: {
+    "$route": {
+      handler() {
+        this.getBreadcrumb();
+      },
+      immediate: true
+    }
+  },
+  mounted() {
+    if (screenfull.isEnabled) {
+      screenfull.on('change', this.fullscreenChange)
+    }
+  },
+  beforeDestroy() {
+    if (screenfull.isEnabled) {
+      screenfull.off('change', this.fullscreenChange)
+    }
+  },
+  methods: {
+    getBreadcrumb() {
+      const [first, last] = this.$route.matched;
+      if (last.name === 'Reload') return;
       let breadcrumbList = [
         {
           path: "/",
           name: projectSetting.homeTitle
         }
       ]
-      const [first, last] = this.$route.matched;
-      console.log(last)
       if (first.path) { // 不是单层菜单
         // 找到所有菜单从后往前匹配
         const matched = this.allMenus.findLast(item => {
@@ -117,21 +136,8 @@ export default {
           name: last.meta['title']
         })
       }
-      return breadcrumbList
-    }
-  },
-  watch: {},
-  mounted() {
-    if (screenfull.isEnabled) {
-      screenfull.on('change', this.fullscreenChange)
-    }
-  },
-  beforeDestroy() {
-    if (screenfull.isEnabled) {
-      screenfull.off('change', this.fullscreenChange)
-    }
-  },
-  methods: {
+      this.breadcrumbList = breadcrumbList;
+    },
     refresh() {
       this.rotationReload = this.rotationReload + 360;
       this.reload(2);
