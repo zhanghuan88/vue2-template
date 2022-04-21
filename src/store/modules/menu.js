@@ -3,6 +3,7 @@ import StoreKeys from '@/constant/store-keys'
 import to from 'await-to-js'
 import {getMenus} from '@/api/user/auth'
 import {handleRoutesByMenus} from '@/utils/menu'
+import {isEmpty} from 'lodash-es'
 
 export default {
   state: {
@@ -13,7 +14,9 @@ export default {
     // 所有菜单信息
     allMenus: [],
     // 收缩侧边栏
-    sidebarCollapse: false
+    sidebarCollapse: false,
+    // 标签栏
+    tags: []
   },
   mutations: {
     // 设置顶部菜单
@@ -32,6 +35,11 @@ export default {
     // 设置收缩侧边栏
     SET_SIDEBAR_COLLAPSE: (state, sidebarCollapse) => {
       state.sidebarCollapse = sidebarCollapse;
+    },
+    // 设置标签栏
+    SET_TAGS: (state, tags) => {
+      state.tags = tags;
+      localforage.setItem(StoreKeys.tags, tags).then();
     }
   },
   actions: {
@@ -41,6 +49,22 @@ export default {
         commit("SET_ALL_MENUS", allMenus);
         return handleRoutesByMenus(allMenus);
       }
+    },
+    async GetTopMenuByStore({commit}) {
+      const [, topMenus] = await to(localforage.getItem(StoreKeys.topMenus));
+      if (topMenus) commit("SET_TOP_MENUS", topMenus)
+    },
+    async GetTagsByStore({commit}) {
+      const [, tags] = await to(localforage.getItem(StoreKeys.tags));
+      commit("SET_TAGS", isEmpty(tags)
+        ? [
+          {
+            name: '首页',
+            path: '/home',
+            componentName: 'Home'
+          }
+        ]
+        : tags);
     }
   }
 }

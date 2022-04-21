@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import {mapMutations, mapState} from 'vuex'
 import projectSetting from '@/project-setting'
 import {trimSlash} from '@/utils/menu'
 import {isEmpty} from 'lodash-es'
@@ -88,6 +88,9 @@ export default {
     }
   },
   methods: {
+    ...mapMutations({
+      setSidebarCollapse: "SET_SIDEBAR_COLLAPSE"
+    }),
     getBreadcrumb() {
       const [first, last] = this.$route.matched;
       if (last.name === 'Reload') return;
@@ -171,7 +174,7 @@ export default {
       return cur.path;
     },
     toggleCollapse() {
-      this.$store.commit("SET_SIDEBAR_COLLAPSE", !this.sidebarCollapse);
+      this.setSidebarCollapse(!this.sidebarCollapse);
     },
     findChildrenList(childrenPath, children) {
       let childrenList = [];

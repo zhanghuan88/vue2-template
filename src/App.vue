@@ -7,6 +7,7 @@
 <script>
 
 import {debounce} from 'lodash-es'
+import {mapMutations} from 'vuex'
 
 export default {
   name: 'App',
@@ -23,12 +24,16 @@ export default {
     }
   },
   mounted() {
-    this.$store.commit('SET_MODE', document.body.clientWidth)
+    this.setMode(document.body.clientWidth)
     window.onresize = debounce(() => {
-      this.$store.commit('SET_MODE', document.body.clientWidth)
+      this.setMode(document.body.clientWidth)
     }, 100);
   },
-  methods: {},
+  methods: {
+    ...mapMutations({
+      setMode: 'SET_MODE'
+    })
+  },
   metaInfo() {
     return {
       title: this.$store.state.project.title,

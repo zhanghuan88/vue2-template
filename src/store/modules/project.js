@@ -1,7 +1,6 @@
 import to from 'await-to-js'
 import localforage from 'localforage'
 import StoreKeys from '@/constant/store-keys'
-import {getToken} from '@/utils/token'
 
 export default {
   state: {
@@ -43,24 +42,13 @@ export default {
         return loginForm;
       }
     },
-    async GetTopMenuByStore({commit}) {
-      const [, topMenus] = await to(localforage.getItem(StoreKeys.topMenus));
-      if (topMenus) commit("SET_TOP_MENUS", topMenus)
-    },
-    async GetUserInfoByStore({commit}) {
-      const [, userInfo] = await to(localforage.getItem(StoreKeys.userInfo));
-      if (userInfo) commit("SET_USER_INFO", userInfo)
-    },
-    GetTokenByCookie({commit}) {
-      const token = getToken();
-      if (token) commit("SET_TOKEN", token)
-    },
     async InitProjectStore({dispatch}) {
       await to(Promise.allSettled([
         dispatch("GetLoginFormByStore"),
         dispatch("GetTopMenuByStore"),
         dispatch("GetTokenByCookie"),
-        dispatch("GetUserInfoByStore")
+        dispatch("GetUserInfoByStore"),
+        dispatch("GetTagsByStore")
       ]))
     }
   }

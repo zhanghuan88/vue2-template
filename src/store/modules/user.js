@@ -2,7 +2,7 @@ import to from 'await-to-js'
 import {login} from '@/api/user/auth'
 import localforage from 'localforage'
 import StoreKeys from '@/constant/store-keys'
-import {setToken} from '@/utils/token'
+import {getToken, setToken} from '@/utils/token'
 import md5 from 'js-md5'
 
 export default {
@@ -34,6 +34,14 @@ export default {
       } else {
         throw new Error("登录失败")
       }
+    },
+    async GetUserInfoByStore({commit}) {
+      const [, userInfo] = await to(localforage.getItem(StoreKeys.userInfo));
+      if (userInfo) commit("SET_USER_INFO", userInfo)
+    },
+    GetTokenByCookie({commit}) {
+      const token = getToken();
+      if (token) commit("SET_TOKEN", token)
     },
     FedLogOut({commit}) {
       commit("SET_USER_INFO", {})

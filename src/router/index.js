@@ -29,6 +29,9 @@ router.beforeEach(async(to, from, next) => {
     if (isEmpty(store.state.menu.allMenus)) {
       const allRoutes = await store.dispatch('GetAllRoutes');
       if (allRoutes) {
+        router.matcher = new VueRouter({
+          routes: routesConfig.constantRoutes
+        })['matcher'];
         allRoutes.forEach(route => {
           router.addRoute(route)
         })
