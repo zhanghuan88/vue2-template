@@ -1,7 +1,7 @@
 <template>
   <div class="main-top">
     <top-toolbar></top-toolbar>
-    <top-navigation></top-navigation>
+    <!--<top-navigation></top-navigation>-->
   </div>
 </template>
 
@@ -11,6 +11,7 @@ import TopNavigation from '@/framework/layout/components/TopNavigation'
 
 export default {
   name: "MainTop",
+  // eslint-disable-next-line vue/no-unused-components
   components: {TopToolbar, TopNavigation}
 
 }

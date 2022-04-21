@@ -211,9 +211,11 @@ export default {
   align-items: stretch;
 
   .top-toolbar-left {
-    padding-right: 50px;
+    flex-grow: 1;
     display: flex;
     align-items: center;
+    overflow: hidden;
+    mask: linear-gradient(to left, transparent, #000 100px);
 
     .sidebar-collapse {
       height: 100%;
@@ -221,6 +223,7 @@ export default {
       display: flex;
       align-items: center;
       cursor: pointer;
+      flex-shrink: 0;
 
       &:hover {
         background-image: linear-gradient(to right, #ddd, transparent);
@@ -233,6 +236,10 @@ export default {
       &.is-collapse ::v-deep .svg-icon {
         transform: rotateZ(-180deg);
       }
+    }
+
+    .el-breadcrumb {
+      flex-shrink: 0;
     }
 
     // 面包屑动画
@@ -252,6 +259,7 @@ export default {
     display: flex;
     align-items: center;
     padding: 0 18px;
+    flex-shrink: 0;
 
     .tools {
       margin-right: 20px;
