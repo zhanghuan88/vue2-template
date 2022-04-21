@@ -10,6 +10,7 @@
 
 <script>
 import {mapMutations, mapState} from 'vuex'
+import projectSetting from '@/project-setting'
 
 export default {
   name: "TopNavigation",
@@ -28,7 +29,7 @@ export default {
   watch: {
     "$route": {
       handler() {
-        if (this.$route.name === 'Reload') return;
+        if (this.$route.name === 'Reload') return; // 刷新页面时不处理
         this.currentTagPath = this.$route.fullPath;
         // 当前tag是否在所有tags中
         let isTagInAll = this.tags.some(item => item.path === this.currentTagPath);
@@ -57,8 +58,17 @@ export default {
         name: this.$route.meta['title'],
         componentName: this.$route.name,
         path: this.$route.fullPath,
-        topMenuId: this.$route.name !== 'PersonalCenter' ? this.topMenuId : undefined
+        topMenuId: this.$route.name !== 'PersonalCenter' ? this.topMenuId : undefined // 个人中心页面不需要设置顶部菜单
       });
+      // 首页在不在tags中
+      let isHomeInTags = tags.some(item => item.componentName === 'Home');
+      if (!isHomeInTags) {
+        tags.unshift({
+          name: projectSetting.homeTitle,
+          componentName: 'Home',
+          path: '/home'
+        });
+      }
       this.setTags(tags);
     },
     removeTab(targetName) {

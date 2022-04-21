@@ -3,7 +3,6 @@ import StoreKeys from '@/constant/store-keys'
 import to from 'await-to-js'
 import {getMenus} from '@/api/user/auth'
 import {handleRoutesByMenus} from '@/utils/menu'
-import {isEmpty} from 'lodash-es'
 
 export default {
   state: {
@@ -56,15 +55,7 @@ export default {
     },
     async GetTagsByStore({commit}) {
       const [, tags] = await to(localforage.getItem(StoreKeys.tags));
-      commit("SET_TAGS", isEmpty(tags)
-        ? [
-          {
-            name: '首页',
-            path: '/home',
-            componentName: 'Home'
-          }
-        ]
-        : tags);
+      if (tags) commit("SET_TAGS", tags);
     }
   }
 }

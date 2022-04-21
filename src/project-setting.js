@@ -1,5 +1,5 @@
 export default {
-  homeTitle: '首页', // 首页浏览器标签前缀和面包屑标题
+  homeTitle: '首页12', // 首页浏览器标签前缀和面包屑标题
   enableProgress: true, // 启用进度条
   resStatusKey: "code", // 通用响应状态
   resMsgKey: "msg", // 通用响应信息
