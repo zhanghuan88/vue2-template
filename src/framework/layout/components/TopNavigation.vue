@@ -9,7 +9,7 @@
     <el-dropdown class="top-navigation-tool">
       <span class="top-navigation-tool--icon">
         <i class="box box-t"></i>
-        <i class="box box-b"></i>
+        <i class="box"></i>
       </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item icon="el-icon-plus">黄金糕</el-dropdown-item>
@@ -114,15 +114,18 @@ export default {
   align-items: center;
   justify-content: space-between;
   user-select: none;
+  background-color:$g-top-tabs-bg;
 
   .top-navigation-tabs {
-
+    width:0;
+    flex:1;
     ::v-deep .el-tabs__header {
       margin-bottom: 0;
     }
   }
 
   .top-navigation-tool {
+    flex:none;
     margin-left: 20px;
 
     .top-navigation-tool--icon {
@@ -133,12 +136,16 @@ export default {
 
       &:hover {
         transform: rotate(90deg);
-
+        .box-t:before {
+          transform: rotate(45deg);
+        }
         .box:before, .box:after {
           background-color: #1890ff;
         }
       }
-
+      .box-t:before{
+        transition: transform .3s ease-out;
+      }
       .box {
         position: relative;
         display: block;
