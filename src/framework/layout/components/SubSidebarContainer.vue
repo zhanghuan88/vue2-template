@@ -4,7 +4,7 @@
       {{ title }}
     </div>
     <div class="sub-sidebar-container__content" @scroll="onSidebarScroll">
-      <el-menu class="menu" :collapse-transition="false" :default-active="$route.path" :collapse="sidebarCollapse"
+      <el-menu class="menu" :collapse-transition="false" :default-active="defaultActive" :collapse="sidebarCollapse"
                @select="menuClick">
         <transition-group enter-active-class="content_animated">
           <sidebar-item v-for="menu in subMenu" :key="menu.path" :item="menu" :base-path="menu.path"/>
@@ -33,7 +33,8 @@ export default {
       headerShowShadow: false,
       subMenu: [],
       // 顶部菜单和对应子菜单的缓存
-      topMenuSide: {}
+      topMenuSide: {},
+      defaultActive: '' // 默认选中的菜单
     }
   },
   computed: {
@@ -43,6 +44,13 @@ export default {
     })
   },
   watch: {
+    "$route": {
+      handler() {
+        if (this.$route.name === 'Reload') return; // 刷新页面时不切换tab
+        this.defaultActive = this.$route.fullPath
+      },
+      immediate: true
+    },
     'activeMainSidebarId': {
       async handler(val) {
         if (!val) return

@@ -211,6 +211,7 @@ export default {
   align-items: stretch;
 
   .top-toolbar-left {
+    padding-right: 50px;
     flex-grow: 1;
     display: flex;
     align-items: center;
