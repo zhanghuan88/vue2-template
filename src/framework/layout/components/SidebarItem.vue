@@ -48,6 +48,7 @@ export default {
 
 <style scoped lang="scss">
 .sidebar-item {
+
   ::v-deep .svg-icon {
     font-size: 20px;
     vertical-align: -0.25em;
@@ -59,15 +60,23 @@ export default {
     background-color: $g-sub-sidebar-menu-active-bg !important;
   }
 
-  ::v-deep .el-submenu__title, .el-menu-item {
+  ::v-deep .el-submenu__title {
+
+  }
+
+  ::v-deep .el-submenu__title, ::v-deep .el-menu-item {
     color: $g-sub-sidebar-menu-color;
     height: $g-sub-sidebar-menu-height;
     line-height: $g-sub-sidebar-menu-height;
 
+    .svg-icon {
+      transition: transform 0.2s ease-in;
+    }
+
     &:hover, &:focus {
       background-color: $g-sub-sidebar-menu-hover-bg;
 
-      ::v-deep .svg-icon {
+      .svg-icon {
         transform: scale(1.2);
       }
     }

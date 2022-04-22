@@ -1,22 +1,21 @@
 <template>
   <div class="top-navigation">
-    <el-tabs v-model="currentTagPath" class="top-navigation-tabs" type="card" @tab-remove="removeTab"
-             @tab-click="tabClick">
+    <el-tabs v-model="currentTagPath" class="top-navigation-tabs top-navigation-tabs--smooth" type="card"
+             @tab-remove="removeTab" @tab-click="tabClick" @contextmenu.native="tabContextMenu">
       <el-tab-pane v-for="(item,index) in showTags" :key="item.path" :label="item.name" :name="item.path"
                    :closable="index!==0">
       </el-tab-pane>
     </el-tabs>
-    <el-dropdown class="top-navigation-tool">
-      <span class="top-navigation-tool--icon">
+    <el-dropdown class="top-navigation-tool" size="small" @visible-change="toolVisibleChange" @command="handleCommand">
+      <span class="top-navigation-tool--icon" :class="{'top-navigation-tool-show':isToolShown}">
         <i class="box box-t"></i>
         <i class="box"></i>
       </span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item icon="el-icon-plus">黄金糕</el-dropdown-item>
-        <el-dropdown-item icon="el-icon-circle-plus">狮子头</el-dropdown-item>
-        <el-dropdown-item icon="el-icon-circle-plus-outline">螺蛳粉</el-dropdown-item>
-        <el-dropdown-item icon="el-icon-check">双皮奶</el-dropdown-item>
-        <el-dropdown-item icon="el-icon-circle-check">蚵仔煎</el-dropdown-item>
+        <el-dropdown-item icon="el-icon-close" command="closeOther">关闭其他</el-dropdown-item>
+        <el-dropdown-item icon="el-icon-right" command="closeRight">关闭右侧</el-dropdown-item>
+        <el-dropdown-item icon="el-icon-back" command="closeLeft">关闭左侧</el-dropdown-item>
+        <el-dropdown-item icon="el-icon-close" command="closeAll">关闭全部</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </div>
@@ -31,7 +30,8 @@ export default {
   data() {
     return {
       currentTagPath: undefined,
-      tabIndex: 2
+      isToolShown: false,
+      contextmenuFlag: false
     }
   },
   computed: {
@@ -69,6 +69,52 @@ export default {
       setActiveMainSidebarId: 'SET_ACTIVE_MAIN_SIDEBAR_ID',
       setTags: 'SET_TAGS'
     }),
+    tabContextMenu(e) {
+      let target = e.target;
+      // 解决 https://github.com/d2-projects/d2-admin/issues/54
+      let flag = false;
+      if (target.className.indexOf("el-tabs__item") > -1) flag = true;
+      else if (target.parentNode.className.indexOf("el-tabs__item") > -1) {
+        target = target.parentNode;
+        flag = true;
+      }
+      if (flag) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.contextmenuFlag = true;
+      }
+
+    },
+    handleCommand(command) {
+      let tags = [];
+      switch (command) {
+        case 'closeOther':
+          tags = this.showTags.filter(item => item.path === this.$route.fullPath && item.componentName !== 'Home')
+          break;
+        case 'closeRight':
+          this.showTags.find(item => {
+            if (item.componentName !== 'Home') tags.push(item);
+            return item.path === this.$route.fullPath;
+          })
+          break;
+        case 'closeLeft':
+          this.showTags.findLast(item => {
+            if (item.componentName !== 'Home') tags.unshift(item);
+            return item.path === this.$route.fullPath;
+          })
+          break;
+        case 'closeAll':
+          this.$router.push({name: 'Home'});
+          break;
+        default:
+          break;
+      }
+      this.setTags(tags);
+
+    },
+    toolVisibleChange(visible) {
+      this.isToolShown = visible;
+    },
     tabClick() {
       this.$router.push(this.currentTagPath);
       let currentTag = this.tags.find(item => item.path === this.currentTagPath);
@@ -88,14 +134,16 @@ export default {
     },
     removeTab(targetName) {
       let currentIndex;
-      const tags = this.tags.filter((item, index) => {
+      const tags = this.showTags.filter((item, index) => {
         if (item.path === targetName) {
           currentIndex = index;
         }
-        return item.path !== targetName
+        return item.path !== targetName && item.componentName !== 'Home';
       })
-      if (this.tags[currentIndex].path === this.currentTagPath) {
-        this.$router.push(currentIndex + 1 < this.tags.length ? this.tags[currentIndex + 1].path : this.tags[currentIndex - 1].path);
+      if (this.showTags[currentIndex].path === this.currentTagPath) {
+        this.$router.push(currentIndex + 1 < this.showTags.length ?
+          this.showTags[currentIndex + 1].path :
+          this.showTags[currentIndex - 1].path);
       }
       this.setTags(tags);
     }
@@ -114,19 +162,77 @@ export default {
   align-items: center;
   justify-content: space-between;
   user-select: none;
-  background-color:$g-top-tabs-bg;
+  background-color: $g-top-tabs-bg;
 
   .top-navigation-tabs {
-    width:0;
-    flex:1;
+    width: 0;
+    flex: 1;
+
     ::v-deep .el-tabs__header {
       margin-bottom: 0;
+      border-bottom: none;
+
+      .el-tabs__nav-wrap {
+        margin-bottom: 0;
+      }
+
+      .el-tabs__nav {
+        border: none;
+
+        .el-tabs__item {
+          box-shadow: none;
+          border: none;
+        }
+      }
+    }
+  }
+
+  .top-navigation-tabs--smooth {
+    align-self: flex-end;
+
+    ::v-deep .el-tabs__header {
+
+      .el-tabs__item {
+        height: 35px;
+        margin-right: -15px;
+        padding: 0 25px;
+
+        .el-icon-close:hover {
+          background-color: inherit;
+          color: inherit;
+        }
+
+        &:not(.is-active):hover {
+          color: inherit;
+          background-color: #dee1e6;
+          mask: url("~@/assets/image/framework/tab-mask.png");
+          mask-size: 100% 100%;
+        }
+      }
+
+      .is-active {
+        background-color: #e8f4ff;
+        mask: url("~@/assets/image/framework/tab-mask.png");
+        mask-size: 100% 100%;
+      }
     }
   }
 
   .top-navigation-tool {
-    flex:none;
+    flex: none;
     margin-left: 20px;
+
+    .top-navigation-tool-show {
+      transform: rotate(90deg);
+
+      .box-t:before {
+        transform: rotate(45deg);
+      }
+
+      .box:before, .box:after {
+        background-color: #1890ff !important;
+      }
+    }
 
     .top-navigation-tool--icon {
       display: inline-block;
@@ -135,29 +241,25 @@ export default {
       transition: transform .3s ease-out;
 
       &:hover {
-        transform: rotate(90deg);
-        .box-t:before {
-          transform: rotate(45deg);
-        }
-        .box:before, .box:after {
-          background-color: #1890ff;
-        }
+        @extend .top-navigation-tool-show
       }
-      .box-t:before{
+
+      .box-t:before {
         transition: transform .3s ease-out;
       }
+
       .box {
         position: relative;
         display: block;
-        width: 14px;
+        width: 18px;
         height: 8px;
 
         &:before {
           position: absolute;
           top: 2px;
           left: 0;
-          width: 6px;
-          height: 6px;
+          width: 7px;
+          height: 7px;
           content: "";
           background: #9a9a9a;
         }
@@ -166,8 +268,8 @@ export default {
           position: absolute;
           top: 2px;
           left: 8px;
-          width: 6px;
-          height: 6px;
+          width: 7px;
+          height: 7px;
           content: "";
           background: #9a9a9a;
         }

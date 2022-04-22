@@ -136,6 +136,18 @@ export default {
     ::v-deep .el-menu--collapse {
       width: $g-sub-sidebar-container-collapse-width;
 
+      .is-active > .el-submenu__title {
+        background-color: $g-sub-sidebar-menu-active-bg;
+
+        &:hover {
+          background-color: $g-sub-sidebar-menu-active-bg;
+        }
+
+        svg {
+          color: white;
+        }
+      }
+
       .el-submenu__title {
         i {
           right: 7px;

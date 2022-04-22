@@ -4,12 +4,14 @@
       <main-sidebar-container></main-sidebar-container>
       <sub-sidebar-container></sub-sidebar-container>
       <div class="main">
-        <main-top></main-top>
-        <transition enter-active-class="main-enter" leave-active-class="main-leave" mode="out-in">
-          <keep-alive :include="[]">
-            <router-view></router-view>
-          </keep-alive>
-        </transition>
+        <main-top :class="{'main-top-shadow':headerShowShadow}"></main-top>
+        <div class="main-content" @scroll="onSidebarScroll">
+          <transition name="main" mode="out-in">
+            <keep-alive :include="[]">
+              <router-view></router-view>
+            </keep-alive>
+          </transition>
+        </div>
       </div>
     </div>
   </div>
@@ -31,7 +33,8 @@ export default {
   },
   data() {
     return {
-      isRouterAlive: true
+      isRouterAlive: true,
+      headerShowShadow: false
     }
   },
   watch: {
@@ -44,13 +47,17 @@ export default {
     })
   },
   methods: {
+    onSidebarScroll(e) {
+      this.headerShowShadow = e.target.scrollTop > 0;
+    },
     reload(type = 1) {
       if (type === 1) {
         this.isRouterAlive = false
         this.$nextTick(() => (this.isRouterAlive = true))
       } else {
+        if (this.$route.name === 'Reload') return;
         this.$router.replace({
-          path: '/reload',
+          name: 'Reload',
           query: {
             redirect: this.$route.fullPath
           }
@@ -84,16 +91,37 @@ export default {
     .main {
       flex-grow: 1;
       background: $g-main-content-bg;
+
+      .main-content {
+        height: calc(100% - #{$g-top-toolbar-height} - #{$g-top-tabs-height});
+        overflow: auto;
+      }
+
+      .main-top-shadow {
+        box-shadow: 0 10px 10px -10px #ccc;
+      }
     }
   }
 
   // 主页面动画
-  .main-enter {
-    animation: fadeInUp 0.2s ease-in;
+  .main-enter-active {
+    transition-property: margin, opacity;
+    transition-duration: 0.2s;
   }
 
-  .main-leave {
-    animation: fadeOutDown 0.2s ease-in;
+  .main-leave-active {
+    transition-property: margin, opacity;
+    transition-duration: 0.2s;
+  }
+
+  .main-enter {
+    opacity: 0;
+    margin-left: -20px;
+  }
+
+  .main-leave-to {
+    opacity: 0;
+    margin-left: 20px;
   }
 }
 </style>

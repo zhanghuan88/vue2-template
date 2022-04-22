@@ -18,6 +18,6 @@ export default {
 
 <style scoped lang="scss">
 .main-top {
-
+  box-shadow: 0 0 1px #ccc;
 }
 </style>
