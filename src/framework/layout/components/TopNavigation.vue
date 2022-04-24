@@ -1,28 +1,13 @@
 <template>
   <div class="top-navigation">
-    <el-popover v-if="contextmenuFlag" v-model="isShowPopover" :reference="popoverReference" placement="bottom"
-                width="200" trigger="click" content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
-                popper-class="tab-contextmenu" @hide="contextmenuFlag=false">
-      <div>
-        <el-button-group>
-          <el-button>主要按钮</el-button>
-          <el-button>主要按钮</el-button>
-          <el-button>主要按钮</el-button>
-        </el-button-group>
-        <el-button-group>
-          <el-button>主要按钮</el-button>
-          <el-button>主要按钮</el-button>
-        </el-button-group>
-      </div>
-    </el-popover>
     <el-tabs ref="tabs" v-model="currentTagPath" class="top-navigation-tabs top-navigation-tabs--smooth"
-             type="card" @tab-remove="removeTab" @tab-click="tabClick" @contextmenu.native="tabContextMenu">
+             type="card" @tab-remove="removeTab" @tab-click="tabClick" @contextmenu.native="contextMenu">
       <el-tab-pane v-for="(item,index) in showTags" :key="item.path" :label="item.name"
                    :name="item.path" :closable="index!==0">
       </el-tab-pane>
     </el-tabs>
     <el-dropdown class="top-navigation-tool" size="small" @visible-change="toolVisibleChange" @command="handleCommand">
-      <span class="top-navigation-tool--icon" :class="{'top-navigation-tool-show':isToolShown}">
+      <span class="top-navigation-tool--icon" :class="{'top-navigation-tool-show':isToolShow}">
         <i class="box box-t"></i>
         <i class="box"></i>
       </span>
@@ -42,14 +27,12 @@ import projectSetting from '@/project-setting'
 
 export default {
   name: "TopNavigation",
+  inject: ['reload'],
   data() {
     return {
       currentTagPath: undefined,
-      isToolShown: false,
-      contextmenuFlag: false,
-      isShowPopover: false,
-      popoverReference: undefined
-
+      isToolShow: false,
+      activeContextMenuIndex: 0
     }
   },
   computed: {
@@ -65,6 +48,30 @@ export default {
           path: '/home'
         }, ...this.tags
       ]
+    },
+    tabContextMenu() {
+      const currentTag = this.showTags[this.activeContextMenuIndex];
+      const isDisableReload = currentTag.path !== this.$route.fullPath;
+      const isDisableCloseCurrentTag = currentTag.componentName === "Home";
+      return [
+        {
+          label: "重新加载(R)",
+          icon: "el-icon-refresh",
+          disabled: isDisableReload,
+          onClick: () => {
+            this.reload(2)
+          }
+        },
+        {
+          label: "关闭标签页(C)",
+          icon: "el-icon-close",
+          disabled: isDisableCloseCurrentTag,
+          divided: true,
+          onClick: () => {
+            this.removeTab(currentTag.path)
+          }
+        }
+      ];
     }
   },
   watch: {
@@ -87,14 +94,7 @@ export default {
       setActiveMainSidebarId: 'SET_ACTIVE_MAIN_SIDEBAR_ID',
       setTags: 'SET_TAGS'
     }),
-    showContextMenu(target) {
-      this.popoverReference = target; // popover的参照元素
-      this.contextmenuFlag = true; // 初始化popover
-      this.$nextTick(() => {
-        this.isShowPopover = true; // 显示popover
-      })
-    },
-    tabContextMenu(e) {
+    contextMenu(e) {
       let target = e.target;
       let flag = false;
       if (target.className.indexOf("el-tabs__item") > -1) flag = true;
@@ -105,13 +105,15 @@ export default {
       if (flag) {
         e.preventDefault();
         e.stopPropagation();
-        if (this.isShowPopover) {
-          this.contextmenuFlag = false;
-          this.isShowPopover = false;
-          this.$nextTick(() => this.showContextMenu(target))
-        } else {
-          this.showContextMenu(target);
-        }
+        let i = 0; // 当前元素的索引;
+        while ((target = target.previousSibling) != null) i++;
+        this.activeContextMenuIndex = i;
+        this.$contextmenu({
+          items: this.tabContextMenu,
+          event: e,
+          zIndex: 3,
+          minWidth: 150
+        });
       }
 
     },
@@ -143,7 +145,7 @@ export default {
 
     },
     toolVisibleChange(visible) {
-      this.isToolShown = visible;
+      this.isToolShow = visible;
     },
     tabClick() {
       this.$router.push(this.currentTagPath);

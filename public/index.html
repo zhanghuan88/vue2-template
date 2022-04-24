@@ -15,6 +15,7 @@
   <!-- 使用CDN的JS文件 -->
   <link href="<%= htmlWebpackPlugin.options.cdnConfig.js[i] %>" rel="external nofollow preload" as="script">
   <% } %>
+  <link href="<%= BASE_URL %>script/contextmenu.js" rel="external nofollow preload" as="script">
   <style>
     .app-loading {
       position: absolute;
@@ -28,7 +29,7 @@
       justify-content: center;
       flex-direction: column;
       user-select: none;
-      color:white;
+      color: white;
       background-color: #2C3E50;
     }
 
@@ -76,17 +77,17 @@
       animation-delay: 0.3s;
     }
 
-    .app-loading  .sk-cube-grid .sk-cube7 {
+    .app-loading .sk-cube-grid .sk-cube7 {
       -webkit-animation-delay: 0s;
       animation-delay: 0s;
     }
 
-    .app-loading  .sk-cube-grid .sk-cube8 {
+    .app-loading .sk-cube-grid .sk-cube8 {
       -webkit-animation-delay: 0.1s;
       animation-delay: 0.1s;
     }
 
-    .app-loading  .sk-cube-grid .sk-cube9 {
+    .app-loading .sk-cube-grid .sk-cube9 {
       -webkit-animation-delay: 0.2s;
       animation-delay: 0.2s;
     }
@@ -141,5 +142,6 @@
 <% for (var i in htmlWebpackPlugin.options.cdnConfig && htmlWebpackPlugin.options.cdnConfig.js) { %>
 <script src="<%= htmlWebpackPlugin.options.cdnConfig.js[i] %>"></script>
 <% } %>
+<script src="<%= BASE_URL %>script/contextmenu.js"></script>
 </body>
 </html>

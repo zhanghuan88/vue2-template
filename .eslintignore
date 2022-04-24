@@ -1,4 +1,5 @@
 dist/
+public/
 webpack/
 node_modules/
 babel.config.js

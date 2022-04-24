@@ -1406,11 +1406,6 @@
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
-"@xunlei/vue-context-menu@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@xunlei/vue-context-menu/-/vue-context-menu-1.0.2.tgz#317bbf841770c64dd1d6fc116984d491dfa223ff"
-  integrity sha512-KyuMmb+NbOfRut92j5tGcEXJixD+m9C74cVvNkuNG9me2TbZJquRBOpNOkCkfO94oP4ZhjDDixQg0UEgoG++dg==
-
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
@@ -7531,6 +7526,11 @@ verror@1.10.0:
     assert-plus "^1.0.0"
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
+
+vue-contextmenujs@^1.3.13:
+  version "1.3.13"
+  resolved "https://registry.yarnpkg.com/vue-contextmenujs/-/vue-contextmenujs-1.3.13.tgz#3bdae023c7bd42095e78da4258000250d50ab8ef"
+  integrity sha512-P5ihsM6bfEUcSQZu2ifukYtv17mg4dcwyU04CN1sg8ItZbcsCeAs6orj2SCgDgquuHTLWVUL6nOu12x+OLM+eA==
 
 vue-eslint-parser@^8.0.1:
   version "8.3.0"
