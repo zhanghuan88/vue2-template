@@ -1,9 +1,24 @@
 <template>
   <div class="top-navigation">
-    <el-tabs v-model="currentTagPath" class="top-navigation-tabs top-navigation-tabs--smooth" type="card"
-             @tab-remove="removeTab" @tab-click="tabClick" @contextmenu.native="tabContextMenu">
-      <el-tab-pane v-for="(item,index) in showTags" :key="item.path" :label="item.name" :name="item.path"
-                   :closable="index!==0">
+    <el-popover v-if="contextmenuFlag" v-model="isShowPopover" :reference="popoverReference" placement="bottom"
+                width="200" trigger="click" content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
+                popper-class="tab-contextmenu" @hide="contextmenuFlag=false">
+      <div>
+        <el-button-group>
+          <el-button>主要按钮</el-button>
+          <el-button>主要按钮</el-button>
+          <el-button>主要按钮</el-button>
+        </el-button-group>
+        <el-button-group>
+          <el-button>主要按钮</el-button>
+          <el-button>主要按钮</el-button>
+        </el-button-group>
+      </div>
+    </el-popover>
+    <el-tabs ref="tabs" v-model="currentTagPath" class="top-navigation-tabs top-navigation-tabs--smooth"
+             type="card" @tab-remove="removeTab" @tab-click="tabClick" @contextmenu.native="tabContextMenu">
+      <el-tab-pane v-for="(item,index) in showTags" :key="item.path" :label="item.name"
+                   :name="item.path" :closable="index!==0">
       </el-tab-pane>
     </el-tabs>
     <el-dropdown class="top-navigation-tool" size="small" @visible-change="toolVisibleChange" @command="handleCommand">
@@ -31,7 +46,10 @@ export default {
     return {
       currentTagPath: undefined,
       isToolShown: false,
-      contextmenuFlag: false
+      contextmenuFlag: false,
+      isShowPopover: false,
+      popoverReference: undefined
+
     }
   },
   computed: {
@@ -69,9 +87,15 @@ export default {
       setActiveMainSidebarId: 'SET_ACTIVE_MAIN_SIDEBAR_ID',
       setTags: 'SET_TAGS'
     }),
+    showContextMenu(target) {
+      this.popoverReference = target; // popover的参照元素
+      this.contextmenuFlag = true; // 初始化popover
+      this.$nextTick(() => {
+        this.isShowPopover = true; // 显示popover
+      })
+    },
     tabContextMenu(e) {
       let target = e.target;
-      // 解决 https://github.com/d2-projects/d2-admin/issues/54
       let flag = false;
       if (target.className.indexOf("el-tabs__item") > -1) flag = true;
       else if (target.parentNode.className.indexOf("el-tabs__item") > -1) {
@@ -81,7 +105,13 @@ export default {
       if (flag) {
         e.preventDefault();
         e.stopPropagation();
-        this.contextmenuFlag = true;
+        if (this.isShowPopover) {
+          this.contextmenuFlag = false;
+          this.isShowPopover = false;
+          this.$nextTick(() => this.showContextMenu(target))
+        } else {
+          this.showContextMenu(target);
+        }
       }
 
     },
@@ -150,8 +180,13 @@ export default {
   }
 }
 </script>
-
+<style lang="scss">
+.tab-contextmenu {
+  padding: 0;
+}
+</style>
 <style scoped lang="scss">
+
 .top-navigation {
   position: relative;
   box-sizing: border-box;
@@ -188,11 +223,12 @@ export default {
   }
 
   .top-navigation-tabs--smooth {
-    align-self: flex-end;
+    align-self: stretch;
 
     ::v-deep .el-tabs__header {
 
       .el-tabs__item {
+        margin-top: calc(#{$g-top-tabs-height} - 35px);
         height: 35px;
         margin-right: -15px;
         padding: 0 25px;
