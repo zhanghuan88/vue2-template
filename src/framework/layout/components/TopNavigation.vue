@@ -6,15 +6,16 @@
                    :name="item.path" :closable="index!==0">
       </el-tab-pane>
     </el-tabs>
-    <el-dropdown class="top-navigation-tool" size="small" @visible-change="toolVisibleChange" @command="handleCommand">
+    <el-dropdown v-show="showTags.length>1" class="top-navigation-tool" size="small" @visible-change="toolVisibleChange"
+                 @command="handleCommand">
       <span class="top-navigation-tool--icon" :class="{'top-navigation-tool-show':isToolShow}">
         <i class="box box-t"></i>
         <i class="box"></i>
       </span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item icon="el-icon-close" command="closeOther">关闭其他</el-dropdown-item>
-        <el-dropdown-item icon="el-icon-right" command="closeRight">关闭右侧</el-dropdown-item>
-        <el-dropdown-item icon="el-icon-back" command="closeLeft">关闭左侧</el-dropdown-item>
+        <el-dropdown-item icon="el-icon-close" command="closeOther" :disabled="dropdownOtherDis">关闭其他</el-dropdown-item>
+        <el-dropdown-item icon="el-icon-right" command="closeRight" :disabled="dropdownRightDis">关闭右侧</el-dropdown-item>
+        <el-dropdown-item icon="el-icon-back" command="closeLeft" :disabled="dropdownLeftDis">关闭左侧</el-dropdown-item>
         <el-dropdown-item icon="el-icon-close" command="closeAll">关闭全部</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
@@ -40,6 +41,18 @@ export default {
       tags: state => state.menu.tags,
       topMenuId: state => state.menu.activeMainSidebarId
     }),
+    dropdownOtherDis() {
+      return this.$route.fullPath !== "/home" && this.showTags.length === 2
+        || this.$route.fullPath === "/home" && this.showTags.length === 1;
+    },
+    dropdownRightDis() {
+      const currentIndex = this.showTags.findIndex(item => item.path === this.$route.fullPath);
+      return currentIndex === this.showTags.length - 1;
+    },
+    dropdownLeftDis() {
+      const currentIndex = this.showTags.findIndex(item => item.path === this.$route.fullPath);
+      return [0, 1].includes(currentIndex);
+    },
     showTags() {
       return [
         {
@@ -52,7 +65,11 @@ export default {
     tabContextMenu() {
       const currentTag = this.showTags[this.activeContextMenuIndex];
       const isDisableReload = currentTag.path !== this.$route.fullPath;
-      const isDisableCloseCurrentTag = currentTag.componentName === "Home";
+      const isDisableCloseCurrent = this.activeContextMenuIndex === 0;
+      const isDisableCloseOther = this.activeContextMenuIndex === 1 && this.showTags.length === 2
+        || this.activeContextMenuIndex === 0 && this.showTags.length === 1;
+      const isDisableCloseRight = this.activeContextMenuIndex === this.showTags.length - 1;
+      const isDisableCloseLeft = [0, 1].includes(this.activeContextMenuIndex);
       return [
         {
           label: "重新加载(R)",
@@ -65,12 +82,37 @@ export default {
         {
           label: "关闭标签页(C)",
           icon: "el-icon-close",
-          disabled: isDisableCloseCurrentTag,
+          disabled: isDisableCloseCurrent,
           divided: true,
           onClick: () => {
             this.removeTab(currentTag.path)
           }
+        },
+        {
+          label: "关闭其他",
+          icon: "el-icon-close",
+          disabled: isDisableCloseOther,
+          onClick: () => {
+            this.closeOther(currentTag.path)
+          }
+        },
+        {
+          label: "关闭右侧",
+          icon: "el-icon-right",
+          disabled: isDisableCloseRight,
+          onClick: () => {
+            this.closeRight(currentTag.path)
+          }
+        },
+        {
+          label: "关闭左侧",
+          icon: "el-icon-back",
+          disabled: isDisableCloseLeft,
+          onClick: () => {
+            this.closeLeft(currentTag.path)
+          }
         }
+
       ];
     }
   },
@@ -117,31 +159,54 @@ export default {
       }
 
     },
-    handleCommand(command) {
+    closeOther(path) {
+      this.$router.push(path);
+      const tags = this.showTags.filter(item => item.path === path && item.componentName !== 'Home');
+      this.setTags(tags);
+    },
+    closeRight(path) {
       let tags = [];
+      // 当前路由是否在未关闭的标签中
+      let isRouteInShowTags = false;
+      this.showTags.find(item => {
+        if (item.componentName !== 'Home') tags.push(item);
+        if (item.path === this.$route.fullPath) isRouteInShowTags = true;
+        return item.path === path;
+      })
+      if (!isRouteInShowTags) this.$router.push(path);
+      this.setTags(tags);
+    },
+    closeLeft(path) {
+      let tags = [];
+      // 当前路由是否在未关闭的标签中
+      let isRouteInShowTags = false;
+      this.showTags.findLast(item => {
+        if (item.componentName !== 'Home') tags.unshift(item);
+        if (item.path === this.$route.fullPath) isRouteInShowTags = true;
+        return item.path === path;
+      })
+      if (!isRouteInShowTags) this.$router.push(path);
+      this.setTags(tags);
+    },
+    handleCommand(command) {
+      const fullPath = this.$route.fullPath;
       switch (command) {
         case 'closeOther':
-          tags = this.showTags.filter(item => item.path === this.$route.fullPath && item.componentName !== 'Home')
+          this.closeOther(fullPath);
           break;
         case 'closeRight':
-          this.showTags.find(item => {
-            if (item.componentName !== 'Home') tags.push(item);
-            return item.path === this.$route.fullPath;
-          })
+          this.closeRight(fullPath);
           break;
         case 'closeLeft':
-          this.showTags.findLast(item => {
-            if (item.componentName !== 'Home') tags.unshift(item);
-            return item.path === this.$route.fullPath;
-          })
+          this.closeLeft(fullPath);
           break;
         case 'closeAll':
+          this.setTags([]);
           this.$router.push({name: 'Home'});
           break;
         default:
           break;
       }
-      this.setTags(tags);
 
     },
     toolVisibleChange(visible) {
