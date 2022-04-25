@@ -300,11 +300,6 @@ export default {
         margin-right: -15px;
         padding: 0 25px;
 
-        .el-icon-close:hover {
-          background-color: inherit;
-          color: inherit;
-        }
-
         &:not(.is-active):hover {
           color: inherit;
           background-color: #dee1e6;

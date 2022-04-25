@@ -11,6 +11,8 @@
               <router-view></router-view>
             </keep-alive>
           </transition>
+          <el-backtop target=".main-content" :bottom="20">
+          </el-backtop>
         </div>
       </div>
     </div>
@@ -91,10 +93,13 @@ export default {
     .main {
       flex-grow: 1;
       background: $g-main-content-bg;
+      display: flex;
+      flex-direction: column;
 
       .main-content {
-        height: calc(100% - #{$g-top-toolbar-height} - #{$g-top-tabs-height});
-        overflow: auto;
+        overflow-x: hidden;
+        overflow-y: auto;
+        flex: 1;
       }
 
       .main-top-shadow {
