@@ -92,6 +92,15 @@ export default {
           }
         },
         {
+          label: "窗口最大化",
+          icon: "el-icon-rank",
+          disabled: isDisableReload,
+          divided: true,
+          onClick: () => {
+            this.setPageMaximized(true)
+          }
+        },
+        {
           label: "关闭其他",
           icon: "el-icon-close",
           disabled: isDisableCloseOther,

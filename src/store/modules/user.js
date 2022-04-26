@@ -47,10 +47,10 @@ export default {
       commit("SET_USER_INFO", {})
       commit("SET_ALL_MENUS", [])
       commit("SET_TOP_MENUS", [])
-      commit("SET_TOP_MENUS", [])
       commit("SET_ACTIVE_MAIN_SIDEBAR_ID", "")
       commit("SET_TAGS", [])
-      commit("SET_TOKEN", "")
+      commit("SET_TOKEN", "");
+      localforage.setItem(StoreKeys.lastOpenRouteTopMenuId, "").then()
     }
 
   }

@@ -7,7 +7,10 @@
     </div>
     <div class="main">
       <!--顶部栏-->
-      <main-top :class="{'main-top-shadow':headerShowShadow}"></main-top>
+      <div class="main-top" :class="{'main-top-shadow':headerShowShadow}">
+        <top-toolbar></top-toolbar>
+        <top-navigation></top-navigation>
+      </div>
       <!--页面-->
       <div class="main-content" @scroll="onSidebarScroll">
         <transition name="main-page" mode="out-in">
@@ -15,9 +18,9 @@
             <router-view></router-view>
           </keep-alive>
         </transition>
-        <el-backtop target=".main-content" :bottom="20">
-        </el-backtop>
       </div>
+      <el-backtop target=".main-content" :bottom="20">
+      </el-backtop>
     </div>
     <!--移动端遮罩层-->
     <div v-show="showMobileSidebar" class="warp-sidebar-mobile-mask" @click="hideMobileSidebar"></div>
@@ -31,14 +34,15 @@
 <script>
 import MainSidebarContainer from '@/framework/layout/components/MainSidebarContainer'
 import SubSidebarContainer from '@/framework/layout/components/SubSidebarContainer'
-import MainTop from '@/framework/layout/components/MainTop'
 import hotkeys from 'hotkeys-js'
 import projectSetting from '@/project-setting'
 import {mapGetters, mapMutations, mapState} from 'vuex'
+import TopToolbar from '@/framework/layout/components/TopToolbar'
+import TopNavigation from '@/framework/layout/components/TopNavigation'
 
 export default {
   name: "Layout",
-  components: {MainTop, SubSidebarContainer, MainSidebarContainer},
+  components: {TopToolbar, TopNavigation, SubSidebarContainer, MainSidebarContainer},
   provide() {
     return {
       reload: this.reload
@@ -137,6 +141,10 @@ export default {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+
+    .main-top {
+      box-shadow: 0 0 1px #ccc;
+    }
 
     .main-content {
       background: $g-main-content-bg;

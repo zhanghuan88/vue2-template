@@ -18,3 +18,4 @@ vue2后台管理模板 正在开发中
 
 ### tab右键菜单使用vue-contextmenujs
 
+### 页面会缓存有tag的页面 最大数量10个 ,在project-setting.js 设置
