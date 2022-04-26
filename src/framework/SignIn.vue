@@ -24,6 +24,7 @@
         <el-button :loading="loading" type="primary" style="width: 100%;" @click="handleLogin">登 录</el-button>
       </el-form>
     </div>
+    <copyright></copyright>
   </div>
 </template>
 
@@ -158,6 +159,13 @@ export default {
         margin: 20px 0;
       }
     }
+  }
+
+  footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 20px;
   }
 }
 </style>

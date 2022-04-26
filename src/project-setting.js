@@ -6,5 +6,8 @@ export default {
   resMsgKey: "msg", // 通用响应信息
   resDataKey: "data", // 通用响应数据
   tokenHeader: "Authorization", // token头部
-  tokenExpires: 7 // token过期时间 单位：日
+  tokenExpires: 7, // token过期时间 单位：日
+  copyrightDates: '2022-2022', // 版权信息时间
+  copyrightWebsite: 'https://www.baidu.com', // 版权信息网址
+  copyrightCompany: 'XXXX有限公司' // 版权信息公司
 }
