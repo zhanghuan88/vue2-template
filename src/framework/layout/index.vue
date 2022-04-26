@@ -18,6 +18,7 @@
             <router-view></router-view>
           </keep-alive>
         </transition>
+        <copyright></copyright>
       </div>
       <el-backtop target=".main-content" :bottom="20">
       </el-backtop>
@@ -151,6 +152,10 @@ export default {
       overflow-x: hidden;
       overflow-y: auto;
       flex: 1;
+
+      & > div:first-child {
+        min-height: calc(100% - 80px);
+      }
     }
 
     .main-top-shadow {
