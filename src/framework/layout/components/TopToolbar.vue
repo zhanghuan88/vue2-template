@@ -1,10 +1,10 @@
 <template>
   <div class="top-toolbar">
     <div class="top-toolbar-left">
-      <div class="sidebar-collapse" :class="{'is-collapse':sidebarCollapse}" @click="toggleCollapse">
+      <div class="sidebar-collapse" :class="{'is-collapse':shrink}" @click="toggleCollapse">
         <svg-icon name="collapse"/>
       </div>
-      <el-breadcrumb separator="/">
+      <el-breadcrumb v-if="isShowBreadcrumb" separator="/">
         <transition-group name="breadcrumb">
           <el-breadcrumb-item v-for="list of breadcrumbList" :key="list.path" :to="list.path">{{ list.name }}
           </el-breadcrumb-item>
@@ -19,7 +19,7 @@
           </span>
         </el-tooltip>
         <el-tooltip effect="dark" content="刷新页面" placement="bottom">
-          <span class="item reload" @click="reload(2)">
+          <span class="item reload" @click="reload()">
             <svg-icon name="reload"/>
           </span>
         </el-tooltip>
@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import {mapMutations, mapState} from 'vuex'
+import {mapGetters, mapMutations, mapState} from 'vuex'
 import projectSetting from '@/project-setting'
 import {trimSlash} from '@/utils/menu'
 import {isEmpty} from 'lodash-es'
@@ -63,18 +63,24 @@ export default {
   },
   computed: {
     ...mapState({
-      sidebarCollapse: state => state.menu.sidebarCollapse,
-      allMenus: state => state.menu.allMenus,
-      nickname: state => state.user.userInfo.nickname,
-      avatar: state => state.user.userInfo.avatar ?? ""
-    })
+      allMenus: state => state.menu.allMenus
+    }),
+    ...mapGetters(['isMobile', 'avatar', 'nickname', 'shrink']),
+    isShowBreadcrumb() {
+      // 如果是移动端，则不显示面包屑
+      return !this.isMobile
+    }
   },
   watch: {
-    "$route": {
+    "$route.fullPath": {
       handler() {
         this.getBreadcrumb();
       },
       immediate: true
+    },
+    isMobile() {
+      // 模式变换 重置收缩按钮
+      this.setShrink(false)
     }
   },
   mounted() {
@@ -89,7 +95,7 @@ export default {
   },
   methods: {
     ...mapMutations({
-      setSidebarCollapse: "SET_SIDEBAR_COLLAPSE"
+      setShrink: "SET_SHRINK"
     }),
     getBreadcrumb() {
       const [first, last] = this.$route.matched;
@@ -174,7 +180,7 @@ export default {
       return cur.path;
     },
     toggleCollapse() {
-      this.setSidebarCollapse(!this.sidebarCollapse);
+      this.setShrink(!this.shrink);
     },
     findChildrenList(childrenPath, children) {
       let childrenList = [];
@@ -287,7 +293,6 @@ export default {
       }
 
       .reload:active {
-        /* 加上这个才可以连续点击 */
         animation: none;
       }
     }

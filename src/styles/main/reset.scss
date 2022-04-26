@@ -29,4 +29,9 @@ body {
 
 body {
   font-family: Lato, PingFang SC, Microsoft YaHei, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+* {
+  outline: 0
 }

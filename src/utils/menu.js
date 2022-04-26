@@ -31,9 +31,13 @@ export function handleRoutesByMenus(allMenus) {
       }
     }
   })
+  // 删除第一个路由
+  if (routes[0].children.length === 0) {
+    routes.splice(0, 1)
+  }
   // 添加最后路由
   routes.push(...routesConfig.lastRoutes);
-  window.console.log(routes, 'allRoutes')
+  window.console.log(routes, '所有动态路由')
   return routes;
 }
 

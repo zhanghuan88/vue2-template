@@ -1,5 +1,5 @@
 <template functional>
-  <svg class="svg-icon" aria-hidden="true" v-on="$listeners">
+  <svg class="svg-icon" aria-hidden="true">
     <use :xlink:href="`#icon-${props.name}`"/>
   </svg>
 </template>

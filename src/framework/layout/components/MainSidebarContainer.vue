@@ -14,7 +14,7 @@
 
 <script>
 import Logo from '@/framework/layout/components/Logo'
-import {mapMutations, mapState} from 'vuex'
+import {mapGetters, mapMutations, mapState} from 'vuex'
 import to from 'await-to-js'
 import {getTopMenus} from '@/api/user/auth'
 import localforage from 'localforage'
@@ -28,9 +28,9 @@ export default {
   },
   computed: {
     ...mapState({
-      topMenus: state => state.menu.topMenus,
-      activeMainSidebarId: state => state.menu.activeMainSidebarId
-    })
+      topMenus: state => state.menu.topMenus
+    }),
+    ...mapGetters(['activeMainSidebarId'])
   },
   mounted() {
     this.init();

@@ -1,7 +1,8 @@
 <template>
   <div class="top-navigation">
     <el-tabs ref="tabs" v-model="currentTagPath" class="top-navigation-tabs top-navigation-tabs--smooth"
-             type="card" @tab-remove="removeTab" @tab-click="tabClick" @contextmenu.native="contextMenu">
+             type="card" @tab-remove="removeTab" @tab-click="tabClick" @contextmenu.native="contextMenu"
+             @dblclick.native="dblClick">
       <el-tab-pane v-for="(item,index) in showTags" :key="item.path" :label="item.name"
                    :name="item.path" :closable="index!==0">
       </el-tab-pane>
@@ -23,7 +24,7 @@
 </template>
 
 <script>
-import {mapMutations, mapState} from 'vuex'
+import {mapGetters, mapMutations, mapState} from 'vuex'
 import projectSetting from '@/project-setting'
 
 export default {
@@ -38,9 +39,9 @@ export default {
   },
   computed: {
     ...mapState({
-      tags: state => state.menu.tags,
-      topMenuId: state => state.menu.activeMainSidebarId
+      tags: state => state.menu.tags
     }),
+    ...mapGetters(['activeMainSidebarId']),
     dropdownOtherDis() {
       return this.$route.fullPath !== "/home" && this.showTags.length === 2
         || this.$route.fullPath === "/home" && this.showTags.length === 1;
@@ -54,13 +55,15 @@ export default {
       return [0, 1].includes(currentIndex);
     },
     showTags() {
-      return [
+      const tags = [
         {
           name: projectSetting.homeTitle,
           componentName: 'Home',
           path: '/home'
         }, ...this.tags
-      ]
+      ];
+      this.setKeepAliveInclude(tags.map(item => item.componentName));
+      return tags;
     },
     tabContextMenu() {
       const currentTag = this.showTags[this.activeContextMenuIndex];
@@ -72,15 +75,15 @@ export default {
       const isDisableCloseLeft = [0, 1].includes(this.activeContextMenuIndex);
       return [
         {
-          label: "重新加载(R)",
+          label: "重新加载",
           icon: "el-icon-refresh",
           disabled: isDisableReload,
           onClick: () => {
-            this.reload(2)
+            this.reload()
           }
         },
         {
-          label: "关闭标签页(C)",
+          label: "关闭标签页",
           icon: "el-icon-close",
           disabled: isDisableCloseCurrent,
           divided: true,
@@ -122,7 +125,7 @@ export default {
         if (this.$route.name === 'Reload') return; // 刷新页面时不切换tab
         this.currentTagPath = this.$route.fullPath;
         if (this.$route.name === 'Home') return; // 首页不新增tab
-        // 当前tag是否在所有tags中
+        // 当前tag不存在时新增tab
         let isTagInAll = this.tags.some(item => item.path === this.currentTagPath);
         if (!isTagInAll) {
           this.addTab();
@@ -134,9 +137,11 @@ export default {
   methods: {
     ...mapMutations({
       setActiveMainSidebarId: 'SET_ACTIVE_MAIN_SIDEBAR_ID',
-      setTags: 'SET_TAGS'
+      setTags: 'SET_TAGS',
+      setPageMaximized: 'SET_PAGE_MAXIMIZED',
+      setKeepAliveInclude: "SET_KEEP_ALIVE_INCLUDE"
     }),
-    contextMenu(e) {
+    tabEventIndex(e) {
       let target = e.target;
       let flag = false;
       if (target.className.indexOf("el-tabs__item") > -1) flag = true;
@@ -149,15 +154,29 @@ export default {
         e.stopPropagation();
         let i = 0; // 当前元素的索引;
         while ((target = target.previousSibling) != null) i++;
+        return [flag, i]
+      }
+      return [flag, null]
+    },
+    contextMenu(e) {
+      const [flag, i] = this.tabEventIndex(e);
+      if (flag) {
         this.activeContextMenuIndex = i;
         this.$contextmenu({
           items: this.tabContextMenu,
           event: e,
-          zIndex: 3,
-          minWidth: 150
+          customClass: "tab-contextmenu",
+          minWidth: 40,
+          zIndex: 3
         });
       }
 
+    },
+    dblClick(e) {
+      const [flag] = this.tabEventIndex(e);
+      if (flag) {
+        this.setPageMaximized(true);
+      }
     },
     closeOther(path) {
       this.$router.push(path);
@@ -225,7 +244,7 @@ export default {
         name: this.$route.meta['title'],
         componentName: this.$route.name,
         path: this.$route.fullPath,
-        topMenuId: this.$route.name !== 'PersonalCenter' ? this.topMenuId : undefined // 个人中心页面不需要设置顶部菜单
+        topMenuId: this.activeMainSidebarId
       });
       this.setTags(tags);
     },
@@ -249,7 +268,9 @@ export default {
 </script>
 <style lang="scss">
 .tab-contextmenu {
-  padding: 0;
+  .menu_item_expand_icon {
+    display: none;
+  }
 }
 </style>
 <style scoped lang="scss">

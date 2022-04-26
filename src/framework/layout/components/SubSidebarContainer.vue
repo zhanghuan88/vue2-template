@@ -1,10 +1,10 @@
 <template>
-  <div class="sub-sidebar-container" :class="{'sub-sidebar-container--collapse':sidebarCollapse}">
-    <div v-if="!sidebarCollapse" class="sub-sidebar-container__header" :class="{'shadow':headerShowShadow}">
+  <div class="sub-sidebar-container" :class="{'sub-sidebar-container--collapse':menuCollapse}">
+    <div v-if="!menuCollapse" class="sub-sidebar-container__header" :class="{'shadow':headerShowShadow}">
       {{ title }}
     </div>
     <div class="sub-sidebar-container__content" @scroll="onSidebarScroll">
-      <el-menu class="menu" :collapse-transition="false" :default-active="defaultActive" :collapse="sidebarCollapse"
+      <el-menu class="menu" :collapse-transition="false" :default-active="defaultActive" :collapse="menuCollapse"
                @select="menuClick">
         <transition-group enter-active-class="content_animated">
           <sidebar-item v-for="menu in subMenu" :key="menu.path" :item="menu" :base-path="menu.path"/>
@@ -21,7 +21,7 @@ import {getMenus} from '@/api/user/auth'
 import regex from '@/constant/regex'
 import SidebarItem from '@/framework/layout/components/SidebarItem'
 import StoreKeys from '@/constant/store-keys'
-import {mapState} from 'vuex'
+import {mapGetters} from 'vuex'
 import localforage from 'localforage'
 
 export default {
@@ -38,10 +38,13 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      activeMainSidebarId: state => state.menu.activeMainSidebarId,
-      sidebarCollapse: state => state.menu.sidebarCollapse
-    })
+    ...mapGetters(['shrink', 'isMobile', 'activeMainSidebarId']),
+    menuCollapse() {
+      if (this.isMobile) {
+        return false
+      }
+      return this.shrink
+    }
   },
   watch: {
     "$route": {

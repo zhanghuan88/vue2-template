@@ -12,8 +12,6 @@ export default {
     activeMainSidebarId: "",
     // 所有菜单信息
     allMenus: [],
-    // 收缩侧边栏
-    sidebarCollapse: false,
     // 标签栏
     tags: []
   },
@@ -30,10 +28,6 @@ export default {
     // 设置所有菜单信息
     SET_ALL_MENUS: (state, allMenus) => {
       state.allMenus = allMenus;
-    },
-    // 设置收缩侧边栏
-    SET_SIDEBAR_COLLAPSE: (state, sidebarCollapse) => {
-      state.sidebarCollapse = sidebarCollapse;
     },
     // 设置标签栏
     SET_TAGS: (state, tags) => {

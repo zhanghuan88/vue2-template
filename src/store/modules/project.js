@@ -8,7 +8,15 @@ export default {
     // 页面标题,
     title: '',
     // 显示模式，支持：mobile、pc
-    mode: 'pc'
+    mode: 'pc',
+    // 工具栏收缩按钮是否收缩
+    shrink: false,
+    // page是否最大化
+    pageMaximized: false,
+    // 页面keep-alive的include
+    keepAliveInclude: [],
+    // 页面keep-alive的exclude
+    keepAliveExclude: []
   },
   mutations: {
     SET_LOGIN_FORM: (state, loginForm) => {
@@ -32,6 +40,21 @@ export default {
           state.mode = 'pc'
         }
       }
+    },
+    SET_SHRINK: (state, shrink) => {
+      state.shrink = shrink;
+    },
+    SET_PAGE_MAXIMIZED: (state, pageMaximized) => {
+      state.pageMaximized = pageMaximized;
+    },
+    SET_KEEP_ALIVE_INCLUDE: (state, keepAliveInclude) => {
+      state.keepAliveInclude = keepAliveInclude;
+    },
+    ADD_KEEP_ALIVE_EXCLUDE: (state, name) => {
+      !state.keepAliveExclude.includes(name) && state.keepAliveExclude.push(name);
+    },
+    REMOVE_KEEP_ALIVE_EXCLUDE: (state, name) => {
+      state.keepAliveExclude = state.keepAliveExclude.filter(v => v !== name);
     }
   },
   actions: {
