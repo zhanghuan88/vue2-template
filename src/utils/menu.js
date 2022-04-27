@@ -62,10 +62,10 @@ export function getRoutByMenu(menu) {
   const isFileFromFramework = /^\/*framework/.test(filePath);
   let component;
   if (isFileFromFramework) {
-    filePath = filePath = filePath.replace(/^framework\/layout\/pages\//, "");
+    filePath = filePath = filePath.replace(/^\/*framework\/layout\/pages\//, "");
     component = () => import(`@/framework/layout/pages/${filePath}`);
   } else { // 其他页面认为来自 src/views
-    filePath = filePath.replace(/^views\//, "");
+    filePath = filePath.replace(/^\/*views\//, "");
     component = () => import(`@/views/${filePath}`);
   }
   return {
