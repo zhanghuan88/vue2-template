@@ -190,7 +190,7 @@ export default {
           // 判断剩余路径是否为空
           const remainingPath = trimSlash(childrenPath.replace(re, ''));
           if (remainingPath === '') {
-            childrenList.unshift(item);
+            childrenList.unshift({...item, children: []});// 没有剩余匹配 不处理子路径
             return true
           } else {
             const list = this.findChildrenList(remainingPath, item.children);

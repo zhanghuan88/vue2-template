@@ -46,11 +46,14 @@ export function deepChildRoute(menus, children) {
   menus.forEach(menu => {
     if (menu.filePath) {
       children.push(menu)
-    } else if (!isEmpty(menu.children)) {
-      deepChildRoute(menu.children.map(item => ({
-        ...item,
-        path: `${trimSlash(menu.path)}/${trimSlash(item.path)}` // 补充路径
-      })), children)
+    }
+    if (!isEmpty(menu.children)) {
+      deepChildRoute(menu.children.map(item => (
+        {
+          ...item,
+          path: `${trimSlash(menu.path)}/${trimSlash(item.path)}` // 补充路径
+        }
+      )), children)
     }
   })
 }

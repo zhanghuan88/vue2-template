@@ -26,6 +26,7 @@
 <script>
 import {mapGetters, mapMutations, mapState} from 'vuex'
 import projectSetting from '@/project-setting'
+import {uniq} from 'lodash-es'
 
 export default {
   name: "TopNavigation",
@@ -62,7 +63,7 @@ export default {
           path: '/home'
         }, ...this.tags
       ];
-      this.setKeepAliveInclude(tags.map(item => item.componentName));
+      this.setKeepAliveInclude(uniq(tags.map(item => item.componentName)));
       return tags;
     },
     tabContextMenu() {

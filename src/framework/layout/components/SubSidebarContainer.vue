@@ -80,10 +80,12 @@ export default {
     // 处理子菜单没有文件路径并且没有子菜单的路由
     handleSubMenu(routers) {
       return routers.filter(router => {
+        // 路由设置隐藏 菜单 则展示
+        if (router['hideMenu']) return false
         if (!isEmpty(router.children)) {
           router.children = this.handleSubMenu(router.children)
         }
-        return !isEmpty(router.children) || router.filePath || regex.url.test(router.path)
+        return !isEmpty(router.children) || router.filePath || regex.url.test(router.path);
       });
     },
     setSubMenu(topMenuId, routers) {
