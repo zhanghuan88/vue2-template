@@ -76,7 +76,8 @@ export function getRoutByMenu(menu) {
     name: menu.componentName,
     component: component,
     meta: {
-      title: menu.title
+      title: menu.title,
+      disPageCache: menu.disPageCache
     }
   }
 

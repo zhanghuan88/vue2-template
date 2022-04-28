@@ -14,7 +14,7 @@
       <!--页面-->
       <div class="main-content" @scroll="onSidebarScroll">
         <transition name="main-page" mode="out-in">
-          <keep-alive :include="keepAliveInclude" :exclude="keepAliveExclude" :max="keepAliveMax">
+          <keep-alive ref="pageKeepAlive" :include="keepAliveInclude" :exclude="keepAliveExclude" :max="keepAliveMax">
             <router-view></router-view>
           </keep-alive>
         </transition>
@@ -90,14 +90,16 @@ export default {
       if (this.$route.name === 'Reload') return;
       this.$router.replace({
         name: 'Reload',
-        query: {
-          redirect: this.$route.fullPath
+        params: {
+          componentName: this.$route.name,
+          params: this.$route.params,
+          query: this.$route.query
         }
       })
     },
     routeChange(newVal, oldVal) {
       if (this.isMobile) this.setShrink(false);// 打开新页面，把收缩状态关闭
-      if (newVal.name === oldVal.name) {
+      if (newVal.name === oldVal.name) { // 同个组件 刷新缓存
         this.reload()
       }
     }

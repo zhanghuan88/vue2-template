@@ -63,7 +63,11 @@ export default {
           path: '/home'
         }, ...this.tags
       ];
-      this.setKeepAliveInclude(uniq(tags.map(item => item.componentName)));
+      const cacheList = [];
+      tags.forEach(item => {
+        if (!item.disPageCache) cacheList.push(item.componentName);
+      })
+      this.setKeepAliveInclude(uniq(cacheList));
       return tags;
     },
     tabContextMenu() {
@@ -138,7 +142,7 @@ export default {
         // 当前tag不存在时新增tab
         let isTagInAll = this.tags.some(item => item.path === this.currentTagPath);
         if (!isTagInAll) {
-          this.addTab();
+          this.addTag();
         }
       },
       immediate: true
@@ -248,13 +252,14 @@ export default {
         this.setActiveMainSidebarId(currentTag.topMenuId)
       }
     },
-    addTab() {
+    addTag() {
       let tags = [...this.tags];
       tags.push({
         name: this.$route.meta['title'],
         componentName: this.$route.name,
         path: this.$route.fullPath,
-        topMenuId: this.activeMainSidebarId
+        topMenuId: this.activeMainSidebarId,
+        disPageCache: this.$route.meta['disPageCache']
       });
       this.setTags(tags);
     },
