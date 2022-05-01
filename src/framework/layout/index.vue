@@ -99,7 +99,9 @@ export default {
     },
     routeChange(newVal, oldVal) {
       if (this.isMobile) this.setShrink(false);// 打开新页面，把收缩状态关闭
-      if (newVal.name === oldVal.name) { // 同个组件 刷新缓存
+      const reloadFlag = newVal.name === oldVal.name ||
+        (!newVal.meta.disPageCache && newVal.meta?.refreshPage?.includes(oldVal.name));
+      if (reloadFlag) { // 同个组件 刷新缓存
         this.reload()
       }
     }
@@ -208,7 +210,7 @@ export default {
     border-radius: 50%;
     background-color: rgba(0, 0, 0, 0.3);
     cursor: pointer;
-    transition: .3s;
+    transition: background-color .3s ease-in-out;
 
     &:hover {
       background-color: rgba(0, 0, 0, 0.7);
@@ -222,7 +224,7 @@ export default {
       position: absolute;
       bottom: 16px;
       left: 16px;
-      transition: .3s;
+      transition: fill .3s ease-in-out;
     }
   }
 }
@@ -230,7 +232,7 @@ export default {
 .page-maximized {
   .warp-sidebar > div {
     width: 0;
-    transition: width 0.3s;
+    overflow: hidden;
   }
 
   ::v-deep .main-top {
@@ -238,7 +240,6 @@ export default {
 
     & > div {
       height: 0;
-      transition: height 0.3s;
     }
   }
 }

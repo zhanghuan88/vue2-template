@@ -69,12 +69,6 @@ module.exports = [
     name: '',
     library: '',
     js: '',
-    css: 'https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css'
-  },
-  {
-    name: '',
-    library: '',
-    js: '',
     css: 'https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css'
   },
 ]

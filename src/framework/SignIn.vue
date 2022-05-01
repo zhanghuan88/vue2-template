@@ -110,8 +110,6 @@ export default {
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 0 5px #999;
-    animation: fadeInDown;
-    animation-duration: 1s;
 
     .login-banner {
       width: 250px;

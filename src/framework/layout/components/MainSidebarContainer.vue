@@ -62,6 +62,8 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
+  transition: width 0.3s;
+  transform: translateZ(0);
 
   .sidebar-logo {
     flex-shrink: 0;

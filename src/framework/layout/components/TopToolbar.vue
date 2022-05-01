@@ -215,6 +215,8 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: stretch;
+  transition: height 0.3s;
+  transform: translateZ(0);
 
   .top-toolbar-left {
     padding-right: 50px;

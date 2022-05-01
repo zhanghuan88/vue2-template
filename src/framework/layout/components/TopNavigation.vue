@@ -301,6 +301,8 @@ export default {
   justify-content: space-between;
   user-select: none;
   background-color: $g-top-tabs-bg;
+  transition: height 0.3s;
+  transform: translateZ(0);
 
   .top-navigation-tabs {
     width: 0;

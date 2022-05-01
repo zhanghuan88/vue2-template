@@ -6,7 +6,7 @@
     <div class="sub-sidebar-container__content" @scroll="onSidebarScroll">
       <el-menu class="menu" :collapse-transition="false" :default-active="defaultActive" :collapse="menuCollapse"
                @select="menuClick">
-        <transition-group enter-active-class="content_animated">
+        <transition-group name="sidebar" mode="in">
           <sidebar-item v-for="menu in subMenu" :key="menu.path" :item="menu" :base-path="menu.path"/>
         </transition-group>
       </el-menu>
@@ -108,6 +108,7 @@ export default {
   overflow: hidden;
   z-index: 1;
   transition: width 0.3s;
+  transform: translateZ(0);
 
   &__header {
     height: $g-sub-sidebar-container-header-height;
@@ -132,9 +133,16 @@ export default {
     overflow-y: auto;
     overscroll-behavior: contain;
     @include hide-scrollbar();
-    // 侧边栏进入动画
-    .content_animated {
-      animation: fadeInUp 0.3s ease;
+    // 侧边栏动画
+    .sidebar-enter-active {
+      transition-property: transform, opacity;
+      transition-duration: .3s;
+      transform-origin: left;
+    }
+
+    .sidebar-enter {
+      opacity: 0;
+      transform: skewY(10deg);
     }
 
     // 收缩后样式

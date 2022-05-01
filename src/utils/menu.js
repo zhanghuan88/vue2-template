@@ -77,7 +77,8 @@ export function getRoutByMenu(menu) {
     component: component,
     meta: {
       title: menu.title,
-      disPageCache: menu.disPageCache
+      disPageCache: menu.disPageCache,
+      refreshPage: menu.refreshPage?.split(',') ?? []
     }
   }
 
