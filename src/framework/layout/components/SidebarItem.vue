@@ -1,12 +1,12 @@
 <template>
   <div class="sidebar-item">
     <el-menu-item v-if="emptyChildren" :title="item.title" :index="basePath">
-      <svg-icon v-if="item.icon" :name="item.icon"/>
+      <svg-icon v-if="icon" :name="icon"/>
       <span>{{ item.title }}</span>
     </el-menu-item>
     <el-submenu v-else :title="item.title" :index="basePath">
       <template slot="title">
-        <svg-icon v-if="item.icon" :name="item.icon"/>
+        <svg-icon v-if="icon" :name="icon"/>
         <span>{{ item.title }}</span>
       </template>
       <SidebarItem v-for="menu in item.children" :key="menu.path" :item="menu" :base-path="resolvePath(menu.path)"/>
@@ -33,6 +33,12 @@ export default {
   computed: {
     emptyChildren() {
       return isEmpty(this.item.children)
+    },
+    icon() {
+      if (this.item['activeIcon'] && this.$route.path.indexOf(this.basePath) === 0) {
+        return this.item['activeIcon']
+      }
+      return this.item.icon
     }
   },
   methods: {
@@ -53,6 +59,7 @@ export default {
     font-size: 20px;
     vertical-align: -0.25em;
     transition: transform 0.2s;
+    color: unset;
   }
 
   ::v-deep .el-menu-item.is-active {

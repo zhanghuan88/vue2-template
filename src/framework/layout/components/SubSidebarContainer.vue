@@ -5,7 +5,7 @@
     </div>
     <div class="sub-sidebar-container__content" @scroll="onSidebarScroll">
       <el-menu class="menu" :collapse-transition="false" :default-active="defaultActive" :collapse="menuCollapse"
-               @select="menuClick">
+               :unique-opened="sidebarUniqueOpened" @select="menuClick">
         <transition-group name="sidebar" mode="in">
           <sidebar-item v-for="menu in subMenu" :key="menu.path" :item="menu" :base-path="menu.path"/>
         </transition-group>
@@ -23,6 +23,7 @@ import SidebarItem from '@/framework/layout/components/SidebarItem'
 import StoreKeys from '@/constant/store-keys'
 import {mapGetters} from 'vuex'
 import localforage from 'localforage'
+import projectSetting from '@/project-setting'
 
 export default {
   name: "SubSidebarContainer",
@@ -30,6 +31,7 @@ export default {
   data() {
     return {
       title: process.env.APP_TITLE,
+      sidebarUniqueOpened: projectSetting.sidebarUniqueOpened,
       headerShowShadow: false,
       subMenu: [],
       // 顶部菜单和对应子菜单的缓存
