@@ -9,7 +9,7 @@
         <svg-icon v-if="icon" :name="icon"/>
         <span>{{ item.title }}</span>
       </template>
-      <SidebarItem v-for="menu in item.children" :key="menu.path" :item="menu" :base-path="resolvePath(menu.path)"/>
+      <sidebar-item v-for="menu in item.children" :key="menu.path" :item="menu" :base-path="resolvePath(menu.path)"/>
     </el-submenu>
   </div>
 </template>
