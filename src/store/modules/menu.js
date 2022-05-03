@@ -13,7 +13,7 @@ export default {
     // 所有菜单信息
     allMenus: [],
     // 标签栏
-    tags: []
+    tabs: []
   },
   mutations: {
     // 设置顶部菜单
@@ -30,9 +30,9 @@ export default {
       state.allMenus = allMenus;
     },
     // 设置标签栏
-    SET_TAGS: (state, tags) => {
-      state.tags = tags;
-      localforage.setItem(StoreKeys.tags, tags).then();
+    SET_TABS: (state, tabs) => {
+      state.tabs = tabs;
+      localforage.setItem(StoreKeys.tabs, tabs).then();
     }
   },
   actions: {
@@ -47,9 +47,9 @@ export default {
       const [, topMenus] = await to(localforage.getItem(StoreKeys.topMenus));
       if (topMenus) commit("SET_TOP_MENUS", topMenus)
     },
-    async GetTagsByStore({commit}) {
-      const [, tags] = await to(localforage.getItem(StoreKeys.tags));
-      if (tags) commit("SET_TAGS", tags);
+    async GetTabsByStore({commit}) {
+      const [, tabs] = await to(localforage.getItem(StoreKeys.tabs));
+      if (tabs) commit("SET_TABS", tabs);
     }
   }
 }

@@ -71,7 +71,7 @@ export default {
         dispatch("GetTopMenuByStore"),
         dispatch("GetTokenByCookie"),
         dispatch("GetUserInfoByStore"),
-        dispatch("GetTagsByStore")
+        dispatch("GetTabsByStore")
       ]))
     }
   }

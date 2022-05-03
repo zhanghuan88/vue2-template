@@ -1,13 +1,13 @@
 <template>
   <div class="top-navigation">
-    <el-tabs ref="tabs" v-model="currentTagPath" class="top-navigation-tabs top-navigation-tabs--smooth"
+    <el-tabs ref="tabs" v-model="currentTabPath" class="top-navigation-tabs top-navigation-tabs--smooth"
              type="card" @tab-remove="removeTab" @tab-click="tabClick" @contextmenu.native="contextMenu"
              @dblclick.native="dblClick">
-      <el-tab-pane v-for="(item,index) in showTags" :key="item.path" :label="item.name"
+      <el-tab-pane v-for="(item,index) in showTabs" :key="item.path" :label="item.name"
                    :name="item.path" :closable="index!==0">
       </el-tab-pane>
     </el-tabs>
-    <el-dropdown v-show="showTags.length>1" class="top-navigation-tool" size="small" @visible-change="toolVisibleChange"
+    <el-dropdown v-show="showTabs.length>1" class="top-navigation-tool" size="small" @visible-change="toolVisibleChange"
                  @command="handleCommand">
       <span class="top-navigation-tool--icon" :class="{'top-navigation-tool-show':isToolShow}">
         <i class="box box-t"></i>
@@ -33,50 +33,50 @@ export default {
   inject: ['reload'],
   data() {
     return {
-      currentTagPath: undefined,
+      currentTabPath: undefined,
       isToolShow: false,
       activeContextMenuIndex: 0
     }
   },
   computed: {
     ...mapState({
-      tags: state => state.menu.tags
+      tabs: state => state.menu.tabs
     }),
     ...mapGetters(['activeMainSidebarId']),
     dropdownOtherDis() {
-      return this.$route.fullPath !== "/home" && this.showTags.length === 2
-        || this.$route.fullPath === "/home" && this.showTags.length === 1;
+      return this.$route.fullPath !== "/home" && this.showTabs.length === 2
+        || this.$route.fullPath === "/home" && this.showTabs.length === 1;
     },
     dropdownRightDis() {
-      const currentIndex = this.showTags.findIndex(item => item.path === this.$route.fullPath);
-      return currentIndex === this.showTags.length - 1;
+      const currentIndex = this.showTabs.findIndex(item => item.path === this.$route.fullPath);
+      return currentIndex === this.showTabs.length - 1;
     },
     dropdownLeftDis() {
-      const currentIndex = this.showTags.findIndex(item => item.path === this.$route.fullPath);
+      const currentIndex = this.showTabs.findIndex(item => item.path === this.$route.fullPath);
       return [0, 1].includes(currentIndex);
     },
-    showTags() {
-      const tags = [
+    showTabs() {
+      const tabs = [
         {
           name: projectSetting.homeTitle,
           componentName: 'Home',
           path: '/home'
-        }, ...this.tags
+        }, ...this.tabs
       ];
       const cacheList = [];
-      tags.forEach(item => {
+      tabs.forEach(item => {
         if (!item.disPageCache) cacheList.push(item.componentName);
       })
       this.setKeepAliveInclude(uniq(cacheList));
-      return tags;
+      return tabs;
     },
     tabContextMenu() {
-      const currentTag = this.showTags[this.activeContextMenuIndex];
-      const isDisableReload = currentTag.path !== this.$route.fullPath;
+      const currentTab = this.showTabs[this.activeContextMenuIndex];
+      const isDisableReload = currentTab.path !== this.$route.fullPath;
       const isDisableCloseCurrent = this.activeContextMenuIndex === 0;
-      const isDisableCloseOther = this.activeContextMenuIndex === 1 && this.showTags.length === 2
-        || this.activeContextMenuIndex === 0 && this.showTags.length === 1;
-      const isDisableCloseRight = this.activeContextMenuIndex === this.showTags.length - 1;
+      const isDisableCloseOther = this.activeContextMenuIndex === 1 && this.showTabs.length === 2
+        || this.activeContextMenuIndex === 0 && this.showTabs.length === 1;
+      const isDisableCloseRight = this.activeContextMenuIndex === this.showTabs.length - 1;
       const isDisableCloseLeft = [0, 1].includes(this.activeContextMenuIndex);
       return [
         {
@@ -93,7 +93,7 @@ export default {
           disabled: isDisableCloseCurrent,
           divided: true,
           onClick: () => {
-            this.removeTab(currentTag.path)
+            this.removeTab(currentTab.path)
           }
         },
         {
@@ -110,7 +110,7 @@ export default {
           icon: "el-icon-close",
           disabled: isDisableCloseOther,
           onClick: () => {
-            this.closeOther(currentTag.path)
+            this.closeOther(currentTab.path)
           }
         },
         {
@@ -118,7 +118,7 @@ export default {
           icon: "el-icon-right",
           disabled: isDisableCloseRight,
           onClick: () => {
-            this.closeRight(currentTag.path)
+            this.closeRight(currentTab.path)
           }
         },
         {
@@ -126,7 +126,7 @@ export default {
           icon: "el-icon-back",
           disabled: isDisableCloseLeft,
           onClick: () => {
-            this.closeLeft(currentTag.path)
+            this.closeLeft(currentTab.path)
           }
         }
 
@@ -137,12 +137,12 @@ export default {
     "$route": {
       handler() {
         if (this.$route.name === 'Reload') return; // 刷新页面时不切换tab
-        this.currentTagPath = this.$route.fullPath;
+        this.currentTabPath = this.$route.fullPath;
         if (this.$route.name === 'Home') return; // 首页不新增tab
-        // 当前tag不存在时新增tab
-        let isTagInAll = this.tags.some(item => item.path === this.currentTagPath);
-        if (!isTagInAll) {
-          this.addTag();
+        // 当前tab不存在时新增tab
+        let isTabInAll = this.tabs.some(item => item.path === this.currentTabPath);
+        if (!isTabInAll) {
+          this.addTab();
         }
       },
       immediate: true
@@ -151,7 +151,7 @@ export default {
   methods: {
     ...mapMutations({
       setActiveMainSidebarId: 'SET_ACTIVE_MAIN_SIDEBAR_ID',
-      setTags: 'SET_TAGS',
+      setTabs: 'SET_TABS',
       setPageMaximized: 'SET_PAGE_MAXIMIZED',
       setKeepAliveInclude: "SET_KEEP_ALIVE_INCLUDE"
     }),
@@ -194,32 +194,32 @@ export default {
     },
     closeOther(path) {
       this.$router.push(path);
-      const tags = this.showTags.filter(item => item.path === path && item.componentName !== 'Home');
-      this.setTags(tags);
+      const tabs = this.showTabs.filter(item => item.path === path && item.componentName !== 'Home');
+      this.setTabs(tabs);
     },
     closeRight(path) {
-      let tags = [];
+      let tabs = [];
       // 当前路由是否在未关闭的标签中
-      let isRouteInShowTags = false;
-      this.showTags.find(item => {
-        if (item.componentName !== 'Home') tags.push(item);
-        if (item.path === this.$route.fullPath) isRouteInShowTags = true;
+      let isRouteInShowTabs = false;
+      this.showTabs.find(item => {
+        if (item.componentName !== 'Home') tabs.push(item);
+        if (item.path === this.$route.fullPath) isRouteInShowTabs = true;
         return item.path === path;
       })
-      if (!isRouteInShowTags) this.$router.push(path);
-      this.setTags(tags);
+      if (!isRouteInShowTabs) this.$router.push(path);
+      this.setTabs(tabs);
     },
     closeLeft(path) {
-      let tags = [];
+      let tabs = [];
       // 当前路由是否在未关闭的标签中
-      let isRouteInShowTags = false;
-      this.showTags.findLast(item => {
-        if (item.componentName !== 'Home') tags.unshift(item);
-        if (item.path === this.$route.fullPath) isRouteInShowTags = true;
+      let isRouteInShowTabs = false;
+      this.showTabs.findLast(item => {
+        if (item.componentName !== 'Home') tabs.unshift(item);
+        if (item.path === this.$route.fullPath) isRouteInShowTabs = true;
         return item.path === path;
       })
-      if (!isRouteInShowTags) this.$router.push(path);
-      this.setTags(tags);
+      if (!isRouteInShowTabs) this.$router.push(path);
+      this.setTabs(tabs);
     },
     handleCommand(command) {
       const fullPath = this.$route.fullPath;
@@ -234,7 +234,7 @@ export default {
           this.closeLeft(fullPath);
           break;
         case 'closeAll':
-          this.setTags([]);
+          this.setTabs([]);
           this.$router.push({name: 'Home'});
           break;
         default:
@@ -246,37 +246,37 @@ export default {
       this.isToolShow = visible;
     },
     tabClick() {
-      this.$router.push(this.currentTagPath);
-      let currentTag = this.tags.find(item => item.path === this.currentTagPath);
-      if (currentTag?.topMenuId) {
-        this.setActiveMainSidebarId(currentTag.topMenuId)
+      this.$router.push(this.currentTabPath);
+      let currentTab = this.tabs.find(item => item.path === this.currentTabPath);
+      if (currentTab?.topMenuId) {
+        this.setActiveMainSidebarId(currentTab.topMenuId)
       }
     },
-    addTag() {
-      let tags = [...this.tags];
-      tags.push({
+    addTab() {
+      let tabs = [...this.tabs];
+      tabs.push({
         name: this.$route.meta['title'],
         componentName: this.$route.name,
         path: this.$route.fullPath,
         topMenuId: this.activeMainSidebarId,
         disPageCache: this.$route.meta['disPageCache']
       });
-      this.setTags(tags);
+      this.setTabs(tabs);
     },
-    removeTab(targetName) {
+    removeTab(path) {
       let currentIndex;
-      const tags = this.showTags.filter((item, index) => {
-        if (item.path === targetName) {
+      const tabs = this.showTabs.filter((item, index) => {
+        if (item.path === path) {
           currentIndex = index;
         }
-        return item.path !== targetName && item.componentName !== 'Home';
+        return item.path !== path && item.componentName !== 'Home';
       })
-      if (this.showTags[currentIndex].path === this.currentTagPath) {
-        this.$router.push(currentIndex + 1 < this.showTags.length ?
-          this.showTags[currentIndex + 1].path :
-          this.showTags[currentIndex - 1].path);
+      if (this.showTabs[currentIndex].path === this.currentTabPath) {
+        this.$router.push(currentIndex + 1 < this.showTabs.length ?
+          this.showTabs[currentIndex + 1].path :
+          this.showTabs[currentIndex - 1].path);
       }
-      this.setTags(tags);
+      this.setTabs(tabs);
     }
   }
 }

@@ -30,15 +30,27 @@ export default {
       default: ''
     }
   },
+  data() {
+    return {
+      icon: ""
+    }
+  },
   computed: {
     emptyChildren() {
       return isEmpty(this.item.children)
-    },
-    icon() {
-      if (this.item['activeIcon'] && this.$route.path.indexOf(this.basePath) === 0) {
-        return this.item['activeIcon']
-      }
-      return this.item.icon
+    }
+  },
+  watch: {
+    "$route": {
+      handler() {
+        if (this.$route.name === 'Reload') return;
+        if (this.item['activeIcon'] && this.$route.path.indexOf(this.basePath) === 0) {
+          this.icon = this.item['activeIcon']
+          return;
+        }
+        this.icon = this.item.icon
+      },
+      immediate: true
     }
   },
   methods: {
