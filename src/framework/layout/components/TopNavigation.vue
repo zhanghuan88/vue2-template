@@ -1,7 +1,7 @@
 <template>
   <div class="top-navigation">
     <el-tabs ref="tabs" v-model="currentTabPath" class="top-navigation-tabs top-navigation-tabs--smooth"
-             type="card" @tab-remove="removeTab" @tab-click="tabClick" @contextmenu.native="contextMenu"
+             type="card" @tab-remove="$tabs.closeTab" @tab-click="tabClick" @contextmenu.native="contextMenu"
              @dblclick.native="dblClick">
       <el-tab-pane v-for="(item,index) in showTabs" :key="item.path" :label="item.name"
                    :name="item.path" :closable="index!==0">
@@ -93,7 +93,7 @@ export default {
           disabled: isDisableCloseCurrent,
           divided: true,
           onClick: () => {
-            this.removeTab(currentTab.path)
+            this.$tabs.closeTab(currentTab.path)
           }
         },
         {
@@ -110,7 +110,7 @@ export default {
           icon: "el-icon-close",
           disabled: isDisableCloseOther,
           onClick: () => {
-            this.closeOther(currentTab.path)
+            this.$tabs.closeOther(currentTab.path)
           }
         },
         {
@@ -118,7 +118,7 @@ export default {
           icon: "el-icon-right",
           disabled: isDisableCloseRight,
           onClick: () => {
-            this.closeRight(currentTab.path)
+            this.$tabs.closeRight(currentTab.path)
           }
         },
         {
@@ -126,7 +126,7 @@ export default {
           icon: "el-icon-back",
           disabled: isDisableCloseLeft,
           onClick: () => {
-            this.closeLeft(currentTab.path)
+            this.$tabs.closeLeft(currentTab.path)
           }
         }
 
@@ -192,50 +192,20 @@ export default {
         this.setPageMaximized(true);
       }
     },
-    closeOther(path) {
-      this.$router.push(path);
-      const tabs = this.showTabs.filter(item => item.path === path && item.componentName !== 'Home');
-      this.setTabs(tabs);
-    },
-    closeRight(path) {
-      let tabs = [];
-      // 当前路由是否在未关闭的标签中
-      let isRouteInShowTabs = false;
-      this.showTabs.find(item => {
-        if (item.componentName !== 'Home') tabs.push(item);
-        if (item.path === this.$route.fullPath) isRouteInShowTabs = true;
-        return item.path === path;
-      })
-      if (!isRouteInShowTabs) this.$router.push(path);
-      this.setTabs(tabs);
-    },
-    closeLeft(path) {
-      let tabs = [];
-      // 当前路由是否在未关闭的标签中
-      let isRouteInShowTabs = false;
-      this.showTabs.findLast(item => {
-        if (item.componentName !== 'Home') tabs.unshift(item);
-        if (item.path === this.$route.fullPath) isRouteInShowTabs = true;
-        return item.path === path;
-      })
-      if (!isRouteInShowTabs) this.$router.push(path);
-      this.setTabs(tabs);
-    },
+
     handleCommand(command) {
-      const fullPath = this.$route.fullPath;
       switch (command) {
         case 'closeOther':
-          this.closeOther(fullPath);
+          this.$tabs.closeOther();
           break;
         case 'closeRight':
-          this.closeRight(fullPath);
+          this.$tabs.closeRight();
           break;
         case 'closeLeft':
-          this.closeLeft(fullPath);
+          this.$tabs.closeLeft();
           break;
         case 'closeAll':
-          this.setTabs([]);
-          this.$router.push({name: 'Home'});
+          this.$tabs.closeAll();
           break;
         default:
           break;
@@ -261,21 +231,6 @@ export default {
         topMenuId: this.activeMainSidebarId,
         disPageCache: this.$route.meta['disPageCache']
       });
-      this.setTabs(tabs);
-    },
-    removeTab(path) {
-      let currentIndex;
-      const tabs = this.showTabs.filter((item, index) => {
-        if (item.path === path) {
-          currentIndex = index;
-        }
-        return item.path !== path && item.componentName !== 'Home';
-      })
-      if (this.showTabs[currentIndex].path === this.currentTabPath) {
-        this.$router.push(currentIndex + 1 < this.showTabs.length ?
-          this.showTabs[currentIndex + 1].path :
-          this.showTabs[currentIndex - 1].path);
-      }
       this.setTabs(tabs);
     }
   }

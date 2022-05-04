@@ -5,6 +5,7 @@ import store from "./store/index";
 import './styles/index.scss';
 import VueMeta from 'vue-meta'
 import ELEMENT from 'element-ui';
+import "@/plugins"
 import "@/components";
 
 Vue.use(ELEMENT);

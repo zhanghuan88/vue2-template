@@ -94,7 +94,9 @@ export default {
 
     &:hover, &:focus {
       background-color: $g-sub-sidebar-menu-hover-bg;
+    }
 
+    &:hover {
       .svg-icon {
         transform: scale(1.2);
       }
