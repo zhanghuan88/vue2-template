@@ -9,7 +9,7 @@
         <svg-icon v-if="icon" :name="icon"/>
         <span>{{ item.title }}</span>
       </template>
-      <sidebar-item v-for="menu in item.children" :key="menu.path" :item="menu" :base-path="resolvePath(menu.path)"/>
+      <sidebar-item v-for="menu in item.children" :key="menu.path" :item="menu" :base-path="resolvePath(menu)"/>
     </el-submenu>
   </div>
 </template>
@@ -54,11 +54,11 @@ export default {
     }
   },
   methods: {
-    resolvePath(routePath) {
-      if (regex.url.test(routePath)) {
-        return routePath
+    resolvePath(menu) {
+      if (regex.url.test(menu.path)) {
+        return menu["newWindow"] ? menu.path : `${this.basePath}/${menu.componentName}`
       }
-      return this.basePath + routePath
+      return this.basePath + menu.path
     }
   }
 }

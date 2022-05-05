@@ -1,6 +1,7 @@
 import Layout from '@/framework/layout'
 import routesConfig from '@/router/routes-config'
 import {isEmpty} from 'lodash-es'
+import regex from '@/constant/regex'
 
 export function handleRoutesByMenus(allMenus) {
   let routes = [
@@ -22,7 +23,7 @@ export function handleRoutesByMenus(allMenus) {
         routes.push({
           path: `/${trimSlash(menu.path)}`,
           component: Layout,
-          redirect: `${trimSlash(menu.path)}/${trimSlash(children[0].path)}`,
+          redirect: trimSlash(menu.path) + "/" + trimSlash(children.find(item => !item['hideMenu']).path),
           children: children.map(getRoutByMenu),
           meta: {
             title: menu.title
@@ -42,24 +43,32 @@ export function handleRoutesByMenus(allMenus) {
 }
 
 // 递归获取子路由
-export function deepChildRoute(menus, children) {
+function deepChildRoute(menus, children, parentPath = '') {
   menus.forEach(menu => {
-    if (menu.filePath) {
-      children.push(menu)
+    if (regex.url.test(menu.path) && !menu['newWindow']) {
+      // 是链接且不是新窗口打开
+      children.push({
+        path: `${trimSlash(parentPath)}/${menu.componentName}`,
+        title: menu.title,
+        filePath: "framework/layout/pages/PageIframe",
+        componentName: menu.componentName,
+        props: {url: menu.path},
+        disPageCache: true
+      })
+    } else if (menu.filePath) {
+      children.push({
+        ...menu,
+        path: `${trimSlash(parentPath)}/${trimSlash(menu.path)}`
+      })
     }
     if (!isEmpty(menu.children)) {
-      deepChildRoute(menu.children.map(item => (
-        {
-          ...item,
-          path: `${trimSlash(menu.path)}/${trimSlash(item.path)}` // 补充路径
-        }
-      )), children)
+      deepChildRoute(menu.children, children, `${trimSlash(parentPath)}/${trimSlash(menu.path)}`)
     }
   })
 }
 
 // 获取二级路由
-export function getRoutByMenu(menu) {
+function getRoutByMenu(menu) {
   let filePath = menu.filePath;
   // 页面是否来自 src/framework/layout/pages
   const isFileFromFramework = /^\/*framework/.test(filePath);
@@ -75,6 +84,7 @@ export function getRoutByMenu(menu) {
     path: trimSlash(menu.path),
     name: menu.componentName,
     component: component,
+    props: menu.props,
     meta: {
       title: menu.title,
       disPageCache: menu.disPageCache,

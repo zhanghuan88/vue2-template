@@ -49,6 +49,7 @@ import projectSetting from '@/project-setting'
 import {trimSlash} from '@/utils/menu'
 import {isEmpty} from 'lodash-es'
 import screenfull from 'screenfull';
+import regex from '@/constant/regex'
 
 export default {
   name: "TopToolbar",
@@ -175,15 +176,21 @@ export default {
     },
     getChildPath(cur) {
       if (!isEmpty(cur.children)) {
-        return `${trimSlash(cur.path)}/${trimSlash(this.getChildPath(cur.children[0]))}`
+        // 可以访问的第一个子路由
+        const first = cur.children.find(item => !item['hideMenu'] && !item['newWindow'])
+        if (first)
+          return `${trimSlash(cur.path)}/${trimSlash(this.getChildPath(first))}`
+        return cur.path
       }
-      return cur.path;
+      if (regex.url.test(cur.path))
+        return cur.componentName
+      return cur.path ?? "";
     },
     toggleCollapse() {
       this.setShrink(!this.shrink);
     },
     findChildrenList(childrenPath, children) {
-      let childrenList = [];
+      let childrenList = []
       children.findLast(item => {
         const re = new RegExp(`^${trimSlash(item.path)}`)
         if (re.test(childrenPath)) {
@@ -193,12 +200,18 @@ export default {
             childrenList.unshift({...item, children: []});// 没有剩余匹配 不处理子路径
             return true
           } else {
+            if (isEmpty(item.children)) return false;
             const list = this.findChildrenList(remainingPath, item.children);
             if (list.length > 0) {
               childrenList.unshift(...list);
               childrenList.unshift(item);
             }
             return list.length > 0;
+          }
+        } else {
+          if (regex.url.test(item.path) && childrenPath === item.componentName) {
+            childrenList.unshift({...item, path: item.componentName, children: []});
+            return true;
           }
         }
       });

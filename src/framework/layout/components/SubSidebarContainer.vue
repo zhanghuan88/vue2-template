@@ -74,6 +74,8 @@ export default {
       if (!regex.url.test(path)) {
         this.$router.push(path);
         localforage.setItem(StoreKeys.lastOpenRouteTopMenuId, this.activeMainSidebarId)
+      } else {
+        window.open(path);
       }
     },
     onSidebarScroll(e) {
@@ -82,7 +84,7 @@ export default {
     // 处理子菜单没有文件路径并且没有子菜单的路由
     handleSubMenu(routers) {
       return routers.filter(router => {
-        // 路由设置隐藏 菜单 则展示
+        // 路由设置隐藏 菜单 不显示
         if (router['hideMenu']) return false
         if (!isEmpty(router.children)) {
           router.children = this.handleSubMenu(router.children)

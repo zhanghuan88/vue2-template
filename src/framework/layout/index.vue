@@ -18,7 +18,7 @@
             <router-view></router-view>
           </keep-alive>
         </transition>
-        <copyright></copyright>
+        <copyright v-show="showCopyright"></copyright>
       </div>
       <el-backtop target=".main-content" :bottom="20">
       </el-backtop>
@@ -64,6 +64,11 @@ export default {
     ...mapGetters(['shrink', 'isMobile']),
     showMobileSidebar() {
       return this.isMobile && this.shrink
+    },
+    showCopyright() {
+      const [, last] = this.$route.matched;
+      return !last?.props?.['default']?.['url'];
+
     }
   },
   watch: {
