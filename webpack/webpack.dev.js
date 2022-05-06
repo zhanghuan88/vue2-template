@@ -43,7 +43,6 @@ module.exports = merge(webpackCommonConfig, {
   ],
   devServer: {
     port: "auto",
-    hot: true,
     compress: true,
     host: "0.0.0.0",
     historyApiFallback: true,//history路由错误问题

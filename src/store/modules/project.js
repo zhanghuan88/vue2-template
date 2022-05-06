@@ -16,7 +16,9 @@ export default {
     // 页面keep-alive的include
     keepAliveInclude: [],
     // 页面keep-alive的exclude
-    keepAliveExclude: []
+    keepAliveExclude: [],
+    // 是否展示搜索弹出框
+    showSearchPop: false
   },
   mutations: {
     SET_LOGIN_FORM: (state, loginForm) => {
@@ -55,6 +57,9 @@ export default {
     },
     REMOVE_KEEP_ALIVE_EXCLUDE: (state, name) => {
       state.keepAliveExclude = state.keepAliveExclude.filter(v => v !== name);
+    },
+    SET_SHOW_SEARCH_POP: (state, showSearchPop) => {
+      state.showSearchPop = showSearchPop;
     }
   },
   actions: {

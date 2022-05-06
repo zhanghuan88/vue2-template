@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <router-view></router-view>
+    <page-search></page-search>
   </div>
 </template>
 
@@ -8,10 +9,11 @@
 
 import {debounce} from 'lodash-es'
 import {mapMutations} from 'vuex'
+import PageSearch from '@/framework/layout/components/PageSearch'
 
 export default {
   name: 'App',
-  components: {},
+  components: {PageSearch},
   data() {
     return {};
   },

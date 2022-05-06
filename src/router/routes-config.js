@@ -1,4 +1,3 @@
-import Layout from '@/framework/layout'
 import ProjectSetting from '@/project-setting'
 
 export default {
@@ -14,7 +13,7 @@ export default {
     },
     {
       path: '/',
-      component: Layout,
+      component: () => import("@/framework/layout/index"),
       redirect: 'home',
       children: [
         {

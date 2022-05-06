@@ -13,6 +13,9 @@
     </div>
     <div class="top-toolbar-right">
       <div class="tools">
+        <el-tooltip effect="dark" content="搜索" placement="bottom">
+          <i class="el-icon-search item" @click="showSearchPop"></i>
+        </el-tooltip>
         <el-tooltip effect="dark" content="全屏" placement="bottom">
           <span v-if="isFullscreenEnable" class="item" @click="fullscreen">
             <svg-icon :name="isFullscreen ? 'fullscreen-exit' : 'fullscreen'"/>
@@ -96,8 +99,12 @@ export default {
   },
   methods: {
     ...mapMutations({
-      setShrink: "SET_SHRINK"
+      setShrink: "SET_SHRINK",
+      setShowSearchPop: "SET_SHOW_SEARCH_POP"
     }),
+    showSearchPop() {
+      this.setShowSearchPop(true)
+    },
     getBreadcrumb() {
       const [first, last] = this.$route.matched;
       if (last.name === 'Reload') return;

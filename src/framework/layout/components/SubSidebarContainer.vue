@@ -82,18 +82,22 @@ export default {
       this.headerShowShadow = e.target.scrollTop > 0;
     },
     // 处理子菜单没有文件路径并且没有子菜单的路由
-    handleSubMenu(routers) {
-      return routers.filter(router => {
+    handleSubMenu(menus) {
+      return menus.filter(menu => {
         // 路由设置隐藏 菜单 不显示
-        if (router['hideMenu']) return false
-        if (!isEmpty(router.children)) {
-          router.children = this.handleSubMenu(router.children)
+        if (menu['hideMenu']) return false
+        if (!isEmpty(menu.children)) {
+          menu.children = this.handleSubMenu(menu.children)
         }
-        return !isEmpty(router.children) || router.filePath || regex.url.test(router.path);
+        if (regex.url.test(menu.path) && !menu['newWindow'] && menu['componentName']) {
+          menu.path = menu.componentName;
+          return true;
+        }
+        return !isEmpty(menu.children) || menu.filePath || regex.url.test(menu.path);
       });
     },
-    setSubMenu(topMenuId, routers) {
-      this.subMenu = this.handleSubMenu(routers);
+    setSubMenu(topMenuId, menus) {
+      this.subMenu = this.handleSubMenu(menus);
       this.topMenuSide[topMenuId] = this.subMenu;
     }
   }
