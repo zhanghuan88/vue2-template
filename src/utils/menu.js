@@ -2,6 +2,35 @@ import {cloneDeep, isEmpty, last} from 'lodash-es'
 import regex from '@/constant/regex'
 import routesConfig from '@/router/routes-config'
 
+// 获取二级路由
+function getRoutByMenu(menu) {
+  let filePath = menu.filePath;
+  // 页面是否来自 src/framework/layout/pages
+  const isFileFromFramework = /^\/*framework/.test(filePath);
+  let component;
+  if (isFileFromFramework) {
+    filePath = filePath = filePath.replace(/^\/*framework\/layout\/pages\//, "");
+    component = () => import(`@/framework/layout/pages/${filePath}`);
+  } else { // 其他页面认为来自 src/views
+    filePath = filePath.replace(/^\/*views\//, "");
+    component = () => import(`@/views/${filePath}`);
+  }
+  return {
+    path: menu.path,
+    name: menu.componentName,
+    component: component,
+    props: {
+      url: menu.link
+    },
+    meta: {
+      title: menu.title,
+      disPageCache: menu.disPageCache,
+      refreshPage: menu.refreshPage?.split(',') ?? []
+    }
+  }
+
+}
+
 export function getAllChildMenuPaths(allMenus) {
   let result = [];
   let tempPath = []; // 栈
@@ -72,33 +101,4 @@ export function handleRoutesByMenus(allMenus) {
 // 去除开头 / 和 结尾 / 的字符串
 export function trimSlash(str) {
   return str.replace(/^\/*/, '').replace(/\/*$/, '');
-}
-
-// 获取二级路由
-function getRoutByMenu(menu) {
-  let filePath = menu.filePath;
-  // 页面是否来自 src/framework/layout/pages
-  const isFileFromFramework = /^\/*framework/.test(filePath);
-  let component;
-  if (isFileFromFramework) {
-    filePath = filePath = filePath.replace(/^\/*framework\/layout\/pages\//, "");
-    component = () => import(`@/framework/layout/pages/${filePath}`);
-  } else { // 其他页面认为来自 src/views
-    filePath = filePath.replace(/^\/*views\//, "");
-    component = () => import(`@/views/${filePath}`);
-  }
-  return {
-    path: menu.path,
-    name: menu.componentName,
-    component: component,
-    props: {
-      url: menu.link
-    },
-    meta: {
-      title: menu.title,
-      disPageCache: menu.disPageCache,
-      refreshPage: menu.refreshPage?.split(',') ?? []
-    }
-  }
-
 }
