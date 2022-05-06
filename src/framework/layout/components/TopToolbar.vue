@@ -47,9 +47,9 @@
 </template>
 
 <script>
-import {mapGetters, mapMutations, mapState} from 'vuex'
+import {mapGetters, mapMutations} from 'vuex'
 import projectSetting from '@/project-setting'
-import {trimSlash} from '@/utils/menu'
+import {getChildMenuPathsByFullPath, trimSlash} from '@/utils/menu'
 import {isEmpty} from 'lodash-es'
 import screenfull from 'screenfull';
 import regex from '@/constant/regex'
@@ -66,10 +66,7 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      allMenus: state => state.menu.allMenus
-    }),
-    ...mapGetters(['isMobile', 'avatar', 'nickname', 'shrink']),
+    ...mapGetters(['isMobile', 'avatar', 'nickname', 'shrink', 'allMenuChildrenPaths']),
     isShowBreadcrumb() {
       // 如果是移动端，则不显示面包屑
       return !this.isMobile
@@ -114,36 +111,15 @@ export default {
           name: projectSetting.homeTitle
         }
       ]
+
       if (first.path) { // 不是单层菜单
-        // 找到所有菜单从后往前匹配
-        const matched = this.allMenus.findLast(item => {
-          return item.path === first.path
+        // 过滤当层菜单
+        const currentMenuPaths = getChildMenuPathsByFullPath(this.allMenuChildrenPaths, last.path)
+        // 添加首层菜单 生成路由时增加了重定向不需要处理路径
+        breadcrumbList.push({
+          path: currentMenuPaths[0].path,
+          name: currentMenuPaths[0]['title']
         });
-        if (matched) {
-          breadcrumbList.push({
-            path: matched.path,
-            name: matched['title']
-          });
-          const childrenPath = trimSlash(last.path.replace(first.path, ''));
-          // 根据菜单找到当前路由层级
-          const childrenList = this.findChildrenList(childrenPath, matched.children);
-          // 处理路径
-          const lastChild = childrenList.reduce((pre, cur) => {
-            if (!isEmpty(cur.children)) {
-              breadcrumbList.push({
-                name: cur['title'],
-                path: `/${trimSlash(pre.path)}/${trimSlash(this.getChildPath(cur))}`
-              })
-            }
-            return {
-              name: cur['title'],
-              path: `/${trimSlash(pre.path)}/${trimSlash(cur.path)}`
-            };
-          }, {
-            path: trimSlash(matched.path)
-          });
-          breadcrumbList.push(lastChild);
-        }
       } else {
         // 单层菜单首页直接返回
         if (last.name === "Home") {

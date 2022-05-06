@@ -36,11 +36,11 @@ export default {
     }
   },
   actions: {
-    async GetAllRoutes({commit}) {
+    async GetAllRoutes({commit, getters}) {
       const [, allMenus] = await to(getMenus());
       if (allMenus) {
         commit("SET_ALL_MENUS", allMenus);
-        return handleRoutesByMenus(allMenus);
+        return handleRoutesByMenus(getters.allMenuChildrenPaths);
       }
     },
     async GetTopMenuByStore({commit}) {

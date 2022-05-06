@@ -31,6 +31,7 @@ function getRoutByMenu(menu) {
 
 }
 
+// 获取所有可访问根菜单的路径
 export function getAllChildMenuPaths(allMenus) {
   let result = [];
   let tempPath = []; // 栈
@@ -52,12 +53,12 @@ export function getAllChildMenuPaths(allMenus) {
   return result;
 }
 
-export function handleRoutesByMenus(allMenus) {
+// 动态路由
+export function handleRoutesByMenus(allChildMenuPaths) {
   // 所有动态路由分组
   let routesObj = {
     "/": []
   }
-  const allChildMenuPaths = getAllChildMenuPaths(allMenus);
   allChildMenuPaths.forEach(menuPaths => {
     let lastMenu = last(menuPaths);
     if (regex.url.test(lastMenu.path) && lastMenu['newWindow']) return;
@@ -96,6 +97,11 @@ export function handleRoutesByMenus(allMenus) {
   routes.push(...routesConfig.lastRoutes);
   window.console.log(routes, '所有动态路由')
   return routes;
+}
+
+// 根据路由路径获取菜单路径
+export function getChildMenuPathsByFullPath(allMenuChildrenPaths, fullPath) {
+  return allMenuChildrenPaths.find(menuPaths => "/" + menuPaths.map(menu => regex.url.test(menu.path) ? trimSlash(menu.componentName ?? "") : trimSlash(menu.path)).join('/') === fullPath);
 }
 
 // 去除开头 / 和 结尾 / 的字符串
