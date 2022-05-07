@@ -65,7 +65,7 @@ export default {
       ];
       const cacheList = [];
       tabs.forEach(item => {
-        if (!item.disPageCache) cacheList.push(item.componentName);
+        if (!item.disPageCache && item.componentName) cacheList.push(item.componentName);
       })
       this.setKeepAliveInclude(uniq(cacheList));
       return tabs;

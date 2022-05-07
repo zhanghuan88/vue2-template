@@ -55,13 +55,14 @@ export function getAllChildMenuPaths(allMenus) {
 
 // 动态路由
 export function handleRoutesByMenus(allChildMenuPaths) {
+  let cloneData = cloneDeep(allChildMenuPaths)
   // 所有动态路由分组
   let routesObj = {
     "/": []
   }
-  allChildMenuPaths.forEach(menuPaths => {
+  cloneData.forEach(menuPaths => {
     let lastMenu = last(menuPaths);
-    if (regex.url.test(lastMenu.path) && lastMenu['newWindow']) return;
+    if (regex.url.test(lastMenu.path) && !lastMenu.componentName) return;
     if (menuPaths.length > 1) {
       const firstMenu = menuPaths[0];
       if (regex.url.test(lastMenu.path)) {
@@ -71,7 +72,7 @@ export function handleRoutesByMenus(allChildMenuPaths) {
         lastMenu.filePath = "framework/layout/pages/PageIframe";
         lastMenu.disPageCache = true;
       }
-      lastMenu.path = menuPaths.slice(1, menuPaths.length).map(item => trimSlash(item.path)).join('/');
+      lastMenu.path = getMenusFullPath(menuPaths.slice(1, menuPaths.length));
       if (routesObj[firstMenu.path] != null) {
         routesObj[`/${trimSlash(firstMenu.path)}`].push(lastMenu);
       } else {
@@ -101,10 +102,14 @@ export function handleRoutesByMenus(allChildMenuPaths) {
 
 // 根据路由路径获取菜单路径
 export function getChildMenuPathsByFullPath(allMenuChildrenPaths, fullPath) {
-  return allMenuChildrenPaths.find(menuPaths => "/" + menuPaths.map(menu => regex.url.test(menu.path) ? trimSlash(menu.componentName ?? "") : trimSlash(menu.path)).join('/') === fullPath);
+  return allMenuChildrenPaths.find(menuPaths => "/" + getMenusFullPath(menuPaths) === fullPath);
+}
+
+export function getMenusFullPath(menus) {
+  return menus.map(menu => regex.url.test(menu.path) ? trimSlash(menu.componentName) : trimSlash(menu.path)).join('/')
 }
 
 // 去除开头 / 和 结尾 / 的字符串
 export function trimSlash(str) {
-  return str.replace(/^\/*/, '').replace(/\/*$/, '');
+  return str?.replace(/^\/*/, '').replace(/\/*$/, '') ?? "";
 }

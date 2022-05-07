@@ -49,8 +49,8 @@
 <script>
 import {mapGetters, mapMutations} from 'vuex'
 import projectSetting from '@/project-setting'
-import {getChildMenuPathsByFullPath, trimSlash} from '@/utils/menu'
-import {isEmpty} from 'lodash-es'
+import {getAllChildMenuPaths, getChildMenuPathsByFullPath, getMenusFullPath} from '@/utils/menu'
+import {isEmpty, last} from 'lodash-es'
 import screenfull from 'screenfull';
 import regex from '@/constant/regex'
 
@@ -103,32 +103,49 @@ export default {
       this.setShowSearchPop(true)
     },
     getBreadcrumb() {
-      const [first, last] = this.$route.matched;
-      if (last.name === 'Reload') return;
+      const [firstRouter, lastRouter] = this.$route.matched;
+      if (lastRouter.name === 'Reload') return;
       let breadcrumbList = [
         {
-          path: "/",
-          name: projectSetting.homeTitle
+          path: this.$route.fullPath,
+          name: lastRouter.meta['title']
         }
       ]
 
-      if (first.path) { // 不是单层菜单
+      if (firstRouter.path) { // 不是单层菜单
         // 过滤当层菜单
-        const currentMenuPaths = getChildMenuPathsByFullPath(this.allMenuChildrenPaths, last.path)
-        // 添加首层菜单 生成路由时增加了重定向不需要处理路径
-        breadcrumbList.push({
-          path: currentMenuPaths[0].path,
-          name: currentMenuPaths[0]['title']
-        });
-      } else {
-        // 单层菜单首页直接返回
-        if (last.name === "Home") {
-          this.breadcrumbList = breadcrumbList
-          return;
-        }
-        breadcrumbList.push({
-          path: last.path,
-          name: last.meta['title']
+        const currentMenuPaths = getChildMenuPathsByFullPath(this.allMenuChildrenPaths, lastRouter.path)
+        if (isEmpty(currentMenuPaths)) return;
+        // 当前根菜单的所有子路径
+        const curMenuChildrenPaths = getAllChildMenuPaths(currentMenuPaths[0].children)
+        // 每层菜单最近一个可访问的菜单
+        currentMenuPaths.slice(0, -1).findLast((menu, i) => {
+          // 默认最前面包屑路径为当前路径
+          let curPath = breadcrumbList[0].path;
+          // 先找子路径的第一个可访问菜单
+          const recentChildRouters = curMenuChildrenPaths.find(routers => {
+            const lastRouter = last(routers);
+            const lastIsRouter = !lastRouter['hideMenu'] && (lastRouter.filePath || (regex.url.test(lastRouter.path) && lastRouter.componentName))
+            return routers.length === i + 1 && lastIsRouter;
+          })
+          if (isEmpty(recentChildRouters)) {
+            // 没有找到，则看当前菜单是否可访问
+            if (menu.filePath || (regex.url.test(menu.path) && menu.componentName)) {
+              curPath = "/" + getMenusFullPath(currentMenuPaths.slice(0, i + 1))
+            }
+          } else {
+            curPath = firstRouter.path + "/" + getMenusFullPath(recentChildRouters)
+          }
+          breadcrumbList.unshift({
+            path: curPath,
+            name: menu['title']
+          })
+        })
+      }
+      if (lastRouter.name !== "Home") {
+        breadcrumbList.unshift({
+          path: '/',
+          name: projectSetting.homeTitle
         })
       }
       this.breadcrumbList = breadcrumbList;
@@ -157,48 +174,8 @@ export default {
           break;
       }
     },
-    getChildPath(cur) {
-      if (!isEmpty(cur.children)) {
-        // 可以访问的第一个子路由
-        const first = cur.children.find(item => !item['hideMenu'] && !item['newWindow'])
-        if (first)
-          return `${trimSlash(cur.path)}/${trimSlash(this.getChildPath(first))}`
-        return cur.path
-      }
-      if (regex.url.test(cur.path))
-        return cur.componentName
-      return cur.path ?? "";
-    },
     toggleCollapse() {
       this.setShrink(!this.shrink);
-    },
-    findChildrenList(childrenPath, children) {
-      let childrenList = []
-      children.findLast(item => {
-        const re = new RegExp(`^${trimSlash(item.path)}`)
-        if (re.test(childrenPath)) {
-          // 判断剩余路径是否为空
-          const remainingPath = trimSlash(childrenPath.replace(re, ''));
-          if (remainingPath === '') {
-            childrenList.unshift({...item, children: []});// 没有剩余匹配 不处理子路径
-            return true
-          } else {
-            if (isEmpty(item.children)) return false;
-            const list = this.findChildrenList(remainingPath, item.children);
-            if (list.length > 0) {
-              childrenList.unshift(...list);
-              childrenList.unshift(item);
-            }
-            return list.length > 0;
-          }
-        } else {
-          if (regex.url.test(item.path) && childrenPath === item.componentName) {
-            childrenList.unshift({...item, path: item.componentName, children: []});
-            return true;
-          }
-        }
-      });
-      return childrenList
     }
   }
 }

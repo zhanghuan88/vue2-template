@@ -89,7 +89,7 @@ export default {
         if (!isEmpty(menu.children)) {
           menu.children = this.handleSubMenu(menu.children)
         }
-        if (regex.url.test(menu.path) && !menu['newWindow'] && menu['componentName']) {
+        if (regex.url.test(menu.path) && menu['componentName']) {
           menu.path = menu.componentName;
           return true;
         }
