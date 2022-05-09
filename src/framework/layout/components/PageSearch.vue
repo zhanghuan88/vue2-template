@@ -95,10 +95,10 @@ export default {
       }
     },
     handleSelect(item) {
-      if (item.path) {
-        this.$router.push(item.path)
-      } else {
+      if (regex.url.test(item.path)) {
         window.open(item.path)
+      } else {
+        this.$router.push(item.path)
       }
       this.state = '';
       this.setShowSearchPop(false)

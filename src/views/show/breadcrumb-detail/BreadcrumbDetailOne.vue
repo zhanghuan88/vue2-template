@@ -5,7 +5,6 @@
     params传参
     <el-button @click="showDetails(1)">详情id:1</el-button>
     <el-button @click="showDetails(2)">详情id:2</el-button>
-
   </div>
 </template>
 

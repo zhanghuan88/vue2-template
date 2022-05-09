@@ -2,7 +2,7 @@ import store from '@/store'
 import router from '@/router'
 import {isEmpty} from 'lodash-es'
 
-const TabsPlugin = {
+export default {
   install(Vue) {
     Vue.prototype.$tabs = {
       closeTab(path = router['history'].current.fullPath) {
@@ -70,5 +70,4 @@ const TabsPlugin = {
       }
     }
   }
-}
-export default TabsPlugin;
+};
