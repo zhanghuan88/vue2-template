@@ -73,7 +73,7 @@ export function handleRoutesByMenus(allChildMenuPaths) {
         lastMenu.disPageCache = true;
       }
       lastMenu.path = getMenusFullPath(menuPaths.slice(1, menuPaths.length));
-      if (routesObj[firstMenu.path] != null) {
+      if (routesObj[`${transformPath(firstMenu.path)}`] != null) {
         routesObj[`${transformPath(firstMenu.path)}`].push(lastMenu);
       } else {
         routesObj[`${transformPath(firstMenu.path)}`] = [lastMenu];

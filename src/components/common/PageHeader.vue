@@ -1,9 +1,9 @@
-<template>
+<template functional>
   <div class="page-header">
     <div class="left">
-      <div class="title">{{ title }}</div>
+      <div class="title">{{ props.title }}</div>
       <div class="content">
-        <slot name="content">{{ content }}</slot>
+        <slot name="content">{{ props.content }}</slot>
       </div>
     </div>
     <div class="right">

@@ -153,7 +153,8 @@ export default {
     flex-direction: column;
 
     .main-top {
-      box-shadow: 0 0 1px #ccc;
+      z-index: 0;
+      box-shadow: 0 0 2px #ccc;
     }
 
     .main-content {
@@ -163,6 +164,7 @@ export default {
       flex: 1;
 
       & > div:first-child {
+        overflow: hidden;
         min-height: calc(100% - 80px);
       }
     }
