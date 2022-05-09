@@ -16,7 +16,7 @@ function getRoutByMenu(menu) {
     component = () => import(`@/views/${filePath}`);
   }
   return {
-    path: menu.path,
+    path: menu.path.replace(/^\/*/, ''),
     name: menu.componentName,
     component: component,
     props: {
@@ -74,9 +74,9 @@ export function handleRoutesByMenus(allChildMenuPaths) {
       }
       lastMenu.path = getMenusFullPath(menuPaths.slice(1, menuPaths.length));
       if (routesObj[firstMenu.path] != null) {
-        routesObj[`/${trimSlash(firstMenu.path)}`].push(lastMenu);
+        routesObj[`${transformPath(firstMenu.path)}`].push(lastMenu);
       } else {
-        routesObj[`/${trimSlash(firstMenu.path)}`] = [lastMenu];
+        routesObj[`${transformPath(firstMenu.path)}`] = [lastMenu];
       }
     } else {
       routesObj["/"].push(lastMenu)
@@ -90,7 +90,7 @@ export function handleRoutesByMenus(allChildMenuPaths) {
     routes.push({
       path: parentPath,
       component: () => import("@/framework/layout/index"),
-      redirect: parentPath + '/' + children.find(o => !o['hideMenu']).path,
+      redirect: parentPath + children.find(o => !o['hideMenu']).path,
       children: children.map(getRoutByMenu)
     })
   })
@@ -102,14 +102,14 @@ export function handleRoutesByMenus(allChildMenuPaths) {
 
 // 根据路由路径获取菜单路径
 export function getChildMenuPathsByFullPath(allMenuChildrenPaths, fullPath) {
-  return allMenuChildrenPaths.find(menuPaths => "/" + getMenusFullPath(menuPaths) === fullPath);
+  return allMenuChildrenPaths.find(menuPaths => getMenusFullPath(menuPaths) === fullPath);
 }
 
 export function getMenusFullPath(menus) {
-  return menus.map(menu => regex.url.test(menu.path) ? trimSlash(menu.componentName) : trimSlash(menu.path)).join('/')
+  return menus.map(menu => regex.url.test(menu.path) ? transformPath(menu.componentName) : transformPath(menu.path)).join("");
 }
 
-// 去除开头 / 和 结尾 / 的字符串
-export function trimSlash(str) {
-  return str?.replace(/^\/*/, '').replace(/\/*$/, '') ?? "";
+// 转换path
+export function transformPath(str) {
+  return `/${str?.replace(/^\/*/, '').replace(/\/*$/, '') ?? ""}`;
 }

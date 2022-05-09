@@ -17,7 +17,7 @@
 <script>
 import {isEmpty} from 'lodash-es'
 import regex from '@/constant/regex'
-import {trimSlash} from '@/utils/menu'
+import {transformPath} from '@/utils/menu'
 
 export default {
   name: "SidebarItem",
@@ -59,7 +59,7 @@ export default {
       if (regex.url.test(menu.path)) {
         return menu.path;
       }
-      return this.basePath + "/" + trimSlash(menu.path)
+      return transformPath(this.basePath) + transformPath(menu.path)
     }
   }
 }

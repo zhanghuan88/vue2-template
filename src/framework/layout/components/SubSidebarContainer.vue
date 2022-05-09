@@ -72,7 +72,7 @@ export default {
   methods: {
     menuClick(path) {
       if (!regex.url.test(path)) {
-        this.$router.push(path);
+        this.$router.push(path)
         localforage.setItem(StoreKeys.lastOpenRouteTopMenuId, this.activeMainSidebarId)
       } else {
         window.open(path);
