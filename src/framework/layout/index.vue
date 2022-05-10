@@ -151,6 +151,7 @@ export default {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    position: relative;
 
     .main-top {
       z-index: 0;

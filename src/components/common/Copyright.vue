@@ -1,5 +1,5 @@
 <template>
-  <footer class="copyright">
+  <footer v-if="!hideCopyright" class="copyright">
     Copyright © {{ copyrightDates }}
     <a v-if="copyrightWebsite" :href="copyrightWebsite" target="_blank" rel="noopener">{{ copyrightCompany }}</a>
     <span v-else>{{ copyrightCompany }}</span>
@@ -15,7 +15,8 @@ export default {
     return {
       copyrightDates: projectSetting.copyrightDates,
       copyrightWebsite: projectSetting.copyrightWebsite,
-      copyrightCompany: projectSetting.copyrightCompany
+      copyrightCompany: projectSetting.copyrightCompany,
+      hideCopyright: projectSetting.hideCopyright
     }
   },
   methods: {}

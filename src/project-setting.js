@@ -8,6 +8,7 @@ export default {
   resDataKey: "data", // 通用响应数据
   tokenHeader: "Authorization", // token头部
   tokenExpires: 7, // token过期时间 单位：日
+  hideCopyright: false, // 隐藏版权
   copyrightDates: '2022-2022', // 版权信息时间
   copyrightWebsite: 'https://github.com/zhanghuan88', // 版权信息网址
   copyrightCompany: 'XXXX有限公司' // 版权信息公司
