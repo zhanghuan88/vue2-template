@@ -1,8 +1,8 @@
-import localforage from 'localforage'
-import StoreKeys from '@/constant/store-keys'
-import to from 'await-to-js'
-import {getMenus} from '@/api/user/auth'
-import {handleRoutesByMenus} from '@/utils/menu'
+import localforage from "localforage";
+import StoreKeys from "@/constant/store-keys";
+import to from "await-to-js";
+import { getMenus } from "@/api/user/auth";
+import { handleRoutesByMenus } from "@/utils/menu";
 
 export default {
   state: {
@@ -13,7 +13,7 @@ export default {
     // 所有菜单信息
     allMenus: [],
     // 标签栏
-    tabs: []
+    tabs: [],
   },
   mutations: {
     // 设置顶部菜单
@@ -33,23 +33,24 @@ export default {
     SET_TABS: (state, tabs) => {
       state.tabs = tabs;
       localforage.setItem(StoreKeys.tabs, tabs).then();
-    }
+    },
   },
   actions: {
-    async GetAllRoutes({commit, getters}) {
+    async GetAllRoutes({ commit, getters }) {
       const [, allMenus] = await to(getMenus());
       if (allMenus) {
         commit("SET_ALL_MENUS", allMenus);
         return handleRoutesByMenus(getters.allMenuChildrenPaths);
       }
+      return [];
     },
-    async GetTopMenuByStore({commit}) {
+    async GetTopMenuByStore({ commit }) {
       const [, topMenus] = await to(localforage.getItem(StoreKeys.topMenus));
-      if (topMenus) commit("SET_TOP_MENUS", topMenus)
+      if (topMenus) commit("SET_TOP_MENUS", topMenus);
     },
-    async GetTabsByStore({commit}) {
+    async GetTabsByStore({ commit }) {
       const [, tabs] = await to(localforage.getItem(StoreKeys.tabs));
       if (tabs) commit("SET_TABS", tabs);
-    }
-  }
-}
+    },
+  },
+};

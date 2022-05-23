@@ -1,13 +1,13 @@
 <template>
-  <div class="layout" :class="{'page-maximized':pageMaximized}">
+  <div class="layout" :class="{ 'page-maximized': pageMaximized }">
     <!--侧边部分-->
-    <div class="warp-sidebar" :class="{'warp-sidebar-mobile-show':showMobileSidebar}">
+    <div class="warp-sidebar" :class="{ 'warp-sidebar-mobile-show': showMobileSidebar }">
       <main-sidebar-container></main-sidebar-container>
       <sub-sidebar-container></sub-sidebar-container>
     </div>
     <div class="main">
       <!--顶部栏-->
-      <div class="main-top" :class="{'main-top-shadow':headerShowShadow}">
+      <div class="main-top" :class="{ 'main-top-shadow': headerShowShadow }">
         <top-toolbar></top-toolbar>
         <top-navigation></top-navigation>
       </div>
@@ -20,8 +20,7 @@
         </transition>
         <copyright v-show="showCopyright"></copyright>
       </div>
-      <el-backtop target=".main-content" :bottom="20">
-      </el-backtop>
+      <el-backtop target=".main-content" :bottom="20"></el-backtop>
     </div>
     <!--移动端遮罩层-->
     <div v-show="showMobileSidebar" class="warp-sidebar-mobile-mask" @click="hideMobileSidebar"></div>
@@ -33,90 +32,89 @@
 </template>
 
 <script>
-import MainSidebarContainer from '@/framework/layout/components/MainSidebarContainer'
-import SubSidebarContainer from '@/framework/layout/components/SubSidebarContainer'
-import hotkeys from 'hotkeys-js'
-import projectSetting from '@/project-setting'
-import {mapGetters, mapMutations, mapState} from 'vuex'
-import TopToolbar from '@/framework/layout/components/TopToolbar'
-import TopNavigation from '@/framework/layout/components/TopNavigation'
+import MainSidebarContainer from "@/framework/layout/components/MainSidebarContainer";
+import SubSidebarContainer from "@/framework/layout/components/SubSidebarContainer";
+import hotkeys from "hotkeys-js";
+import projectSetting from "@/project-setting";
+import { mapGetters, mapMutations, mapState } from "vuex";
+import TopToolbar from "@/framework/layout/components/TopToolbar";
+import TopNavigation from "@/framework/layout/components/TopNavigation";
 
 export default {
   name: "Layout",
-  components: {TopToolbar, TopNavigation, SubSidebarContainer, MainSidebarContainer},
+  components: { TopToolbar, TopNavigation, SubSidebarContainer, MainSidebarContainer },
   provide() {
     return {
-      reload: this.reload
-    }
+      reload: this.reload,
+    };
   },
   data() {
     return {
       keepAliveMax: projectSetting.keepAliveMax,
-      headerShowShadow: false
-    }
+      headerShowShadow: false,
+    };
   },
   computed: {
     ...mapState({
-      pageMaximized: state => state.project.pageMaximized,
-      keepAliveInclude: state => state.project.keepAliveInclude,
-      keepAliveExclude: state => state.project.keepAliveExclude
+      pageMaximized: (state) => state.project.pageMaximized,
+      keepAliveInclude: (state) => state.project.keepAliveInclude,
+      keepAliveExclude: (state) => state.project.keepAliveExclude,
     }),
-    ...mapGetters(['shrink', 'isMobile']),
+    ...mapGetters(["shrink", "isMobile"]),
     showMobileSidebar() {
-      return this.isMobile && this.shrink
+      return this.isMobile && this.shrink;
     },
     showCopyright() {
       const [, last] = this.$route.matched;
-      return !last?.props?.['default']?.['url'];
-
-    }
+      return !last?.props?.default?.url;
+    },
   },
   watch: {
-    $route: 'routeChange'
+    $route: "routeChange",
   },
   mounted() {
-    hotkeys('f5', e => {
-      e.preventDefault()
-      this.reload()
-    })
+    hotkeys("f5", (e) => {
+      e.preventDefault();
+      this.reload();
+    });
   },
   methods: {
     ...mapMutations({
       setShrink: "SET_SHRINK",
-      setPageMaximized: "SET_PAGE_MAXIMIZED"
+      setPageMaximized: "SET_PAGE_MAXIMIZED",
     }),
     hideMobileSidebar() {
-      this.setShrink(false)
+      this.setShrink(false);
     },
     onSidebarScroll(e) {
       this.headerShowShadow = e.target.scrollTop > 0;
     },
     reload() {
-      if (this.$route.name === 'Reload') return;
+      if (this.$route.name === "Reload") return;
       this.$router.replace({
-        name: 'Reload',
+        name: "Reload",
         params: {
           componentName: this.$route.name,
           params: this.$route.params,
-          query: this.$route.query
-        }
-      })
+          query: this.$route.query,
+        },
+      });
     },
     routeChange(newVal, oldVal) {
-      if (this.isMobile) this.setShrink(false);// 打开新页面，把收缩状态关闭
-      const reloadFlag = newVal.name === oldVal.name ||
-        (!newVal.meta.disPageCache && newVal.meta?.refreshPage?.includes(oldVal.name));
-      if (reloadFlag) { // 同个组件 刷新缓存
-        this.reload()
+      if (this.isMobile) this.setShrink(false); // 打开新页面，把收缩状态关闭
+      const reloadFlag =
+        newVal.name === oldVal.name || (!newVal.meta.disPageCache && newVal.meta?.refreshPage?.includes(oldVal.name));
+      if (reloadFlag) {
+        // 同个组件 刷新缓存
+        this.reload();
       }
-    }
-  }
-
-}
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
-[data-mode=mobile] {
+[data-mode="mobile"] {
   .layout {
     .warp-sidebar-mobile-show {
       transform: translateX(0) !important;
@@ -141,10 +139,10 @@ export default {
     height: 100%;
     display: flex;
 
-    ::v-deep .main-sidebar-container, .sub-sidebar-container {
+    ::v-deep .main-sidebar-container,
+    .sub-sidebar-container {
       flex-shrink: 0;
     }
-
   }
 
   .main {
@@ -194,7 +192,6 @@ export default {
       opacity: 0;
       margin-left: 20px;
     }
-
   }
 
   .warp-sidebar-mobile-mask {
@@ -218,7 +215,7 @@ export default {
     border-radius: 50%;
     background-color: rgba(0, 0, 0, 0.3);
     cursor: pointer;
-    transition: background-color .3s ease-in-out;
+    transition: background-color 0.3s ease-in-out;
 
     &:hover {
       background-color: rgba(0, 0, 0, 0.7);
@@ -232,7 +229,7 @@ export default {
       position: absolute;
       bottom: 16px;
       left: 16px;
-      transition: fill .3s ease-in-out;
+      transition: fill 0.3s ease-in-out;
     }
   }
 }

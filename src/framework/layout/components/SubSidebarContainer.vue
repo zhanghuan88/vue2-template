@@ -1,13 +1,18 @@
 <template>
-  <div class="sub-sidebar-container" :class="{'sub-sidebar-container--collapse':menuCollapse}">
-    <div v-if="!menuCollapse" class="sub-sidebar-container__header" :class="{'shadow':headerShowShadow}">
+  <div class="sub-sidebar-container" :class="{ 'sub-sidebar-container--collapse': menuCollapse }">
+    <div v-if="!menuCollapse" class="sub-sidebar-container__header" :class="{ shadow: headerShowShadow }">
       {{ title }}
     </div>
     <div class="sub-sidebar-container__content" @scroll="onSidebarScroll">
-      <el-menu class="menu" :collapse-transition="false" :default-active="defaultActive" :collapse="menuCollapse"
-               :unique-opened="sidebarUniqueOpened" @select="menuClick">
+      <el-menu
+        class="menu"
+        :collapse-transition="false"
+        :default-active="defaultActive"
+        :collapse="menuCollapse"
+        :unique-opened="sidebarUniqueOpened"
+        @select="menuClick">
         <transition-group name="sidebar" mode="in">
-          <sidebar-item v-for="menu in subMenu" :key="menu.path" :item="menu" :base-path="menu.path"/>
+          <sidebar-item v-for="menu in subMenu" :key="menu.path" :item="menu" :base-path="menu.path" />
         </transition-group>
       </el-menu>
     </div>
@@ -15,19 +20,19 @@
 </template>
 
 <script>
-import {isEmpty} from 'lodash-es'
-import to from 'await-to-js'
-import {getMenus} from '@/api/user/auth'
-import regex from '@/constant/regex'
-import SidebarItem from '@/framework/layout/components/SidebarItem'
-import StoreKeys from '@/constant/store-keys'
-import {mapGetters} from 'vuex'
-import localforage from 'localforage'
-import projectSetting from '@/project-setting'
+import { isEmpty } from "lodash-es";
+import to from "await-to-js";
+import { getMenus } from "@/api/user/auth";
+import regex from "@/constant/regex";
+import SidebarItem from "@/framework/layout/components/SidebarItem";
+import StoreKeys from "@/constant/store-keys";
+import { mapGetters } from "vuex";
+import localforage from "localforage";
+import projectSetting from "@/project-setting";
 
 export default {
   name: "SubSidebarContainer",
-  components: {SidebarItem},
+  components: { SidebarItem },
   data() {
     return {
       title: process.env.APP_TITLE,
@@ -36,44 +41,44 @@ export default {
       subMenu: [],
       // 顶部菜单和对应子菜单的缓存
       topMenuSide: {},
-      defaultActive: '' // 默认选中的菜单
-    }
+      defaultActive: "", // 默认选中的菜单
+    };
   },
   computed: {
-    ...mapGetters(['shrink', 'isMobile', 'activeMainSidebarId']),
+    ...mapGetters(["shrink", "isMobile", "activeMainSidebarId"]),
     menuCollapse() {
       if (this.isMobile) {
-        return false
+        return false;
       }
-      return this.shrink
-    }
+      return this.shrink;
+    },
   },
   watch: {
-    "$route": {
+    $route: {
       handler() {
-        if (this.$route.name === 'Reload') return; // 刷新页面时不切换tab
-        this.defaultActive = this.$route.fullPath
+        if (this.$route.name === "Reload") return; // 刷新页面时不切换tab
+        this.defaultActive = this.$route.fullPath;
       },
-      immediate: true
+      immediate: true,
     },
-    'activeMainSidebarId': {
+    activeMainSidebarId: {
       async handler(val) {
-        if (!val) return
+        if (!val) return;
         if (this.topMenuSide[val]) {
           this.subMenu = this.topMenuSide[val];
           return;
         }
-        const [, res] = await to(getMenus(val))
+        const [, res] = await to(getMenus(val));
         if (res) this.setSubMenu(val, res);
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   methods: {
     menuClick(path) {
       if (!regex.url.test(path)) {
-        this.$router.push(path)
-        localforage.setItem(StoreKeys.lastOpenRouteTopMenuId, this.activeMainSidebarId)
+        this.$router.push(path);
+        localforage.setItem(StoreKeys.lastOpenRouteTopMenuId, this.activeMainSidebarId);
       } else {
         window.open(path);
       }
@@ -83,13 +88,13 @@ export default {
     },
     // 处理子菜单没有文件路径并且没有子菜单的路由
     handleSubMenu(menus) {
-      return menus.filter(menu => {
+      return menus.filter((menu) => {
         // 路由设置隐藏 菜单 不显示
-        if (menu['hideMenu']) return false
+        if (menu.hideMenu) return false;
         if (!isEmpty(menu.children)) {
-          menu.children = this.handleSubMenu(menu.children)
+          menu.children = this.handleSubMenu(menu.children);
         }
-        if (regex.url.test(menu.path) && menu['componentName']) {
+        if (regex.url.test(menu.path) && menu.componentName) {
           menu.path = menu.componentName;
           return true;
         }
@@ -99,10 +104,9 @@ export default {
     setSubMenu(topMenuId, menus) {
       this.subMenu = this.handleSubMenu(menus);
       this.topMenuSide[topMenuId] = this.subMenu;
-    }
-  }
-}
-
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
@@ -144,7 +148,7 @@ export default {
     // 侧边栏动画
     .sidebar-enter-active {
       transition-property: transform, opacity;
-      transition-duration: .3s;
+      transition-duration: 0.3s;
       transform-origin: left;
     }
 
@@ -187,10 +191,8 @@ export default {
       ::v-deep .el-menu {
         background-color: $g-sub-sidebar-next-bg;
       }
-
     }
   }
-
 }
 
 .sub-sidebar-container--collapse {

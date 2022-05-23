@@ -1,19 +1,24 @@
 <template>
   <transition name="fade">
     <div v-show="showSearchPop" class="page-search" @mousedown.self="close">
-      <el-autocomplete ref="autocomplete" v-model="state" :fetch-suggestions="querySearchAsync"
-                       placeholder="搜索页面，支持标题、URL模糊搜索" :popper-append-to-body="false" value-key="title"
-                       prefix-icon="el-icon-search"
-                       @select="handleSelect">
-        <template #default="{item}">
+      <el-autocomplete
+        ref="autocomplete"
+        v-model="state"
+        :fetch-suggestions="querySearchAsync"
+        placeholder="搜索页面，支持标题、URL模糊搜索"
+        :popper-append-to-body="false"
+        value-key="title"
+        prefix-icon="el-icon-search"
+        @select="handleSelect">
+        <template #default="{ item }">
           <div class="suggestion">
             <svg-icon :name="item.icon"></svg-icon>
             <div class="content">
               <div class="title">{{ item.title }}</div>
               <div class="breadcrumb">
-                <div v-for="(o,i) of item.titlePath" :key="o" class="breadcrumb__item">
+                <div v-for="(o, i) of item.titlePath" :key="o" class="breadcrumb__item">
                   {{ o }}
-                  <i v-show="i!==item.titlePath.length - 1" class="el-icon-arrow-right"></i>
+                  <i v-show="i !== item.titlePath.length - 1" class="el-icon-arrow-right"></i>
                 </div>
               </div>
               <div class="path">{{ item.path }}</div>
@@ -26,85 +31,88 @@
 </template>
 
 <script>
-import {mapGetters, mapMutations, mapState} from 'vuex'
-import {last, toLower} from 'lodash-es'
-import {getMenusFullPath} from '@/utils/menu'
-import regex from '@/constant/regex'
+import { mapGetters, mapMutations, mapState } from "vuex";
+import { last, toLower } from "lodash-es";
+import { getMenusFullPath } from "@/utils/menu";
+import regex from "@/constant/regex";
 
 export default {
   name: "PageSearch",
   data() {
     return {
-      state: ''
-    }
+      state: "",
+    };
   },
   computed: {
-    ...mapGetters(['allMenuChildrenPaths']),
+    ...mapGetters(["allMenuChildrenPaths"]),
     ...mapState({
-      showSearchPop: state => state.project.showSearchPop,
-      allMenus: state => state.menu.allMenus
+      showSearchPop: (state) => state.project.showSearchPop,
+      allMenus: (state) => state.menu.allMenus,
     }),
     searchAllMenuList() {
-      let searchMenuList = [];
-      this.allMenuChildrenPaths.forEach(childPaths => {
-        const lastChild = last(childPaths)
-        if (!lastChild['hideMenu']) {
+      const searchMenuList = [];
+      this.allMenuChildrenPaths.forEach((childPaths) => {
+        const lastChild = last(childPaths);
+        if (!lastChild.hideMenu) {
           let icon;
-          const titles = childPaths.map(o => {
-            !icon && (icon = o.icon);
+          const titles = childPaths.map((o) => {
+            if (!icon) icon = o.icon;
             return o.title;
-          })
+          });
           const isLink = regex.url.test(lastChild.path) && !lastChild.componentName;
           searchMenuList.push({
             title: lastChild.title,
             titlePath: titles,
-            icon: icon,
-            path: isLink ? lastChild.path : "/" + getMenusFullPath(childPaths)
-          })
+            icon,
+            path: isLink ? lastChild.path : `/${getMenusFullPath(childPaths)}`,
+          });
         }
       });
       return searchMenuList;
-    }
+    },
   },
   watch: {
     showSearchPop(val) {
       if (val) {
         setTimeout(() => {
-          this.$refs.autocomplete.$refs.input.$refs.input.focus()
-        }, 300)
+          this.$refs.autocomplete.$refs.input.$refs.input.focus();
+        }, 300);
       }
-    }
+    },
   },
   methods: {
     ...mapMutations({
-      setShowSearchPop: 'SET_SHOW_SEARCH_POP'
+      setShowSearchPop: "SET_SHOW_SEARCH_POP",
     }),
     close() {
-      this.setShowSearchPop(false)
-      this.state = '';
+      this.setShowSearchPop(false);
+      this.state = "";
     },
     querySearchAsync(queryString, cb) {
       if (queryString === "") {
         cb(this.searchAllMenuList);
       } else {
         const query = toLower(queryString);
-        const results = this.searchAllMenuList.filter(menu => {
-          return toLower(menu.title).indexOf(query) !== -1 || toLower(menu.path).indexOf(query) !== -1 || menu.titlePath.some(o => toLower(o).indexOf(query) !== -1);
-        })
-        cb(results)
+        const results = this.searchAllMenuList.filter(
+          (menu) =>
+            toLower(menu.title).indexOf(query) !== -1 ||
+            toLower(menu.path).indexOf(query) !== -1 ||
+            menu.titlePath.some((o) => toLower(o).indexOf(query) !== -1)
+        );
+        cb(results);
       }
     },
     handleSelect(item) {
       if (regex.url.test(item.path)) {
-        window.open(item.path)
+        window.open(item.path);
       } else {
-        this.$router.push(item.path)
+        this.$router.push(item.path);
       }
-      this.state = '';
-      this.setShowSearchPop(false)
-    }
-  }
-}
+      this.state = "";
+      this.setShowSearchPop(false);
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
@@ -155,7 +163,7 @@ export default {
       max-height: calc(100vh - 200px);
       padding: 0;
       @mixin li-highlight() {
-        background-color: #D3E1F6;
+        background-color: #d3e1f6;
 
         .suggestion {
           svg {
@@ -191,7 +199,7 @@ export default {
         width: 24px;
         height: 24px;
         margin-right: 20px;
-        transition: transform .2s
+        transition: transform 0.2s;
       }
 
       .content {
@@ -208,7 +216,6 @@ export default {
           font-size: 18px;
           font-weight: 700;
           color: #666;
-
         }
 
         .breadcrumb {
@@ -228,5 +235,4 @@ export default {
     }
   }
 }
-
 </style>

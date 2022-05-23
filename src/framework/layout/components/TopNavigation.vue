@@ -1,22 +1,42 @@
 <template>
   <div class="top-navigation">
-    <el-tabs ref="tabs" v-model="currentTabPath" class="top-navigation-tabs top-navigation-tabs--smooth"
-             type="card" @tab-remove="$tabs.closeTab" @tab-click="tabClick" @contextmenu.native="contextMenu"
-             @dblclick.native="dblClick">
-      <el-tab-pane v-for="(item,index) in showTabs" :key="item.path" :label="item.name"
-                   :name="item.path" :closable="index!==0">
+    <el-tabs
+      ref="tabs"
+      v-model="currentTabPath"
+      class="top-navigation-tabs top-navigation-tabs--smooth"
+      type="card"
+      @tab-remove="$tabs.closeTab"
+      @tab-click="tabClick"
+      @contextmenu.native="contextMenu"
+      @dblclick.native="dblClick">
+      <el-tab-pane
+        v-for="(item, index) in showTabs"
+        :key="item.path"
+        :label="item.name"
+        :name="item.path"
+        :closable="index !== 0">
       </el-tab-pane>
     </el-tabs>
-    <el-dropdown v-show="showTabs.length>1" class="top-navigation-tool" size="small" @visible-change="toolVisibleChange"
-                 @command="handleCommand">
-      <span class="top-navigation-tool--icon" :class="{'top-navigation-tool-show':isToolShow}">
+    <el-dropdown
+      v-show="showTabs.length > 1"
+      class="top-navigation-tool"
+      size="small"
+      @visible-change="toolVisibleChange"
+      @command="handleCommand">
+      <span class="top-navigation-tool--icon" :class="{ 'top-navigation-tool-show': isToolShow }">
         <i class="box box-t"></i>
         <i class="box"></i>
       </span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item icon="el-icon-close" command="closeOther" :disabled="dropdownOtherDis">关闭其他</el-dropdown-item>
-        <el-dropdown-item icon="el-icon-right" command="closeRight" :disabled="dropdownRightDis">关闭右侧</el-dropdown-item>
-        <el-dropdown-item icon="el-icon-back" command="closeLeft" :disabled="dropdownLeftDis">关闭左侧</el-dropdown-item>
+        <el-dropdown-item icon="el-icon-close" command="closeOther" :disabled="dropdownOtherDis"
+        >关闭其他
+        </el-dropdown-item>
+        <el-dropdown-item icon="el-icon-right" command="closeRight" :disabled="dropdownRightDis"
+        >关闭右侧
+        </el-dropdown-item>
+        <el-dropdown-item icon="el-icon-back" command="closeLeft" :disabled="dropdownLeftDis"
+        >关闭左侧
+        </el-dropdown-item>
         <el-dropdown-item icon="el-icon-close" command="closeAll">关闭全部</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
@@ -24,49 +44,52 @@
 </template>
 
 <script>
-import {mapGetters, mapMutations, mapState} from 'vuex'
-import projectSetting from '@/project-setting'
-import {uniq} from 'lodash-es'
+import { mapGetters, mapMutations, mapState } from "vuex";
+import projectSetting from "@/project-setting";
+import { uniq } from "lodash-es";
 
 export default {
   name: "TopNavigation",
-  inject: ['reload'],
+  inject: ["reload"],
   data() {
     return {
       currentTabPath: undefined,
       isToolShow: false,
-      activeContextMenuIndex: 0
-    }
+      activeContextMenuIndex: 0,
+    };
   },
   computed: {
     ...mapState({
-      tabs: state => state.menu.tabs
+      tabs: (state) => state.menu.tabs,
     }),
-    ...mapGetters(['activeMainSidebarId']),
+    ...mapGetters(["activeMainSidebarId"]),
     dropdownOtherDis() {
-      return this.$route.fullPath !== "/home" && this.showTabs.length === 2
-        || this.$route.fullPath === "/home" && this.showTabs.length === 1;
+      return (
+        (this.$route.fullPath !== "/home" && this.showTabs.length === 2) ||
+        (this.$route.fullPath === "/home" && this.showTabs.length === 1)
+      );
     },
     dropdownRightDis() {
-      const currentIndex = this.showTabs.findIndex(item => item.path === this.$route.fullPath);
+      const currentIndex = this.showTabs.findIndex((item) => item.path === this.$route.fullPath);
       return currentIndex === this.showTabs.length - 1;
     },
     dropdownLeftDis() {
-      const currentIndex = this.showTabs.findIndex(item => item.path === this.$route.fullPath);
+      const currentIndex = this.showTabs.findIndex((item) => item.path === this.$route.fullPath);
       return [0, 1].includes(currentIndex);
     },
     showTabs() {
       const tabs = [
         {
           name: projectSetting.homeTitle,
-          componentName: 'Home',
-          path: '/home'
-        }, ...this.tabs
+          componentName: "Home",
+          path: "/home",
+        },
+        ...this.tabs,
       ];
       const cacheList = [];
-      tabs.forEach(item => {
+      tabs.forEach((item) => {
         if (!item.disPageCache && item.componentName) cacheList.push(item.componentName);
-      })
+      });
       this.setKeepAliveInclude(uniq(cacheList));
       return tabs;
     },
@@ -74,8 +97,9 @@ export default {
       const currentTab = this.showTabs[this.activeContextMenuIndex];
       const isDisableReload = currentTab.path !== this.$route.fullPath;
       const isDisableCloseCurrent = this.activeContextMenuIndex === 0;
-      const isDisableCloseOther = this.activeContextMenuIndex === 1 && this.showTabs.length === 2
-        || this.activeContextMenuIndex === 0 && this.showTabs.length === 1;
+      const isDisableCloseOther =
+        (this.activeContextMenuIndex === 1 && this.showTabs.length === 2) ||
+        (this.activeContextMenuIndex === 0 && this.showTabs.length === 1);
       const isDisableCloseRight = this.activeContextMenuIndex === this.showTabs.length - 1;
       const isDisableCloseLeft = [0, 1].includes(this.activeContextMenuIndex);
       return [
@@ -84,8 +108,8 @@ export default {
           icon: "el-icon-refresh",
           disabled: isDisableReload,
           onClick: () => {
-            this.reload()
-          }
+            this.reload();
+          },
         },
         {
           label: "关闭标签页",
@@ -93,8 +117,8 @@ export default {
           disabled: isDisableCloseCurrent,
           divided: true,
           onClick: () => {
-            this.$tabs.closeTab(currentTab.path)
-          }
+            this.$tabs.closeTab(currentTab.path);
+          },
         },
         {
           label: "窗口最大化",
@@ -102,61 +126,60 @@ export default {
           disabled: isDisableReload,
           divided: true,
           onClick: () => {
-            this.setPageMaximized(true)
-          }
+            this.setPageMaximized(true);
+          },
         },
         {
           label: "关闭其他",
           icon: "el-icon-close",
           disabled: isDisableCloseOther,
           onClick: () => {
-            this.$tabs.closeOther(currentTab.path)
-          }
+            this.$tabs.closeOther(currentTab.path);
+          },
         },
         {
           label: "关闭右侧",
           icon: "el-icon-right",
           disabled: isDisableCloseRight,
           onClick: () => {
-            this.$tabs.closeRight(currentTab.path)
-          }
+            this.$tabs.closeRight(currentTab.path);
+          },
         },
         {
           label: "关闭左侧",
           icon: "el-icon-back",
           disabled: isDisableCloseLeft,
           onClick: () => {
-            this.$tabs.closeLeft(currentTab.path)
-          }
-        }
-
+            this.$tabs.closeLeft(currentTab.path);
+          },
+        },
       ];
-    }
+    },
   },
   watch: {
-    "$route": {
+    $route: {
       handler() {
-        if (this.$route.name === 'Reload') return; // 刷新页面时不切换tab
+        if (this.$route.name === "Reload") return; // 刷新页面时不切换tab
         this.currentTabPath = this.$route.fullPath;
-        if (this.$route.name === 'Home') return; // 首页不新增tab
+        if (this.$route.name === "Home") return; // 首页不新增tab
         // 当前tab不存在时新增tab
-        let isTabInAll = this.tabs.some(item => item.path === this.currentTabPath);
+        const isTabInAll = this.tabs.some((item) => item.path === this.currentTabPath);
         if (!isTabInAll) {
           this.addTab();
         }
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   methods: {
     ...mapMutations({
-      setActiveMainSidebarId: 'SET_ACTIVE_MAIN_SIDEBAR_ID',
-      setTabs: 'SET_TABS',
-      setPageMaximized: 'SET_PAGE_MAXIMIZED',
-      setKeepAliveInclude: "SET_KEEP_ALIVE_INCLUDE"
+      setActiveMainSidebarId: "SET_ACTIVE_MAIN_SIDEBAR_ID",
+      setTabs: "SET_TABS",
+      setPageMaximized: "SET_PAGE_MAXIMIZED",
+      setKeepAliveInclude: "SET_KEEP_ALIVE_INCLUDE",
     }),
     tabEventIndex(e) {
-      let target = e.target;
+      let { target } = e;
       let flag = false;
       if (target.className.indexOf("el-tabs__item") > -1) flag = true;
       else if (target.parentNode.className.indexOf("el-tabs__item") > -1) {
@@ -167,10 +190,13 @@ export default {
         e.preventDefault();
         e.stopPropagation();
         let i = 0; // 当前元素的索引;
-        while ((target = target.previousSibling) != null) i++;
-        return [flag, i]
+        while (target.previousSibling != null) {
+          i += 1;
+          target = target.previousSibling;
+        }
+        return [flag, i];
       }
-      return [flag, null]
+      return [flag, null];
     },
     contextMenu(e) {
       const [flag, i] = this.tabEventIndex(e);
@@ -181,10 +207,9 @@ export default {
           event: e,
           customClass: "tab-contextmenu",
           minWidth: 40,
-          zIndex: 3
+          zIndex: 3,
         });
       }
-
     },
     dblClick(e) {
       const [flag] = this.tabEventIndex(e);
@@ -195,46 +220,45 @@ export default {
 
     handleCommand(command) {
       switch (command) {
-        case 'closeOther':
+        case "closeOther":
           this.$tabs.closeOther();
           break;
-        case 'closeRight':
+        case "closeRight":
           this.$tabs.closeRight();
           break;
-        case 'closeLeft':
+        case "closeLeft":
           this.$tabs.closeLeft();
           break;
-        case 'closeAll':
+        case "closeAll":
           this.$tabs.closeAll();
           break;
         default:
           break;
       }
-
     },
     toolVisibleChange(visible) {
       this.isToolShow = visible;
     },
     tabClick() {
       this.$router.push(this.currentTabPath);
-      let currentTab = this.tabs.find(item => item.path === this.currentTabPath);
+      const currentTab = this.tabs.find((item) => item.path === this.currentTabPath);
       if (currentTab?.topMenuId) {
-        this.setActiveMainSidebarId(currentTab.topMenuId)
+        this.setActiveMainSidebarId(currentTab.topMenuId);
       }
     },
     addTab() {
-      let tabs = [...this.tabs];
+      const tabs = [...this.tabs];
       tabs.push({
-        name: this.$route.meta['title'],
+        name: this.$route.meta.title,
         componentName: this.$route.name,
         path: this.$route.fullPath,
         topMenuId: this.activeMainSidebarId,
-        disPageCache: this.$route.meta['disPageCache']
+        disPageCache: this.$route.meta.disPageCache,
       });
       this.setTabs(tabs);
-    }
-  }
-}
+    },
+  },
+};
 </script>
 <style lang="scss">
 .tab-contextmenu {
@@ -244,7 +268,6 @@ export default {
 }
 </style>
 <style scoped lang="scss">
-
 .top-navigation {
   position: relative;
   box-sizing: border-box;
@@ -286,7 +309,6 @@ export default {
     align-self: stretch;
 
     ::v-deep .el-tabs__header {
-
       .el-tabs__item {
         margin-top: calc(#{$g-top-tabs-height} - 35px);
         height: 35px;
@@ -320,7 +342,8 @@ export default {
         transform: rotate(45deg);
       }
 
-      .box:before, .box:after {
+      .box:before,
+      .box:after {
         background-color: #1890ff !important;
       }
     }
@@ -329,14 +352,14 @@ export default {
       display: inline-block;
       color: #9a9a9a;
       cursor: pointer;
-      transition: transform .3s ease-out;
+      transition: transform 0.3s ease-out;
 
       &:hover {
-        @extend .top-navigation-tool-show
+        @extend .top-navigation-tool-show;
       }
 
       .box-t:before {
-        transition: transform .3s ease-out;
+        transition: transform 0.3s ease-out;
       }
 
       .box {

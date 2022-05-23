@@ -10,20 +10,20 @@ export default {
   props: {
     url: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
-      loading: true
-    }
+      loading: true,
+    };
   },
   mounted() {
     this.iframeInit();
   },
   methods: {
     iframeInit() {
-      const iframe = this.$refs.iframe;
+      const { iframe } = this.$refs;
       if (iframe.attachEvent) {
         iframe.attachEvent("onload", () => {
           this.loading = false;
@@ -33,9 +33,9 @@ export default {
           this.loading = false;
         };
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">

@@ -9,19 +9,24 @@
         <div>
           <el-form-item prop="account">
             <el-input ref="name" v-model="form.account" placeholder="用户名" type="text" tabindex="1">
-              <svg-icon slot="prefix" name="user"/>
+              <svg-icon slot="prefix" name="user" />
             </el-input>
           </el-form-item>
           <el-form-item prop="password">
-            <el-input ref="password" v-model="form.password" :type="passwordType" placeholder="密码" tabindex="2"
-                      @keyup.enter.native="handleLogin">
-              <svg-icon slot="prefix" name="password"/>
-              <svg-icon slot="suffix" :name="passwordType === 'password' ? 'eye' : 'eye-open'" @click="showPassword"/>
+            <el-input
+              ref="password"
+              v-model="form.password"
+              :type="passwordType"
+              placeholder="密码"
+              tabindex="2"
+              @keyup.enter.native="handleLogin">
+              <svg-icon slot="prefix" name="password" />
+              <svg-icon slot="suffix" :name="passwordType === 'password' ? 'eye' : 'eye-open'" @click="showPassword" />
             </el-input>
           </el-form-item>
         </div>
         <el-checkbox v-model="form.remember">记住我</el-checkbox>
-        <el-button :loading="loading" type="primary" style="width: 100%;" @click="handleLogin">登 录</el-button>
+        <el-button :loading="loading" type="primary" style="width: 100%" @click="handleLogin">登 录</el-button>
       </el-form>
     </div>
     <copyright></copyright>
@@ -29,10 +34,9 @@
 </template>
 
 <script>
-
-import {mapState} from 'vuex'
-import {clone} from 'lodash-es'
-import to from 'await-to-js'
+import { mapState } from "vuex";
+import { clone } from "lodash-es";
+import to from "await-to-js";
 
 export default {
   name: "SignIn",
@@ -42,23 +46,32 @@ export default {
       form: {
         account: "",
         password: "",
-        remember: false
+        remember: false,
       },
       rules: {
-        account: [{required: true, trigger: 'blur', message: '请输入用户名'}],
+        account: [{ required: true, trigger: "blur", message: "请输入用户名" }],
         password: [
-          {required: true, trigger: 'blur', message: '请输入密码'},
-          {min: 6, max: 18, trigger: 'blur', message: '密码长度为6到18位'}
-        ]
+          {
+            required: true,
+            trigger: "blur",
+            message: "请输入密码",
+          },
+          {
+            min: 6,
+            max: 18,
+            trigger: "blur",
+            message: "密码长度为6到18位",
+          },
+        ],
       },
       loading: false,
-      passwordType: 'password'
-    }
+      passwordType: "password",
+    };
   },
   computed: {
     ...mapState({
-      loginForm: state => state.project.loginForm
-    })
+      loginForm: (state) => state.project.loginForm,
+    }),
   },
   created() {
     if (this.loginForm.remember) this.form = clone(this.loginForm);
@@ -68,20 +81,20 @@ export default {
       this.passwordType = this.passwordType === "text" ? "password" : "text";
     },
     async handleLogin() {
-      const [, valid] = await to(this.$refs.form.validate())
+      const [, valid] = await to(this.$refs.form.validate());
       if (valid) {
-        const [err] = await to(this.$store.dispatch("SignIn", this.form))
+        const [err] = await to(this.$store.dispatch("SignIn", this.form));
         if (!err) {
-          this.$router.push({path: this.$route.query?.redirect || '/'}).then();
+          this.$router.push({ path: this.$route.query?.redirect || "/" }).then();
         }
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
-[data-mode=mobile] {
+[data-mode="mobile"] {
   #login-box {
     max-width: 80%;
 
@@ -100,7 +113,7 @@ export default {
   justify-content: center;
   align-items: center;
 
-  ::v-deep input[type=password]::-ms-reveal {
+  ::v-deep input[type="password"]::-ms-reveal {
     display: none;
   }
 

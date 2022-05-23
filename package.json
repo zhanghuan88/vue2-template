@@ -76,7 +76,8 @@
     "webpackbar": "^5.0.2"
   },
   "lint-staged": {
-    "src/**/*.{js,vue}": [
+    "src/**/*.{js,vue,json}": [
+      "prettier --write .",
       "eslint --fix"
     ]
   }

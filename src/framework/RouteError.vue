@@ -1,6 +1,6 @@
 <template>
   <div class="route-error">
-    <svg-icon name="404"/>
+    <svg-icon name="404" />
     <div class="content">
       <h1>404</h1>
       <div class="desc">抱歉，你访问的页面不存在</div>
@@ -13,30 +13,30 @@
 export default {
   name: "RouteError",
   beforeRouteLeave(to, from, next) {
-    clearInterval(this.inter)
-    next()
+    clearInterval(this.inter);
+    next();
   },
   data() {
     return {
       inter: null,
-      countdown: 5
-    }
+      countdown: 5,
+    };
   },
   mounted() {
     this.inter = setInterval(() => {
-      this.countdown--
+      this.countdown -= 1;
       if (this.countdown === 0) {
-        clearInterval(this.inter)
-        this.goBack()
+        clearInterval(this.inter);
+        this.goBack();
       }
-    }, 1000)
+    }, 1000);
   },
   methods: {
     goBack() {
-      this.$router.replace('/home');
-    }
-  }
-}
+      this.$router.replace("/home");
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">

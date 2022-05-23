@@ -6,42 +6,41 @@
 </template>
 
 <script>
-
-import {debounce} from 'lodash-es'
-import {mapMutations} from 'vuex'
-import PageSearch from '@/framework/layout/components/PageSearch'
+import { debounce } from "lodash-es";
+import { mapMutations } from "vuex";
+import PageSearch from "@/framework/layout/components/PageSearch";
 
 export default {
-  name: 'App',
-  components: {PageSearch},
+  name: "App",
+  components: { PageSearch },
   data() {
     return {};
   },
   watch: {
-    '$store.state.project.mode': {
+    "$store.state.project.mode": {
       handler() {
-        document.body.setAttribute('data-mode', this.$store.state.project.mode)
+        document.body.setAttribute("data-mode", this.$store.state.project.mode);
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   mounted() {
-    this.setMode(document.body.clientWidth)
+    this.setMode(document.body.clientWidth);
     window.onresize = debounce(() => {
-      this.setMode(document.body.clientWidth)
+      this.setMode(document.body.clientWidth);
     }, 100);
   },
   methods: {
     ...mapMutations({
-      setMode: 'SET_MODE'
-    })
+      setMode: "SET_MODE",
+    }),
   },
   metaInfo() {
     return {
       title: this.$store.state.project.title,
-      titleTemplate: title => title ? `${title} - ${process.env.APP_TITLE}` : process.env.APP_TITLE
-    }
-  }
+      titleTemplate: (title) => (title ? `${title} - ${process.env.APP_TITLE}` : process.env.APP_TITLE),
+    };
+  },
 };
 </script>
 <style lang="scss" scoped>

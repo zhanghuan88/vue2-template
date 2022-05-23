@@ -1,12 +1,13 @@
 <template>
   <div class="top-toolbar">
     <div class="top-toolbar-left">
-      <div class="sidebar-collapse" :class="{'is-collapse':shrink}" @click="toggleCollapse">
-        <svg-icon name="collapse"/>
+      <div class="sidebar-collapse" :class="{ 'is-collapse': shrink }" @click="toggleCollapse">
+        <svg-icon name="collapse" />
       </div>
       <el-breadcrumb v-if="isShowBreadcrumb" separator="/">
         <transition-group name="breadcrumb">
-          <el-breadcrumb-item v-for="list of breadcrumbList" :key="list.path" :to="list.path">{{ list.name }}
+          <el-breadcrumb-item v-for="list of breadcrumbList" :key="list.path" :to="list.path"
+          >{{ list.name }}
           </el-breadcrumb-item>
         </transition-group>
       </el-breadcrumb>
@@ -18,22 +19,22 @@
         </el-tooltip>
         <el-tooltip effect="dark" content="全屏" placement="bottom">
           <span v-if="isFullscreenEnable" class="item" @click="fullscreen">
-            <svg-icon :name="isFullscreen ? 'fullscreen-exit' : 'fullscreen'"/>
+            <svg-icon :name="isFullscreen ? 'fullscreen-exit' : 'fullscreen'" />
           </span>
         </el-tooltip>
         <el-tooltip effect="dark" content="刷新页面" placement="bottom">
           <span class="item reload" @click="reload()">
-            <svg-icon name="reload"/>
+            <svg-icon name="reload" />
           </span>
         </el-tooltip>
       </div>
       <el-dropdown class="user-container" @command="handleCommand">
         <div class="user-wrapper">
           <el-avatar size="medium" :src="avatar">
-            <i class="el-icon-user-solid"/>
+            <i class="el-icon-user-solid" />
           </el-avatar>
           {{ nickname }}
-          <i class="el-icon-caret-bottom"/>
+          <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
           <el-dropdown-item command="home">{{ homeTitle }}</el-dropdown-item>
@@ -41,144 +42,146 @@
           <el-dropdown-item divided command="logout">退出登录</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-
     </div>
   </div>
 </template>
 
 <script>
-import {mapGetters, mapMutations} from 'vuex'
-import projectSetting from '@/project-setting'
-import {getAllChildMenuPaths, getChildMenuPathsByFullPath, getMenusFullPath} from '@/utils/menu'
-import {isEmpty, last} from 'lodash-es'
-import screenfull from 'screenfull';
-import regex from '@/constant/regex'
+import { mapGetters, mapMutations } from "vuex";
+import projectSetting from "@/project-setting";
+import { getAllChildMenuPaths, getChildMenuPathsByFullPath, getMenusFullPath } from "@/utils/menu";
+import { isEmpty, last } from "lodash-es";
+import screenfull from "screenfull";
+import regex from "@/constant/regex";
 
 export default {
   name: "TopToolbar",
-  inject: ['reload'],
+  inject: ["reload"],
   data() {
     return {
       homeTitle: projectSetting.homeTitle,
       isFullscreenEnable: screenfull.isEnabled,
       isFullscreen: screenfull.isFullscreen,
-      breadcrumbList: []
-    }
+      breadcrumbList: [],
+    };
   },
   computed: {
-    ...mapGetters(['isMobile', 'avatar', 'nickname', 'shrink', 'allMenuChildrenPaths']),
+    ...mapGetters(["isMobile", "avatar", "nickname", "shrink", "allMenuChildrenPaths"]),
     isShowBreadcrumb() {
       // 如果是移动端，则不显示面包屑
-      return !this.isMobile
-    }
+      return !this.isMobile;
+    },
   },
   watch: {
     "$route.fullPath": {
       handler() {
         this.getBreadcrumb();
       },
-      immediate: true
+      immediate: true,
     },
     isMobile() {
       // 模式变换 重置收缩按钮
-      this.setShrink(false)
-    }
+      this.setShrink(false);
+    },
   },
   mounted() {
     if (screenfull.isEnabled) {
-      screenfull.on('change', this.fullscreenChange)
+      screenfull.on("change", this.fullscreenChange);
     }
   },
   beforeDestroy() {
     if (screenfull.isEnabled) {
-      screenfull.off('change', this.fullscreenChange)
+      screenfull.off("change", this.fullscreenChange);
     }
   },
   methods: {
     ...mapMutations({
       setShrink: "SET_SHRINK",
-      setShowSearchPop: "SET_SHOW_SEARCH_POP"
+      setShowSearchPop: "SET_SHOW_SEARCH_POP",
     }),
     showSearchPop() {
-      this.setShowSearchPop(true)
+      this.setShowSearchPop(true);
     },
     getBreadcrumb() {
-      const [firstRouter, lastRouter] = this.$route.matched;
-      if (lastRouter.name === 'Reload') return;
-      let breadcrumbList = [
+      const [parentRouter, currentRouter] = this.$route.matched;
+      if (currentRouter.name === "Reload") return;
+      const breadcrumbList = [
         {
           path: this.$route.fullPath,
-          name: lastRouter.meta['title']
-        }
-      ]
+          name: currentRouter.meta.title,
+        },
+      ];
 
-      if (firstRouter.path) { // 不是单层菜单
+      if (parentRouter.path) {
+        // 不是单层菜单
         // 过滤当层菜单
-        const currentMenuPaths = getChildMenuPathsByFullPath(this.allMenuChildrenPaths, lastRouter.path)
+        const currentMenuPaths = getChildMenuPathsByFullPath(this.allMenuChildrenPaths, currentRouter.path);
         if (isEmpty(currentMenuPaths)) return;
         // 当前根菜单的所有子路径
-        const curMenuChildrenPaths = getAllChildMenuPaths(currentMenuPaths[0].children)
+        const curMenuChildrenPaths = getAllChildMenuPaths(currentMenuPaths[0].children);
         // 每层菜单最近一个可访问的菜单
         currentMenuPaths.slice(0, -1).findLast((menu, i) => {
           // 默认最前面包屑路径为当前路径
           let curPath = breadcrumbList[0].path;
           // 先找子路径的第一个可访问菜单
-          const recentChildRouters = curMenuChildrenPaths.find(routers => {
+          const recentChildRouters = curMenuChildrenPaths.find((routers) => {
             const lastRouter = last(routers);
-            const lastIsRouter = !lastRouter['hideMenu'] && (lastRouter.filePath || (regex.url.test(lastRouter.path) && lastRouter.componentName))
+            const lastIsRouter =
+              !lastRouter.hideMenu &&
+              (lastRouter.filePath || (regex.url.test(lastRouter.path) && lastRouter.componentName));
             return routers.length === i + 1 && lastIsRouter;
-          })
+          });
           if (isEmpty(recentChildRouters)) {
             // 没有找到，则看当前菜单是否可访问
             if (menu.filePath || (regex.url.test(menu.path) && menu.componentName)) {
-              curPath = "/" + getMenusFullPath(currentMenuPaths.slice(0, i + 1))
+              curPath = `/${getMenusFullPath(currentMenuPaths.slice(0, i + 1))}`;
             }
           } else {
-            curPath = firstRouter.path + "/" + getMenusFullPath(recentChildRouters)
+            curPath = `${parentRouter.path}/${getMenusFullPath(recentChildRouters)}`;
           }
           breadcrumbList.unshift({
             path: curPath,
-            name: menu['title']
-          })
-        })
+            name: menu.title,
+          });
+        });
       }
-      if (lastRouter.name !== "Home") {
+      if (currentRouter.name !== "Home") {
         breadcrumbList.unshift({
-          path: '/',
-          name: projectSetting.homeTitle
-        })
+          path: "/",
+          name: projectSetting.homeTitle,
+        });
       }
       this.breadcrumbList = breadcrumbList;
     },
     fullscreen() {
-      screenfull.toggle()
+      screenfull.toggle();
     },
     fullscreenChange() {
-      this.isFullscreen = screenfull.isFullscreen
+      this.isFullscreen = screenfull.isFullscreen;
     },
     handleCommand(command) {
       switch (command) {
-        case 'home':
-          this.$router.push('/home');
-          break
-        case 'setting':
+        case "home":
+          this.$router.push("/home");
+          break;
+        case "setting":
           this.$router.push({
-            name: 'PersonalCenter'
-          })
-          break
-        case 'logout':
-          this.$store.dispatch('FedLogOut')
+            name: "PersonalCenter",
+          });
+          break;
+        case "logout":
+          this.$store.dispatch("FedLogOut");
           this.$router.push("/sign-in");
-          break
+          break;
         default:
           break;
       }
     },
     toggleCollapse() {
       this.setShrink(!this.shrink);
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
@@ -234,7 +237,6 @@ export default {
       opacity: 0;
       transform: translateX(30px) skewX(-50deg);
     }
-
   }
 
   .top-toolbar-right {
@@ -283,7 +285,6 @@ export default {
         }
       }
     }
-
   }
 }
 </style>
