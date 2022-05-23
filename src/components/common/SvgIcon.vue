@@ -1,6 +1,6 @@
 <template functional>
   <svg class="svg-icon" aria-hidden="true">
-    <use :xlink:href="`#icon-${props.name}`"/>
+    <use :xlink:href="`#icon-${props.name}`" />
   </svg>
 </template>
 
@@ -10,10 +10,10 @@ export default {
   props: {
     name: {
       type: String,
-      required: true
-    }
-  }
-}
+      required: true,
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">

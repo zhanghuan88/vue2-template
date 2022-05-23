@@ -7,7 +7,7 @@
       </div>
     </div>
     <div class="right">
-      <slot/>
+      <slot />
     </div>
   </div>
 </template>
@@ -18,14 +18,14 @@ export default {
   props: {
     title: {
       type: String,
-      required: true
+      required: true,
     },
     content: {
       type: String,
-      default: ''
-    }
-  }
-}
+      default: "",
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">

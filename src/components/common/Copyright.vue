@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import projectSetting from '@/project-setting'
+import projectSetting from "@/project-setting";
 
 export default {
   name: "Copyright",
@@ -16,11 +16,11 @@ export default {
       copyrightDates: projectSetting.copyrightDates,
       copyrightWebsite: projectSetting.copyrightWebsite,
       copyrightCompany: projectSetting.copyrightCompany,
-      hideCopyright: projectSetting.hideCopyright
-    }
+      hideCopyright: projectSetting.hideCopyright,
+    };
   },
-  methods: {}
-}
+  methods: {},
+};
 </script>
 
 <style scoped lang="scss">

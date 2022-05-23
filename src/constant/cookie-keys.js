@@ -1,4 +1,4 @@
 const CookieKeys = {
-  tokenKey: 'project-token'
-}
+  tokenKey: "project-token",
+};
 export default CookieKeys;

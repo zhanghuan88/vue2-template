@@ -1,7 +1,6 @@
 <template>
   <div class="page-header-page">
-    <page-header title="页面标题" content="page-header">
-    </page-header>
+    <page-header title="页面标题" content="page-header"> </page-header>
     <page-header title="页面标题" content="page-header">
       <div>
         <el-button icon="el-icon-back" type="text">返回</el-button>
@@ -15,12 +14,11 @@
 
 <script>
 export default {
-  name: "PageHeaderPage"
-}
+  name: "PageHeaderPage",
+};
 </script>
 
 <style scoped lang="scss">
 .page-header-page {
-
 }
 </style>

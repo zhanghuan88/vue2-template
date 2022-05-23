@@ -2,9 +2,12 @@
   <div class="main-sidebar-container">
     <logo class="sidebar-logo"></logo>
     <div class="nav">
-      <div v-for="top of topMenus" :key="top.id" class="item"
-           :class="{'active':top.id===activeMainSidebarId}"
-           @click="setActiveMainSidebarId(top.id)">
+      <div
+        v-for="top of topMenus"
+        :key="top.id"
+        class="item"
+        :class="{ active: top.id === activeMainSidebarId }"
+        @click="setActiveMainSidebarId(top.id)">
         <svg-icon :name="top.icon || 'default'"></svg-icon>
         <div class="title">{{ top.title }}</div>
       </div>
@@ -13,46 +16,45 @@
 </template>
 
 <script>
-import Logo from '@/framework/layout/components/Logo'
-import {mapGetters, mapMutations, mapState} from 'vuex'
-import to from 'await-to-js'
-import {getTopMenus} from '@/api/user/auth'
-import localforage from 'localforage'
-import StoreKeys from '@/constant/store-keys'
+import Logo from "@/framework/layout/components/Logo";
+import { mapGetters, mapMutations, mapState } from "vuex";
+import to from "await-to-js";
+import { getTopMenus } from "@/api/user/auth";
+import localforage from "localforage";
+import StoreKeys from "@/constant/store-keys";
 
 export default {
   name: "MainSidebarContainer",
-  components: {Logo},
+  components: { Logo },
   data() {
-    return {}
+    return {};
   },
   computed: {
     ...mapState({
-      topMenus: state => state.menu.topMenus
+      topMenus: (state) => state.menu.topMenus,
     }),
-    ...mapGetters(['activeMainSidebarId'])
+    ...mapGetters(["activeMainSidebarId"]),
   },
   mounted() {
     this.init();
   },
   methods: {
     ...mapMutations({
-      setTopMenus: 'SET_TOP_MENUS',
-      setActiveMainSidebarId: 'SET_ACTIVE_MAIN_SIDEBAR_ID'
+      setTopMenus: "SET_TOP_MENUS",
+      setActiveMainSidebarId: "SET_ACTIVE_MAIN_SIDEBAR_ID",
     }),
     async init() {
       // 初始化顶部菜单
-      const [, topMenus] = await to(getTopMenus())
+      const [, topMenus] = await to(getTopMenus());
       if (topMenus) {
         this.setTopMenus(topMenus);
         // 获取最后打开页面时的顶部菜单
-        const [, topMenuId] = await to(localforage.getItem(StoreKeys.lastOpenRouteTopMenuId))
+        const [, topMenuId] = await to(localforage.getItem(StoreKeys.lastOpenRouteTopMenuId));
         this.setActiveMainSidebarId(topMenuId || topMenus[0].id);
       }
-
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">

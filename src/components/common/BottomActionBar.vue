@@ -9,8 +9,8 @@
 
 <script>
 export default {
-  name: "BottomActionBar"
-}
+  name: "BottomActionBar",
+};
 </script>
 
 <style scoped lang="scss">
@@ -29,7 +29,6 @@ export default {
     box-shadow: 0 0 2px #ccc;
     background-color: #fff;
     height: 80px;
-
   }
 }
 </style>

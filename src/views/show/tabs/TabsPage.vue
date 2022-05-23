@@ -1,7 +1,7 @@
 <template>
   <div class="tabs-page">
     标签全局功能测试页面,首页不支持关闭
-    <br>
+    <br />
     <el-button @click="closeCurrent">关闭当前页面</el-button>
     <el-button @click="closeAll">关闭全部</el-button>
     <el-button @click="closeOther">关闭其他</el-button>
@@ -28,13 +28,12 @@ export default {
     },
     closeLeft() {
       this.$tabs.closeLeft();
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
 .tabs-page {
-
 }
 </style>
