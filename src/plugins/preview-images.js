@@ -1,10 +1,12 @@
 import ElImageViewer from "element-ui/packages/image/src/image-viewer";
 import { isEmpty, isString } from "lodash-es";
+import Vue from "vue";
 
 let instance = null;
+const ImageViewerConstructor = Vue.extend(ElImageViewer);
+
 export default {
-  install(Vue) {
-    const ImageViewerConstructor = Vue.extend(ElImageViewer);
+  install() {
     Vue.prototype.$previewImages = (pics) => {
       if (isEmpty(pics) || instance) return;
       let urlList = [];
@@ -15,7 +17,6 @@ export default {
         propsData: {
           urlList,
           onClose: () => {
-            console.log(instance);
             instance.$destroy();
             instance = null;
           },
