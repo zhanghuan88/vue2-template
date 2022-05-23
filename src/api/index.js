@@ -49,8 +49,8 @@ export function initApi(store, router) {
       // 如果是401则跳转到登录页面
       if (status === 401) {
         store.dispatch("FedLogOut").then();
-        router.push({
-          path: "/login",
+        router.replace({
+          path: "/sign-in",
           query: {
             redirect: router.currentRoute.fullPath,
           },
