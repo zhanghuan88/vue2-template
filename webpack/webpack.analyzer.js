@@ -4,8 +4,7 @@ const webpackProConfig = require("./webpack.prod.js")
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = merge(webpackProConfig, {
-    plugins: [
-        new BundleAnalyzerPlugin(),
-    ]
-
+  plugins: [
+    new BundleAnalyzerPlugin(),
+  ]
 })

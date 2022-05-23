@@ -1,18 +1,18 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const {VueLoaderPlugin} = require("vue-loader");
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const {getExternals, getCdnConfig, resolve} = require('./utils');
+const { VueLoaderPlugin } = require("vue-loader");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
+const { getExternals, getCdnConfig, resolve } = require("./utils");
 module.exports = {
   entry: {
-    index: "./src/main.js"
+    index: "./src/main.js",
   },
   output: {
     filename: "js/[name].[fullhash:8].js",
     path: resolve("dist"),
-    publicPath: "/"
+    publicPath: "/",
   },
   cache: {
-    type: 'filesystem',
+    type: "filesystem",
     buildDependencies: {
       config: [resolve(".env.development"), resolve(".env.production")],
     },
@@ -23,46 +23,46 @@ module.exports = {
       {
         test: /\.js$/,
         include: resolve("src"),
-        use: ['babel-loader']
+        use: ["babel-loader"],
       },
       {
         test: /\.svg$/,
         include: resolve("src/assets/icons"),
         use: [
           {
-            loader: 'svg-sprite-loader', options: {
-              symbolId: 'icon-[name]'
-            }
+            loader: "svg-sprite-loader",
+            options: {
+              symbolId: "icon-[name]",
+            },
           },
-          {loader: 'svgo-loader', options: {}}
-        ]
+          { loader: "svgo-loader", options: {} },
+        ],
       },
       {
         test: /\.(png|gif|jpe?g|svg)$/,
-        type: 'asset', // webpack5使用内置静态资源模块，且不指定具体，根据以下规则使用
+        type: "asset", // webpack5使用内置静态资源模块，且不指定具体，根据以下规则使用
         exclude: resolve("src/assets/icons"),
         generator: {
-          filename: 'img/[name][ext]' // ext本身会附带点，放入img目录下
+          filename: "img/[name][ext]", // ext本身会附带点，放入img目录下
         },
         parser: {
           dataUrlCondition: {
-            maxSize: 10 * 1024 // 超过10kb的进行复制，不超过则直接使用base64
-          }
-        }
+            maxSize: 10 * 1024, // 超过10kb的进行复制，不超过则直接使用base64
+          },
+        },
       },
       {
         test: /\.(ttf|woff2?|eot)$/,
-        type: 'asset/resource', // 指定静态资源类复制
+        type: "asset/resource", // 指定静态资源类复制
         generator: {
-          filename: 'font/[name].[ext]' // 放入font目录下
-        }
+          filename: "font/[name].[ext]", // 放入font目录下
+        },
       },
       {
         test: /\.vue$/,
-        use: ["vue-loader"]
-      }
-
-    ]
+        use: ["vue-loader"],
+      },
+    ],
   },
   plugins: [
     new VueLoaderPlugin(),
@@ -72,9 +72,9 @@ module.exports = {
       minify: {
         removeComments: true, // 移除HTML中的注释
         collapseWhitespace: true, // 删除空符与换符
-        minifyCSS: true // 压缩内联css
+        minifyCSS: true, // 压缩内联css
       },
-      cdnConfig: getCdnConfig()
+      cdnConfig: getCdnConfig(),
     }),
     new CopyWebpackPlugin({
       patterns: [
@@ -84,19 +84,18 @@ module.exports = {
           globOptions: {
             dot: true,
             gitignore: true,
-            ignore: ["**/index.html"]
-          }
-        }
-      ]
-    })
+            ignore: ["**/index.html"],
+          },
+        },
+      ],
+    }),
   ],
   resolve: {
     symlinks: false,
     extensions: [".vue", ".js", ".json"],
     alias: {
-      'vue$': 'vue/dist/vue.esm.js',
-      "@": resolve("src")
-    }
-  }
-
+      vue$: "vue/dist/vue.esm.js",
+      "@": resolve("src"),
+    },
+  },
 };
