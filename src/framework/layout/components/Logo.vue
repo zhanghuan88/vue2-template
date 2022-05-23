@@ -1,24 +1,25 @@
 <template>
   <div class="logo" @click="goHome()">
-    <img :src="logo" alt="LOGO"/>
+    <img :src="logo" alt="LOGO" />
   </div>
 </template>
 
 <script>
+const logo = require("@/assets/image/framework/vue.png");
 
 export default {
   name: "Logo",
   data() {
     return {
-      logo: require("@/assets/image/framework/vue.png")
-    }
+      logo,
+    };
   },
   methods: {
     goHome() {
       this.$router.push("/");
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
