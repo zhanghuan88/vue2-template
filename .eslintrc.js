@@ -9,7 +9,7 @@ module.exports = {
     process: true,
     require: true,
   },
-  extends: ["plugin:vue/essential", "eslint-config-airbnb-base","plugin:prettier/recommended"],
+  extends: ["plugin:vue/essential", "eslint-config-airbnb-base", "plugin:prettier/recommended"],
   parserOptions: {
     ecmaVersion: "latest",
     sourceType: "module",
