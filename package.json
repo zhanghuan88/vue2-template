@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "后台管理系统模板",
   "scripts": {
-    "serve": "webpack serve --config webpack/webpack.dev.js",
-    "build": "webpack --config webpack/webpack.prod.js",
+    "serve": "webpack serve --config webpack/webpack.dev.conf.js",
+    "build": "webpack --config webpack/webpack.prod.conf.js",
     "analyzer": "webpack --config webpack/webpack.analyzer.js",
     "prepare": "husky install"
   },

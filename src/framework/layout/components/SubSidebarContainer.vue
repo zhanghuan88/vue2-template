@@ -22,12 +22,12 @@
 <script>
 import { isEmpty } from "lodash-es";
 import to from "await-to-js";
+import { mapGetters } from "vuex";
+import localforage from "localforage";
 import { getMenus } from "@/api/user/auth";
 import regex from "@/constant/regex";
 import SidebarItem from "@/framework/layout/components/SidebarItem";
 import StoreKeys from "@/constant/store-keys";
-import { mapGetters } from "vuex";
-import localforage from "localforage";
 import projectSetting from "@/project-setting";
 
 export default {

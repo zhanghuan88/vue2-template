@@ -1,9 +1,9 @@
 import axios from "axios";
 import NProgress from "accessible-nprogress";
 import { debounce } from "lodash-es";
+import { Message } from "element-ui";
 import { getToken } from "@/utils/token";
 import ProjectSetting from "@/project-setting";
-import { Message } from "element-ui";
 
 const debounceShowMessage = debounce((message) => {
   Message({

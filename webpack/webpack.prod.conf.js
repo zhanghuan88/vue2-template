@@ -9,7 +9,7 @@ const WebpackBar = require("webpackbar");
 const TerserPlugin = require("terser-webpack-plugin");
 const CompressionPlugin = require("compression-webpack-plugin");
 const { DefinePlugin } = require("webpack");
-const webpackCommonConfig = require("./webpack.common.js");
+const webpackCommonConfig = require("./webpack.common.conf.js");
 
 module.exports = merge(webpackCommonConfig, {
   mode: "production",

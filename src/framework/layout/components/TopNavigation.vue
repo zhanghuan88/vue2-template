@@ -5,7 +5,7 @@
       v-model="currentTabPath"
       class="top-navigation-tabs top-navigation-tabs--smooth"
       type="card"
-      @tab-remove="$tabs.closeTab"
+      tab-remove="$tabs.closeTab"
       @tab-click="tabClick"
       @contextmenu.native="contextMenu"
       @dblclick.native="dblClick">
@@ -28,14 +28,14 @@
         <i class="box"></i>
       </span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item icon="el-icon-close" command="closeOther" :disabled="dropdownOtherDis"
-        >关闭其他
+        <el-dropdown-item icon="el-icon-close" command="closeOther" :disabled="dropdownOtherDis">
+          关闭其他
         </el-dropdown-item>
-        <el-dropdown-item icon="el-icon-right" command="closeRight" :disabled="dropdownRightDis"
-        >关闭右侧
+        <el-dropdown-item icon="el-icon-right" command="closeRight" :disabled="dropdownRightDis">
+          关闭右侧
         </el-dropdown-item>
-        <el-dropdown-item icon="el-icon-back" command="closeLeft" :disabled="dropdownLeftDis"
-        >关闭左侧
+        <el-dropdown-item icon="el-icon-back" command="closeLeft" :disabled="dropdownLeftDis">
+          关闭左侧
         </el-dropdown-item>
         <el-dropdown-item icon="el-icon-close" command="closeAll">关闭全部</el-dropdown-item>
       </el-dropdown-menu>
@@ -45,8 +45,8 @@
 
 <script>
 import { mapGetters, mapMutations, mapState } from "vuex";
-import projectSetting from "@/project-setting";
 import { uniq } from "lodash-es";
+import projectSetting from "@/project-setting";
 
 export default {
   name: "TopNavigation",

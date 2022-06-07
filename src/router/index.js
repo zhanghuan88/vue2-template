@@ -1,11 +1,11 @@
 import VueRouter from "vue-router";
 import NProgress from "accessible-nprogress";
+import Vue from "vue";
+import { isEmpty } from "lodash-es";
 import store from "@/store";
 import { getToken } from "@/utils/token";
 import ProjectSetting from "@/project-setting";
-import Vue from "vue";
 import routesConfig from "@/router/routes-config";
-import { isEmpty } from "lodash-es";
 
 Vue.use(VueRouter);
 // 解决路由在 push/replace相同地址报错的问题

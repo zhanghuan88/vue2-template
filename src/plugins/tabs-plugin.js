@@ -1,6 +1,6 @@
+import { isEmpty } from "lodash-es";
 import store from "@/store";
 import router from "@/router";
-import { isEmpty } from "lodash-es";
 
 export default {
   install(Vue) {

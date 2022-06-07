@@ -1,9 +1,9 @@
 import to from "await-to-js";
-import { login } from "@/api/user/auth";
 import localforage from "localforage";
+import md5 from "js-md5";
+import { login } from "@/api/user/auth";
 import StoreKeys from "@/constant/store-keys";
 import { getToken, setToken } from "@/utils/token";
-import md5 from "js-md5";
 
 export default {
   state: {

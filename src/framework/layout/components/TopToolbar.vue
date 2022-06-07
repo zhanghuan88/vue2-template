@@ -6,8 +6,8 @@
       </div>
       <el-breadcrumb v-if="isShowBreadcrumb" separator="/">
         <transition-group name="breadcrumb">
-          <el-breadcrumb-item v-for="list of breadcrumbList" :key="list.path" :to="list.path"
-          >{{ list.name }}
+          <el-breadcrumb-item v-for="list of breadcrumbList" :key="list.path" :to="list.path">
+            {{ list.name }}
           </el-breadcrumb-item>
         </transition-group>
       </el-breadcrumb>
@@ -48,10 +48,10 @@
 
 <script>
 import { mapGetters, mapMutations } from "vuex";
-import projectSetting from "@/project-setting";
-import { getAllChildMenuPaths, getChildMenuPathsByFullPath, getMenusFullPath } from "@/utils/menu";
 import { isEmpty, last } from "lodash-es";
 import screenfull from "screenfull";
+import projectSetting from "@/project-setting";
+import { getAllChildMenuPaths, getChildMenuPathsByFullPath, getMenusFullPath } from "@/utils/menu";
 import regex from "@/constant/regex";
 
 export default {

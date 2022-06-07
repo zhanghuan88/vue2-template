@@ -32,11 +32,11 @@
 </template>
 
 <script>
+import hotkeys from "hotkeys-js";
+import { mapGetters, mapMutations, mapState } from "vuex";
 import MainSidebarContainer from "@/framework/layout/components/MainSidebarContainer";
 import SubSidebarContainer from "@/framework/layout/components/SubSidebarContainer";
-import hotkeys from "hotkeys-js";
 import projectSetting from "@/project-setting";
-import { mapGetters, mapMutations, mapState } from "vuex";
 import TopToolbar from "@/framework/layout/components/TopToolbar";
 import TopNavigation from "@/framework/layout/components/TopNavigation";
 

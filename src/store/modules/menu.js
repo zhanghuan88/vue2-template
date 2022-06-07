@@ -1,6 +1,6 @@
 import localforage from "localforage";
-import StoreKeys from "@/constant/store-keys";
 import to from "await-to-js";
+import StoreKeys from "@/constant/store-keys";
 import { getMenus } from "@/api/user/auth";
 import { handleRoutesByMenus } from "@/utils/menu";
 

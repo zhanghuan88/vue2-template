@@ -3,7 +3,7 @@ const { readEnv, getConditionalLoader } = require("./utils");
 const config = readEnv("./.env.development");
 const ESLintPlugin = require("eslint-webpack-plugin");
 const { DefinePlugin } = require("webpack");
-const webpackCommonConfig = require("./webpack.common.js");
+const webpackCommonConfig = require("./webpack.common.conf.js");
 
 //读取环境变量
 module.exports = merge(webpackCommonConfig, {

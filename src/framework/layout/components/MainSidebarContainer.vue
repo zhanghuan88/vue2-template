@@ -16,11 +16,11 @@
 </template>
 
 <script>
-import Logo from "@/framework/layout/components/Logo";
 import { mapGetters, mapMutations, mapState } from "vuex";
 import to from "await-to-js";
-import { getTopMenus } from "@/api/user/auth";
 import localforage from "localforage";
+import { getTopMenus } from "@/api/user/auth";
+import Logo from "@/framework/layout/components/Logo";
 import StoreKeys from "@/constant/store-keys";
 
 export default {
