@@ -50,7 +50,7 @@ module.exports = {
   settings: {
     "import/resolver": {
       webpack: {
-        config: resolve("webpack/webpack.dev.js"),
+        config: resolve("webpack/webpack.dev.conf.js"),
       },
     },
   },
