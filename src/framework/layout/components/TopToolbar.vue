@@ -48,10 +48,10 @@
 
 <script>
 import { mapGetters, mapMutations } from "vuex";
-import { isEmpty, last } from "lodash-es";
-import screenfull from "screenfull";
 import projectSetting from "@/project-setting";
 import { getAllChildMenuPaths, getChildMenuPathsByFullPath, getMenusFullPath } from "@/utils/menu";
+import { isEmpty, last } from "lodash-es";
+import screenfull from "screenfull";
 import regex from "@/constant/regex";
 
 export default {
