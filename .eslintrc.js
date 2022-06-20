@@ -14,7 +14,7 @@ module.exports = {
     ecmaVersion: "latest",
     sourceType: "module",
   },
-  plugins: ["vue", "prettier"],
+  plugins: ["vue"],
   rules: {
     "import/extensions": [
       "error",
@@ -39,13 +39,7 @@ module.exports = {
     "vue/order-in-components": 2,
     "vue/this-in-template": 2,
     "vue/multi-word-component-names": 0,
-    "vue/script-indent": [
-      2,
-      2,
-      {
-        switchCase: 1,
-      },
-    ],
+    "vue/script-indent": [2, 2, { switchCase: 1 }],
   },
   settings: {
     "import/resolver": {
