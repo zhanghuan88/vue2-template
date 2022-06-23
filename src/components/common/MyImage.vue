@@ -1,7 +1,7 @@
 <template>
   <el-image :src="src" fit="cover" :preview-src-list="[src]" class="my-image">
     <div slot="error" class="image-slot">
-      <svg-icon name="image-load-fail" />
+      <colors-icon name="imageLoadFail" />
     </div>
   </el-image>
 </template>

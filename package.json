@@ -30,6 +30,7 @@
   "devDependencies": {
     "@babel/core": "^7.18.5",
     "@babel/preset-env": "^7.18.0",
+    "@z363416071/vue-iconfont-cli": "^1.1.4",
     "babel-loader": "^8.2.5",
     "chalk": "^5.0.1",
     "clean-webpack-plugin": "^4.0.0",
@@ -63,7 +64,6 @@
     "sass-loader": "^13.0.0",
     "sass-resources-loader": "^2.2.5",
     "style-loader": "^3.3.1",
-    "svg-sprite-loader": "^6.0.11",
     "svgo-loader": "^3.0.1",
     "terser-webpack-plugin": "^5.3.1",
     "url-loader": "^4.1.1",

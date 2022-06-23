@@ -12,10 +12,6 @@ import "@/components";
 Vue.use(ELEMENT);
 // 初始化api
 initApi(store, router);
-// 自动加载 svg 图标
-const req = require.context("./assets/icons", false, /\.svg$/);
-const requireAll = (requireContext) => requireContext.keys().map(requireContext);
-requireAll(req);
 Vue.use(VueMeta);
 
 const app = new Vue({

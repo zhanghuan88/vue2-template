@@ -27,22 +27,8 @@ module.exports = {
         use: ["babel-loader"],
       },
       {
-        test: /\.svg$/,
-        include: resolve("src/assets/icons"),
-        use: [
-          {
-            loader: "svg-sprite-loader",
-            options: {
-              symbolId: "icon-[name]",
-            },
-          },
-          { loader: "svgo-loader", options: {} },
-        ],
-      },
-      {
         test: /\.(png|gif|jpe?g|svg)$/,
         type: "asset", // webpack5使用内置静态资源模块，且不指定具体，根据以下规则使用
-        exclude: resolve("src/assets/icons"),
         generator: {
           filename: "img/[name][ext]", // ext本身会附带点，放入img目录下
         },

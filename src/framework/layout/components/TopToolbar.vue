@@ -2,7 +2,7 @@
   <div class="top-toolbar">
     <div class="top-toolbar-left">
       <div class="sidebar-collapse" :class="{ 'is-collapse': shrink }" @click="toggleCollapse">
-        <svg-icon name="collapse" />
+        <colors-icon name="collapse" />
       </div>
       <el-breadcrumb v-if="isShowBreadcrumb" separator="/">
         <transition-group name="breadcrumb">
@@ -19,12 +19,12 @@
         </el-tooltip>
         <el-tooltip effect="dark" content="全屏" placement="bottom">
           <span v-if="isFullscreenEnable" class="item" @click="fullscreen">
-            <svg-icon :name="isFullscreen ? 'fullscreen-exit' : 'fullscreen'" />
+            <colors-icon :name="isFullscreen ? 'fullscreen-exit' : 'fullscreen'" />
           </span>
         </el-tooltip>
         <el-tooltip effect="dark" content="刷新页面" placement="bottom">
           <span class="item reload" @click="reload()">
-            <svg-icon name="reload" />
+            <colors-icon name="reload" />
           </span>
         </el-tooltip>
       </div>
@@ -214,11 +214,11 @@ export default {
         background-image: linear-gradient(to right, #ddd, transparent);
       }
 
-      ::v-deep .svg-icon {
+      ::v-deep svg {
         transition: transform 0.3s;
       }
 
-      &.is-collapse ::v-deep .svg-icon {
+      &.is-collapse ::v-deep svg {
         transform: rotateZ(-180deg);
       }
     }

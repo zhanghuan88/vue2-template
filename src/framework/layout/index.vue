@@ -26,7 +26,7 @@
     <div v-show="showMobileSidebar" class="warp-sidebar-mobile-mask" @click="hideMobileSidebar"></div>
     <!--主页最大化退出按钮-->
     <div v-show="pageMaximized" class="page-maximized-exit" @click="setPageMaximized(false)">
-      <svg-icon name="exit"></svg-icon>
+      <colors-icon name="exit" />
     </div>
   </div>
 </template>
@@ -220,12 +220,12 @@ export default {
     &:hover {
       background-color: rgba(0, 0, 0, 0.7);
 
-      ::v-deep .svg-icon {
+      ::v-deep svg {
         fill: #fff;
       }
     }
 
-    ::v-deep .svg-icon {
+    ::v-deep svg {
       position: absolute;
       bottom: 16px;
       left: 16px;

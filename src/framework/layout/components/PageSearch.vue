@@ -12,7 +12,7 @@
         @select="handleSelect">
         <template #default="{ item }">
           <div class="suggestion">
-            <svg-icon :name="item.icon"></svg-icon>
+            <colors-icon :name="item.icon" />
             <div class="content">
               <div class="title">{{ item.title }}</div>
               <div class="breadcrumb">

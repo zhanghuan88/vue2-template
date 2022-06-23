@@ -9,7 +9,7 @@
         <div>
           <el-form-item prop="account">
             <el-input ref="name" v-model="form.account" placeholder="用户名" type="text" tabindex="1">
-              <svg-icon slot="prefix" name="user" />
+              <colors-icon slot="prefix" name="user" />
             </el-input>
           </el-form-item>
           <el-form-item prop="password">
@@ -20,8 +20,11 @@
               placeholder="密码"
               tabindex="2"
               @keyup.enter.native="handleLogin">
-              <svg-icon slot="prefix" name="password" />
-              <svg-icon slot="suffix" :name="passwordType === 'password' ? 'eye' : 'eye-open'" @click="showPassword" />
+              <colors-icon slot="prefix" name="password" />
+              <colors-icon
+                slot="suffix"
+                :name="passwordType === 'password' ? 'eye' : 'eye-open'"
+                @click="showPassword" />
             </el-input>
           </el-form-item>
         </div>

@@ -8,7 +8,7 @@
         class="item"
         :class="{ active: top.id === activeMainSidebarId }"
         @click="setActiveMainSidebarId(top.id)">
-        <svg-icon :name="top.icon || 'default'"></svg-icon>
+        <colors-icon :name="top.icon || 'default'" />
         <div class="title">{{ top.title }}</div>
       </div>
     </div>
@@ -114,7 +114,7 @@ export default {
         color: $g-main-sidebar-menu-active-color;
       }
 
-      ::v-deep .svg-icon {
+      ::v-deep svg {
         margin: 0 auto;
         font-size: 24px;
       }

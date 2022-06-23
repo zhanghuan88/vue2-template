@@ -1,12 +1,12 @@
 <template>
   <div class="sidebar-item">
     <el-menu-item v-if="emptyChildren" :title="item.title" :index="basePath">
-      <svg-icon v-if="icon" :name="icon" />
+      <colors-icon v-if="icon" :name="icon" />
       <span>{{ item.title }}</span>
     </el-menu-item>
     <el-submenu v-else :title="item.title" :index="basePath">
       <template slot="title">
-        <svg-icon v-if="icon" :name="icon" />
+        <colors-icon v-if="icon" :name="icon" />
         <span>{{ item.title }}</span>
       </template>
       <sidebar-item v-for="menu in item.children" :key="menu.path" :item="menu" :base-path="resolvePath(menu)" />
@@ -67,7 +67,7 @@ export default {
 
 <style scoped lang="scss">
 .sidebar-item {
-  ::v-deep .svg-icon {
+  ::v-deep svg {
     font-size: 20px;
     vertical-align: -0.25em;
     transition: transform 0.2s;
@@ -88,7 +88,7 @@ export default {
     height: $g-sub-sidebar-menu-height;
     line-height: $g-sub-sidebar-menu-height;
 
-    .svg-icon {
+    svg {
       transition: transform 0.2s ease-in;
     }
 
@@ -98,7 +98,7 @@ export default {
     }
 
     &:hover {
-      .svg-icon {
+      svg {
         transform: scale(1.2);
       }
     }

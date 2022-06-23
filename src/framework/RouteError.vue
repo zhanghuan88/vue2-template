@@ -1,6 +1,6 @@
 <template>
   <div class="route-error">
-    <svg-icon name="404" />
+    <div class="bg"></div>
     <div class="content">
       <h1>404</h1>
       <div class="desc">抱歉，你访问的页面不存在</div>
@@ -46,9 +46,13 @@ export default {
   justify-content: center;
   height: 100vh;
 
-  ::v-deep .svg-icon {
+  .bg {
     width: 400px;
     height: 400px;
+    background-image: url("~@/assets/image/framework/404.svg");
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
   }
 
   .content {
