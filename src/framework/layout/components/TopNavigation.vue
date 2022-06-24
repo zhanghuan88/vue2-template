@@ -5,7 +5,7 @@
       v-model="currentTabPath"
       class="top-navigation-tabs top-navigation-tabs--smooth"
       type="card"
-      tab-remove="$tabs.closeTab"
+      @tab-remove="$tabs.closeTab"
       @tab-click="tabClick"
       @contextmenu.native="contextMenu"
       @dblclick.native="dblClick">
