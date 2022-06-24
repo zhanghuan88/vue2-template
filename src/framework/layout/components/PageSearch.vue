@@ -64,7 +64,7 @@ export default {
             title: lastChild.title,
             titlePath: titles,
             icon,
-            path: isLink ? lastChild.path : `/${getMenusFullPath(childPaths)}`,
+            path: isLink ? lastChild.path : `${getMenusFullPath(childPaths)}`,
           });
         }
       });

@@ -36,7 +36,6 @@ module.exports = merge(webpackCommonConfig, {
       "process.env": config,
     }),
     new ESLintPlugin({
-      fix: true /* 自动帮助修复 */,
       extensions: ["js", "json", "vue"],
       files: "src",
     }),
